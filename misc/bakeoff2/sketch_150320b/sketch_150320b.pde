@@ -7,6 +7,11 @@ import java.util.List;
 // import ketai.ui.*;
 
 ///////////// VARIABLE DECLARATIONS /////////////
+// Scale vars
+float scaleFactor;
+float translateX;
+float translateY;
+
 // Typing variables
 String[] phrases;
 int totalTrialNum = 4; //the total number of phrases to be tested - set this low for testing. Might be ~10 for the real bakeoff!
@@ -41,14 +46,22 @@ void setup()
   orientation(PORTRAIT); //can also be LANDSCAPE -- sets orientation on android device
   size(1000, 1000); //Sets the size of the app. You may want to modify this to your device. Many phones today are 1080 wide by 1920 tall.
   textFont(createFont("Arial", 24)); //set the font to arial 24
+	scaleFactor = 1;
 }
 
-//You can modify anything in here. This is just a basic implementation.
 void draw()
 {
   background(0); //clear background
-
   fill(100);
+	
+	// Start drawing
+
+	// SCALING: DON'T CHANGE! /////////////////
+  pushMatrix();														 //
+  translate(translateX,translateY);        //
+  scale(scaleFactor);											 //
+	///////////////////////////////////////////
+	
   rect(screenStart, screenStart, sizeOfInputArea, sizeOfInputArea);
 	
   if (finishTime!=0)
@@ -85,13 +98,12 @@ void draw()
     fill(255);
     text("NEXT > ", 850, 100); //draw next label
 
-
 		// draw keyboard rows
 		drawKeys(kbRow1, 1);
 		drawKeys(kbRow2, 2);
 		drawKeys(kbRow3, 3);	
   }
-  
+  popMatrix();
 }
 
 ///////// KEYBOARD DRAWING CODE //////////////
@@ -114,9 +126,9 @@ void drawKeys(List<String> row, int rowNumber) {
 
 boolean didMouseClick(float x, float y, float w, float h) //simple function to do hit testing
 {	
+	// TODO: Rewrite to include scaling factor
   return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
 }
-
 
 void mousePressed()
 {
@@ -129,6 +141,15 @@ void mousePressed()
     nextTrial(); //if so, advance to next trial
   }
 }
+
+void mouseWheel(MouseEvent e)
+{
+	// TODO: Translate to phone context
+  translateX = translateX-e.getAmount()*(mouseX)/100;
+  translateY = translateY-e.getAmount()*(mouseY)/100;
+  scaleFactor += e.getAmount() / 100;
+}
+
 
 ///////// TRIAL HANDLING CODE ////////////////
 
