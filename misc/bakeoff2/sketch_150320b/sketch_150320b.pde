@@ -30,6 +30,7 @@ List<String> kbRow1 = Arrays.asList("Q", "W", "E", "R", "T", "Y", "U", "I", "O",
 List<String> kbRow2 = Arrays.asList("A", "S", "D", "F", "G", "H", "J", "K", "L");
 List<String> kbRow3 = Arrays.asList("Z", "X", "C", "V", "B", "N", "M", "<");
 final int maxKeysPerRow = kbRow1.size(); // Assuming qwerty
+HashMap<Character, ArrayList> keyLocations = new HashMap<Character, ArrayList>();
 
 // Drawing variables
 final int DPIofYourDeviceScreen = 445; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
@@ -114,6 +115,13 @@ void drawKeys(List<String> row, int rowNumber) {
 		float offset = (row.size() - maxKeysPerRow) * keyWidth/2;
 		float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
 		float keyY = screenStart + (rowNumber-1) * keyHeight;
+		
+		ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
+		thisKeyBounds.add(keyX); thisKeyBounds.add(keyX+keyWidth);
+		thisKeyBounds.add(keyY); thisKeyBounds.add(keyY+keyHeight);
+		
+		keyLocations.put(row.get(i).charAt(0), thisKeyBounds);
+		System.out.println(keyLocations);
 
 		fill(255);
 		rect(keyX, keyY, keyWidth, keyHeight);
