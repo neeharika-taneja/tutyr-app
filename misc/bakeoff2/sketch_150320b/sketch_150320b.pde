@@ -117,8 +117,8 @@ void drawKeys(List<String> row, int rowNumber) {
 		float keyY = screenStart + (rowNumber-1) * keyHeight;
 		
 		ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
-		thisKeyBounds.add(keyX); thisKeyBounds.add(keyX+keyWidth);
-		thisKeyBounds.add(keyY); thisKeyBounds.add(keyY+keyHeight);
+		thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
+		thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
 		
 		keyLocations.put(row.get(i).charAt(0), thisKeyBounds);
 		System.out.println(keyLocations);
@@ -153,7 +153,7 @@ void mousePressed()
   if (didMouseClick(800, 00, 200, 200)) //check if click is in next button
   {
     nextTrial(); //if so, advance to next trial
-  }
+	}
 }
 
 void mouseWheel(MouseEvent e)
