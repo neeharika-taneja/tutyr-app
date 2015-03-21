@@ -126,7 +126,13 @@ void drawKeys(List<String> row, int rowNumber) {
 
 boolean didMouseClick(float x, float y, float w, float h) //simple function to do hit testing
 {	
-	// TODO: Rewrite to include scaling factor
+	// Translate mouse click coordinates by scaling and movement
+	x *= scaleFactor; x += translateX;	
+	y *= scaleFactor; y += translateY;
+	
+	// Click targets are also appropriately scaled
+	w *= scaleFactor;
+	h *= scaleFactor;
   return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
 }
 
@@ -144,7 +150,6 @@ void mousePressed()
 
 void mouseWheel(MouseEvent e)
 {
-	// TODO: Translate to phone context
   translateX = translateX-e.getAmount()*(mouseX)/100;
   translateY = translateY-e.getAmount()*(mouseY)/100;
   scaleFactor += e.getAmount() / 100;
