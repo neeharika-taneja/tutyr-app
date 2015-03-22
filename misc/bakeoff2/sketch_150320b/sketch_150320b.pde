@@ -30,7 +30,7 @@ List<String> kbRow1 = Arrays.asList("Q", "W", "E", "R", "T", "Y", "U", "I", "O",
 List<String> kbRow2 = Arrays.asList("A", "S", "D", "F", "G", "H", "J", "K", "L");
 List<String> kbRow3 = Arrays.asList("Z", "X", "C", "V", "B", "N", "M", "<");
 final int maxKeysPerRow = kbRow1.size(); // Assuming qwerty
-HashMap<Character, ArrayList> keyLocations = new HashMap<Character, ArrayList>();
+HashMap<ArrayList, Character> keyLocations = new HashMap<ArrayList, Character>();
 
 // Drawing variables
 final int DPIofYourDeviceScreen = 445; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
@@ -47,24 +47,24 @@ void setup()
   orientation(PORTRAIT); //can also be LANDSCAPE -- sets orientation on android device
   size(1000, 1000); //Sets the size of the app. You may want to modify this to your device. Many phones today are 1080 wide by 1920 tall.
   textFont(createFont("Arial", 24)); //set the font to arial 24
-	scaleFactor = 1;
+  scaleFactor = 1;
 }
 
 void draw()
 {
   background(0); //clear background
   fill(100);
-	
-	// Start drawing
+  
+  // Start drawing
 
-	// SCALING: DON'T CHANGE! /////////////////
-  pushMatrix();														 //
+  // SCALING: DON'T CHANGE! /////////////////
+  pushMatrix();                             //
   translate(translateX,translateY);        //
-  scale(scaleFactor);											 //
-	///////////////////////////////////////////
-	
+  scale(scaleFactor);                       //
+  ///////////////////////////////////////////
+  
   rect(screenStart, screenStart, sizeOfInputArea, sizeOfInputArea);
-	
+  
   if (finishTime!=0)
   {
     fill(255);
@@ -99,61 +99,74 @@ void draw()
     fill(255);
     text("NEXT > ", 850, 100); //draw next label
 
-		// draw keyboard rows
-		drawKeys(kbRow1, 1);
-		drawKeys(kbRow2, 2);
-		drawKeys(kbRow3, 3);	
+    // draw keyboard rows
+    drawKeys(kbRow1, 1);
+    drawKeys(kbRow2, 2);
+    drawKeys(kbRow3, 3);  
   }
   popMatrix();
 }
 
 ///////// KEYBOARD DRAWING CODE //////////////
 void drawKeys(List<String> row, int rowNumber) {
-	for (int i=0; i<row.size(); i++) {
-		float keyWidth = sizeOfInputArea/maxKeysPerRow;
-		float keyHeight = sizeOfInputArea / 3; // magic number: we're assuming 3 rows
-		float offset = (row.size() - maxKeysPerRow) * keyWidth/2;
-		float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
-		float keyY = screenStart + (rowNumber-1) * keyHeight;
-		
-		ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
-		thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
-		thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
-		
-		keyLocations.put(row.get(i).charAt(0), thisKeyBounds);
-		System.out.println(keyLocations);
-
-		fill(255);
-		rect(keyX, keyY, keyWidth, keyHeight);
-		fill(0);
-		text(row.get(i).charAt(0), keyX+(keyWidth/5), keyY+50, 100);
-	}
+  for (int i=0; i<row.size(); i++) {
+    float keyWidth = sizeOfInputArea/maxKeysPerRow;
+    float keyHeight = sizeOfInputArea / 3; // magic number: we're assuming 3 rows
+    float offset = (row.size() - maxKeysPerRow) * keyWidth/2;
+    float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
+    float keyY = screenStart + (rowNumber-1) * keyHeight;
+    
+    ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
+    
+    thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
+    thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
+    //System.out.println(thisKeyBounds);
+    keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
+   // System.out.println(keyLocations);
+  
+    fill(255);
+    rect(keyX, keyY, keyWidth, keyHeight);
+    fill(0);
+    text(row.get(i).charAt(0), keyX+(keyWidth/5), keyY+50, 100);
+  }
 }
 
 ///////// MOUSE HANDLING CODE ////////////////
 
 boolean didMouseClick(float x, float y, float w, float h) //simple function to do hit testing
-{	
-	// Translate mouse click coordinates by scaling and movement
-	x *= scaleFactor; x += translateX;	
-	y *= scaleFactor; y += translateY;
-	
-	// Click targets are also appropriately scaled
-	w *= scaleFactor;
-	h *= scaleFactor;
+{  
+  // Translate mouse click coordinates by scaling and movement
+  x *= scaleFactor; x += translateX;  
+  y *= scaleFactor; y += translateY;
+  
+  // Click targets are also appropriately scaled
+  w *= scaleFactor;
+  h *= scaleFactor;
   return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
 }
 
 void mousePressed()
 {
-	// TODO: Map x, y -> locations of buttons
-	// TODO: On click, set currentTyped to correct values	
+  // TODO: Map x, y -> locations of buttons
+  // TODO: On click, set currentTyped to correct values  
+  for (ArrayList key : keyLocations.keySet()) {
+    float corner0 = (Float)key.get(0);
+    float corner1 = (Float)key.get(1);
+    float corner2 = (Float)key.get(2);
+    float corner3 = (Float)key.get(3);
+    if (didMouseClick(corner0, corner1, corner2, corner3)){
+    //if (mouseX > corner0 && mouseX < corner0 + corner2 && mouseY < corner1 + corner3 && mouseY > corner1){
+      System.out.println(keyLocations.get(key));
+    }
+  
+  }
+  
 
-	// Next Button
+  // Next Button
   if (didMouseClick(800, 00, 200, 200)) //check if click is in next button
   {
     nextTrial(); //if so, advance to next trial
-	}
+  }
 }
 
 void mouseWheel(MouseEvent e)
