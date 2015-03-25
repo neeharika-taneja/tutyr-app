@@ -25,6 +25,12 @@ float errorsTotal = 0; //a running total of the number of errors (when hitting n
 String currentPhrase = ""; //the current target phrase
 String currentTyped = ""; //what the user has typed so far
 int value = 0;
+boolean left = false;
+boolean center = false;
+boolean right = false;
+
+boolean zoomed = false;
+List<Integer> currentSubset = Arrays.asList(0);
 // Keyboard variables
 List<String> kbRow1 = Arrays.asList("q", "w", "e", "r", "t", "y", "u", "i", "o", "p");
 List<String> kbRow2 = Arrays.asList("a", "s", "d", "f", "g", "h", "j", "k", "l");
@@ -60,10 +66,10 @@ void draw()
   // Start drawing
 
   // SCALING: DON'T CHANGE! /////////////////
-  pushMatrix();                             //
-  translate(translateX,translateY);        //
-  scale(scaleFactor);                       //
-  ///////////////////////////////////////////
+  // pushMatrix();                             //
+  // translate(translateX,translateY);        //
+  // scale(scaleFactor);                       //
+  // ///////////////////////////////////////////
   
   rect(screenStart, screenStart, sizeOfInputArea, sizeOfInputArea);
   
@@ -90,7 +96,7 @@ void draw()
   if (startTime!=0)
   {
     //you will need something like the next 10 lines in your code. Output does not have to be within the 2 inch area!
-		textSize(24);
+    textSize(24);
     textAlign(LEFT); //align the text left
     fill(128);
     text("Phrase " + (currTrialNum+1) + " of " + totalTrialNum, 70, 50); //draw the trial count
@@ -103,12 +109,14 @@ void draw()
     text("NEXT > ", 850, 100); //draw next label
 
     // draw keyboard rows
-		// drawWholeKeyboard();
-		textSize(48);
-		drawSubset(6, 10);
-
+    textSize(48);
+    if (zoomed == false){
+			drawWholeKeyboard();
+		} else { 
+			drawSubset(currentSubset.get(0), currentSubset.get(1));
+		}
   }
-  popMatrix();
+  // popMatrix();
 }
 
 ///////// KEYBOARD DRAWING CODE //////////////
@@ -135,97 +143,115 @@ void drawKeys(List<String> row, int rowNumber) {
 }
 
 void drawKeysSubset(List<String> row, int start, int stop, int rowNumber) {
-	int finish;
-	if ( stop >= row.size() ) {
-		finish = row.size();
-	} else {
-		finish = stop;
-	}
-	int maxKeysPerSubsetRow = finish - start + 1;
-	
-        int pos = 0;
-	for (int i=start; i<finish; i++) {
-            float keyWidth = sizeOfInputArea/maxKeysPerSubsetRow;
-            float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 4 rows
-            float offset = (row.size() - maxKeysPerSubsetRow) * keyWidth/2;
-            float keyX = screenStart + (pos * sizeOfInputArea / maxKeysPerSubsetRow);
-            float keyY = screenStart + (rowNumber-1) * keyHeight;
-        		
-            ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
-            
-            thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
-            thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
-            keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
-        		
-            fill(255);
-            rect(keyX, keyY, keyWidth, keyHeight);
-            fill(0);
-            textSize(48);
-            text(row.get(i).charAt(0), keyX+(keyWidth/5), keyY+50, 100);
-            pos++;		
-	}
+  int finish;
+  if ( stop >= row.size() ) {
+    finish = row.size();
+  } else {
+    finish = stop;
+  }
+  int maxKeysPerSubsetRow = finish - start + 1;
+  
+  int pos = 0; // Declaring a dummy variable for positioning
+  for (int i=start; i<finish; i++) {
+	  float keyWidth = sizeOfInputArea/maxKeysPerSubsetRow;
+	  float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 4 rows
+	  float offset = (row.size() - maxKeysPerSubsetRow) * keyWidth/2;
+	  float keyX = screenStart + (pos * sizeOfInputArea / maxKeysPerSubsetRow);
+	  float keyY = screenStart + (rowNumber-1) * keyHeight;
+  
+	  ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
+  
+	  thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
+	  thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
+	  keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
+  
+	  fill(255);
+	  rect(keyX, keyY, keyWidth, keyHeight);
+	  fill(0);
+	  textSize(48);
+	  text(row.get(i).charAt(0), keyX+(keyWidth/5), keyY+50, 100);
+	  pos++;    
+  }
 }
 
 void drawWholeKeyboard() {
   drawKeys(kbRow1, 1);
   drawKeys(kbRow2, 2);
   drawKeys(kbRow3, 3);  
-	drawKeys(kbRow4, 4);
+  drawKeys(kbRow4, 4);
 }
 
 void drawSubset(int start, int finish) {
-	drawKeysSubset(kbRow1, start, finish, 1);
-	drawKeysSubset(kbRow2, start, finish, 2);
-	drawKeysSubset(kbRow3, start, finish, 3);
-	drawKeysSubset(kbRow4, start, finish, 4);
+  drawKeysSubset(kbRow1, start, finish, 1);
+  drawKeysSubset(kbRow2, start, finish, 2);
+  drawKeysSubset(kbRow3, start, finish, 3);
+  drawKeysSubset(kbRow4, start, finish, 4);
 }
 
 ///////// MOUSE HANDLING CODE ////////////////
 
 boolean didMouseClick(float x, float y, float w, float h) //simple function to do hit testing
 {  
-  // Translate mouse click coordinates by scaling and movement
-  x *= scaleFactor; x += translateX;  
-  y *= scaleFactor; y += translateY;
-  
-  // Click targets are also appropriately scaled
-  w *= scaleFactor;
-  h *= scaleFactor;
+  // // Translate mouse click coordinates by scaling and movement
+  // x *= scaleFactor; x += translateX;
+  // y *= scaleFactor; y += translateY;
+  //
+  // // Click targets are also appropriately scaled
+  // w *= scaleFactor;
+  // h *= scaleFactor;
   
   return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
 }
 
-void mouseDragged()
-{
-
-}
 void mousePressed()
 {
-  // TODO: Map x, y -> locations of buttons
-  // TODO: On click, set currentTyped to correct values  
-  for (ArrayList key : keyLocations.keySet()) {
-    float corner0 = (Float)key.get(0);
-    float corner1 = (Float)key.get(1);
-    float corner2 = (Float)key.get(2);
-    float corner3 = (Float)key.get(3);
-    if (didMouseClick(corner0, corner1, corner2, corner3)){
-      if ( keyLocations.get(key) != "<".charAt(0) ) { 
-        currentTyped += keyLocations.get(key);
-      } else {
-        currentTyped = currentTyped.substring(0, currentTyped.length()-1);
-      }      
-      System.out.println(keyLocations.get(key));
+
+  System.out.println(mouseX);
+  System.out.println(mouseY);
+  if (zoomed == false){
+    if (mouseX > 200 && mouseX < 375 && mouseY > 200 && mouseY < 645){
+      zoomed = true;
+			currentSubset = Arrays.asList(0, 3);
+      // drawSubset(0,3);
     }
-  
+    else if (mouseX > 375 && mouseX < 510 && mouseY > 200 && mouseY < 645){
+      System.out.println("here");
+      zoomed = true;
+			currentSubset = Arrays.asList(3, 6);
+      // drawSubset(3,6);
+    }
+    else if (mouseX > 510 && mouseX < 640 && mouseY > 200 && mouseY < 645){
+      zoomed = true;
+			currentSubset = Arrays.asList(6,10);
+      // drawSubset(6,10);
+    }
+	} else { 
+	  for (ArrayList key : keyLocations.keySet()) {
+	    float corner0 = (Float)key.get(0);
+	    float corner1 = (Float)key.get(1);
+	    float corner2 = (Float)key.get(2);
+	    float corner3 = (Float)key.get(3);
+	    if (didMouseClick(corner0, corner1, corner2, corner3)){
+	      if ( keyLocations.get(key) != "<".charAt(0) ) { 
+	        currentTyped += keyLocations.get(key);
+	        zoomed = false;
+	        drawWholeKeyboard();
+	        break;
+				} else {
+	        currentTyped = currentTyped.substring(0, currentTyped.length()-1);        
+	      }      
+     
+	      System.out.println(keyLocations.get(key));
+	    }  
+	  }
   }
-  
 
   // Next Button
   if (didMouseClick(800, 00, 200, 200)) //check if click is in next button
   {
     nextTrial(); //if so, advance to next trial
   }
-	
+  
 }
 
 //void mouseWheel(MouseEvent e)
