@@ -24,11 +24,12 @@ float lettersExpectedTotal = 0; //a running total of the number of letters expec
 float errorsTotal = 0; //a running total of the number of errors (when hitting next)
 String currentPhrase = ""; //the current target phrase
 String currentTyped = ""; //what the user has typed so far
-
+int value = 0;
 // Keyboard variables
-List<String> kbRow1 = Arrays.asList("Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P");
-List<String> kbRow2 = Arrays.asList("A", "S", "D", "F", "G", "H", "J", "K", "L");
-List<String> kbRow3 = Arrays.asList("Z", "X", "C", "V", "B", "N", "M", "<");
+List<String> kbRow1 = Arrays.asList("q", "w", "e", "r", "t", "y", "u", "i", "o", "p");
+List<String> kbRow2 = Arrays.asList("a", "s", "d", "f", "g", "h", "j", "k", "l");
+List<String> kbRow3 = Arrays.asList("z", "x", "c", "v", "b", "n", "m", "<", " ");
+List<String> kbRow4 = Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
 final int maxKeysPerRow = kbRow1.size(); // Assuming qwerty
 HashMap<ArrayList, Character> keyLocations = new HashMap<ArrayList, Character>();
 
@@ -55,6 +56,7 @@ void draw()
   background(0); //clear background
   fill(100);
   
+    
   // Start drawing
 
   // SCALING: DON'T CHANGE! /////////////////
@@ -103,6 +105,7 @@ void draw()
     drawKeys(kbRow1, 1);
     drawKeys(kbRow2, 2);
     drawKeys(kbRow3, 3);  
+		drawKeys(kbRow4, 4);
   }
   popMatrix();
 }
@@ -111,7 +114,7 @@ void draw()
 void drawKeys(List<String> row, int rowNumber) {
   for (int i=0; i<row.size(); i++) {
     float keyWidth = sizeOfInputArea/maxKeysPerRow;
-    float keyHeight = sizeOfInputArea / 3; // magic number: we're assuming 3 rows
+    float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 3 rows
     float offset = (row.size() - maxKeysPerRow) * keyWidth/2;
     float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
     float keyY = screenStart + (rowNumber-1) * keyHeight;
@@ -131,6 +134,7 @@ void drawKeys(List<String> row, int rowNumber) {
   }
 }
 
+
 ///////// MOUSE HANDLING CODE ////////////////
 
 boolean didMouseClick(float x, float y, float w, float h) //simple function to do hit testing
@@ -142,9 +146,14 @@ boolean didMouseClick(float x, float y, float w, float h) //simple function to d
   // Click targets are also appropriately scaled
   w *= scaleFactor;
   h *= scaleFactor;
+  
   return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
 }
 
+void mouseDragged()
+{
+
+}
 void mousePressed()
 {
   // TODO: Map x, y -> locations of buttons
@@ -155,6 +164,8 @@ void mousePressed()
     float corner2 = (Float)key.get(2);
     float corner3 = (Float)key.get(3);
     if (didMouseClick(corner0, corner1, corner2, corner3)){
+      currentTyped+=keyLocations.get(key);
+      
     //if (mouseX > corner0 && mouseX < corner0 + corner2 && mouseY < corner1 + corner3 && mouseY > corner1){
       System.out.println(keyLocations.get(key));
     }
@@ -251,4 +262,3 @@ int computeLevenshteinDistance(String phrase1, String phrase2)
 
   return distance[phrase1.length()][phrase2.length()];
 }
-
