@@ -208,22 +208,19 @@ void mousePressed()
 
   System.out.println(mouseX);
   System.out.println(mouseY);
-  if (zoomed == false){
+  if (zoomed == false && startTime != 0){
     if (mouseX > 200 && mouseX < 375 && mouseY > 200 && mouseY < 645){
       zoomed = true;
 			currentSubset = Arrays.asList(0, 3);
-      // drawSubset(0,3);
     }
     else if (mouseX > 375 && mouseX < 510 && mouseY > 200 && mouseY < 645){
       System.out.println("here");
       zoomed = true;
 			currentSubset = Arrays.asList(3, 6);
-      // drawSubset(3,6);
     }
     else if (mouseX > 510 && mouseX < 640 && mouseY > 200 && mouseY < 645){
       zoomed = true;
 			currentSubset = Arrays.asList(6,10);
-      // drawSubset(6,10);
     }
 	} else { 
 	  for (ArrayList key : keyLocations.keySet()) {
@@ -235,9 +232,9 @@ void mousePressed()
 	      if ( keyLocations.get(key) != "<".charAt(0) ) { 
 	        currentTyped += keyLocations.get(key);
 	        zoomed = false;
-	        drawWholeKeyboard();
 	        break;
 				} else {
+					// Delete key
 	        currentTyped = currentTyped.substring(0, currentTyped.length()-1);        
 	      }      
      
