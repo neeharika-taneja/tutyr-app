@@ -28,7 +28,7 @@ int value = 0;
 // Keyboard variables
 List<String> kbRow1 = Arrays.asList("q", "w", "e", "r", "t", "y", "u", "i", "o", "p");
 List<String> kbRow2 = Arrays.asList("a", "s", "d", "f", "g", "h", "j", "k", "l");
-List<String> kbRow3 = Arrays.asList("z", "x", "c", "v", "b", "n", "m", "<", " ");
+List<String> kbRow3 = Arrays.asList("z", "x", "c", "v", "b", "n", "m", "<");
 List<String> kbRow4 = Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
 final int maxKeysPerRow = kbRow1.size(); // Assuming qwerty
 HashMap<ArrayList, Character> keyLocations = new HashMap<ArrayList, Character>();
@@ -90,6 +90,7 @@ void draw()
   if (startTime!=0)
   {
     //you will need something like the next 10 lines in your code. Output does not have to be within the 2 inch area!
+		textSize(24);
     textAlign(LEFT); //align the text left
     fill(128);
     text("Phrase " + (currTrialNum+1) + " of " + totalTrialNum, 70, 50); //draw the trial count
@@ -102,10 +103,10 @@ void draw()
     text("NEXT > ", 850, 100); //draw next label
 
     // draw keyboard rows
-    drawKeys(kbRow1, 1);
-    drawKeys(kbRow2, 2);
-    drawKeys(kbRow3, 3);  
-		drawKeys(kbRow4, 4);
+		// drawWholeKeyboard();
+		textSize(48);
+		drawSubset(6, 10);
+
   }
   popMatrix();
 }
@@ -114,7 +115,7 @@ void draw()
 void drawKeys(List<String> row, int rowNumber) {
   for (int i=0; i<row.size(); i++) {
     float keyWidth = sizeOfInputArea/maxKeysPerRow;
-    float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 3 rows
+    float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 4 rows
     float offset = (row.size() - maxKeysPerRow) * keyWidth/2;
     float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
     float keyY = screenStart + (rowNumber-1) * keyHeight;
@@ -123,9 +124,8 @@ void drawKeys(List<String> row, int rowNumber) {
     
     thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
     thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
-    //System.out.println(thisKeyBounds);
     keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
-   // System.out.println(keyLocations);
+
   
     fill(255);
     rect(keyX, keyY, keyWidth, keyHeight);
@@ -134,6 +134,51 @@ void drawKeys(List<String> row, int rowNumber) {
   }
 }
 
+void drawKeysSubset(List<String> row, int start, int stop, int rowNumber) {
+	int finish;
+	if ( stop >= row.size() ) {
+		finish = row.size();
+	} else {
+		finish = stop;
+	}
+	int maxKeysPerSubsetRow = finish - start + 1;
+	
+        int pos = 0;
+	for (int i=start; i<finish; i++) {
+            float keyWidth = sizeOfInputArea/maxKeysPerSubsetRow;
+            float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 4 rows
+            float offset = (row.size() - maxKeysPerSubsetRow) * keyWidth/2;
+            float keyX = screenStart + (pos * sizeOfInputArea / maxKeysPerSubsetRow);
+            float keyY = screenStart + (rowNumber-1) * keyHeight;
+        		
+            ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
+            
+            thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
+            thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
+            keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
+        		
+            fill(255);
+            rect(keyX, keyY, keyWidth, keyHeight);
+            fill(0);
+            textSize(48);
+            text(row.get(i).charAt(0), keyX+(keyWidth/5), keyY+50, 100);
+            pos++;		
+	}
+}
+
+void drawWholeKeyboard() {
+  drawKeys(kbRow1, 1);
+  drawKeys(kbRow2, 2);
+  drawKeys(kbRow3, 3);  
+	drawKeys(kbRow4, 4);
+}
+
+void drawSubset(int start, int finish) {
+	drawKeysSubset(kbRow1, start, finish, 1);
+	drawKeysSubset(kbRow2, start, finish, 2);
+	drawKeysSubset(kbRow3, start, finish, 3);
+	drawKeysSubset(kbRow4, start, finish, 4);
+}
 
 ///////// MOUSE HANDLING CODE ////////////////
 
@@ -164,9 +209,11 @@ void mousePressed()
     float corner2 = (Float)key.get(2);
     float corner3 = (Float)key.get(3);
     if (didMouseClick(corner0, corner1, corner2, corner3)){
-      currentTyped+=keyLocations.get(key);
-      
-    //if (mouseX > corner0 && mouseX < corner0 + corner2 && mouseY < corner1 + corner3 && mouseY > corner1){
+      if ( keyLocations.get(key) != "<".charAt(0) ) { 
+        currentTyped += keyLocations.get(key);
+      } else {
+        currentTyped = currentTyped.substring(0, currentTyped.length()-1);
+      }      
       System.out.println(keyLocations.get(key));
     }
   
@@ -178,14 +225,15 @@ void mousePressed()
   {
     nextTrial(); //if so, advance to next trial
   }
+	
 }
 
-void mouseWheel(MouseEvent e)
-{
-  translateX = translateX-e.getAmount()*(mouseX)/100;
-  translateY = translateY-e.getAmount()*(mouseY)/100;
-  scaleFactor += e.getAmount() / 100;
-}
+//void mouseWheel(MouseEvent e)
+//{
+//  translateX = translateX-e.getAmount()*(mouseX)/100;
+//  translateY = translateY-e.getAmount()*(mouseY)/100;
+//  scaleFactor += e.getAmount() / 100;
+//}
 
 
 ///////// TRIAL HANDLING CODE ////////////////
