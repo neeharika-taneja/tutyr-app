@@ -128,11 +128,11 @@ void drawKeys(List<String> row, int rowNumber) {
     float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
     float keyY = screenStart + (rowNumber-1) * keyHeight;
     
-    ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
-    
-    thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
-    thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
-    keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
+    // ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
+    //
+    // thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
+    // thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
+    // keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
 
   
     fill(255);
@@ -214,7 +214,6 @@ void mousePressed()
 			currentSubset = Arrays.asList(0, 3);
     }
     else if (mouseX > 375 && mouseX < 510 && mouseY > 200 && mouseY < 645){
-      System.out.println("here");
       zoomed = true;
 			currentSubset = Arrays.asList(3, 6);
     }
@@ -222,6 +221,8 @@ void mousePressed()
       zoomed = true;
 			currentSubset = Arrays.asList(6,10);
     }
+		System.out.println("New keymapping");
+		keyLocations = new HashMap<ArrayList, Character>();
 	} else { 
 	  for (ArrayList key : keyLocations.keySet()) {
 	    float corner0 = (Float)key.get(0);
@@ -250,14 +251,6 @@ void mousePressed()
   }
   
 }
-
-//void mouseWheel(MouseEvent e)
-//{
-//  translateX = translateX-e.getAmount()*(mouseX)/100;
-//  translateY = translateY-e.getAmount()*(mouseY)/100;
-//  scaleFactor += e.getAmount() / 100;
-//}
-
 
 ///////// TRIAL HANDLING CODE ////////////////
 
