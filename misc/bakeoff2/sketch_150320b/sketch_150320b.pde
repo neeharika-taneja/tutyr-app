@@ -1,11 +1,6 @@
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-// Ketai is a Processing support library that lets you do multitouch and
-// other fancy stuff on Android. install in Processing: Android Mode | Tools > Add Tool > Ketai
-// import ketai.ui.*;
-
 ///////////// VARIABLE DECLARATIONS /////////////
 // Scale vars
 float scaleFactor;
@@ -30,6 +25,7 @@ boolean center = false;
 boolean right = false;
 
 boolean zoomed = false;
+
 List<Integer> currentSubset = Arrays.asList(0);
 // Keyboard variables
 List<String> kbRow1 = Arrays.asList("q", "w", "e", "r", "t", "y", "u", "i", "o", "p");
@@ -38,6 +34,7 @@ List<String> kbRow3 = Arrays.asList("z", "x", "c", "v", "b", "n", "m", "<");
 List<String> kbRow4 = Arrays.asList(" ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
 final int maxKeysPerRow = kbRow1.size(); // Assuming qwerty
 HashMap<ArrayList, Character> keyLocations = new HashMap<ArrayList, Character>();
+char flashKey = " ".charAt(0);
 
 // Drawing variables
 final int DPIofYourDeviceScreen = 445; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
@@ -55,6 +52,7 @@ void setup()
   size(1000, 1000); //Sets the size of the app. You may want to modify this to your device. Many phones today are 1080 wide by 1920 tall.
   textFont(createFont("Arial", 24)); //set the font to arial 24
   scaleFactor = 1;
+	
 }
 
 void draw()
@@ -113,6 +111,7 @@ void draw()
     if (zoomed == false){
 			drawWholeKeyboard();
 		} else { 
+			flashKey = " ".charAt(0);
 			drawSubset(currentSubset.get(0), currentSubset.get(1));
 		}
   }
@@ -134,8 +133,11 @@ void drawKeys(List<String> row, int rowNumber) {
     // thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
     // keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
 
-  
-    fill(255);
+  	if ( row.get(i).charAt(0) == flashKey ) {
+			fill(180, 213, 255);
+		} else {
+	    fill(255);			
+		}
     rect(keyX, keyY, keyWidth, keyHeight);
     fill(0);
     text(row.get(i).charAt(0), keyX+(keyWidth/5), keyY+50, 100);
@@ -156,7 +158,7 @@ void drawKeysSubset(List<String> row, int start, int stop, int rowNumber) {
 	  float keyWidth = sizeOfInputArea/maxKeysPerSubsetRow;
 	  float keyHeight = sizeOfInputArea / 4; // magic number: we're assuming 4 rows
 	  float offset = (row.size() - maxKeysPerSubsetRow) * keyWidth/2;
-	  float keyX = screenStart + (pos * sizeOfInputArea / maxKeysPerSubsetRow);
+	  float keyX = screenStart + (pos * sizeOfInputArea / maxKeysPerSubsetRow) + offset/4;
 	  float keyY = screenStart + (rowNumber-1) * keyHeight;
   
 	  ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
@@ -192,15 +194,7 @@ void drawSubset(int start, int finish) {
 
 boolean didMouseClick(float x, float y, float w, float h) //simple function to do hit testing
 {  
-  // // Translate mouse click coordinates by scaling and movement
-  // x *= scaleFactor; x += translateX;
-  // y *= scaleFactor; y += translateY;
-  //
-  // // Click targets are also appropriately scaled
-  // w *= scaleFactor;
-  // h *= scaleFactor;
-  
-  return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
+	return (mouseX > x && mouseX<x+w && mouseY>y && mouseY<y+h); //check to see if it is in button bounds
 }
 
 void mousePressed()
@@ -210,35 +204,44 @@ void mousePressed()
   System.out.println(mouseY);
   if (zoomed == false && startTime != 0){
     if (mouseX > 200 && mouseX < 375 && mouseY > 200 && mouseY < 645){
+			// First third
       zoomed = true;
 			currentSubset = Arrays.asList(0, 3);
     }
     else if (mouseX > 375 && mouseX < 510 && mouseY > 200 && mouseY < 645){
+			//Middle third
       zoomed = true;
 			currentSubset = Arrays.asList(3, 6);
     }
     else if (mouseX > 510 && mouseX < 640 && mouseY > 200 && mouseY < 645){
+			// Last third
       zoomed = true;
 			currentSubset = Arrays.asList(6,10);
     }
 		System.out.println("New keymapping");
 		keyLocations = new HashMap<ArrayList, Character>();
 	} else { 
-	  for (ArrayList key : keyLocations.keySet()) {
+	  for (ArrayList key : keyLocations.keySet()) {			
+			// Get key bounds
 	    float corner0 = (Float)key.get(0);
 	    float corner1 = (Float)key.get(1);
 	    float corner2 = (Float)key.get(2);
 	    float corner3 = (Float)key.get(3);
+			
 	    if (didMouseClick(corner0, corner1, corner2, corner3)){
 	      if ( keyLocations.get(key) != "<".charAt(0) ) { 
 	        currentTyped += keyLocations.get(key);
-	        zoomed = false;
-	        break;
+					if ( keyLocations.get(key) != " ".charAt(0) ) {
+		        zoomed = false;
+					}
+					flashKey = keyLocations.get(key);
+	        break;					
 				} else {
-					// Delete key
-	        currentTyped = currentTyped.substring(0, currentTyped.length()-1);        
-	      }      
-     
+					// Delete key - delete if there's text
+					if ( currentTyped.length() > 0 ) {
+		        currentTyped = currentTyped.substring(0, currentTyped.length()-1);        
+					}
+	      }           
 	      System.out.println(keyLocations.get(key));
 	    }  
 	  }
