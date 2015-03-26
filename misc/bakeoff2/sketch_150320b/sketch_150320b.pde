@@ -1,6 +1,9 @@
+import android.view.MotionEvent;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import ketai.ui.*;
+
 ///////////// VARIABLE DECLARATIONS /////////////
 // Scale vars
 float scaleFactor;
@@ -25,6 +28,7 @@ boolean center = false;
 boolean right = false;
 
 boolean zoomed = false;
+KetaiGesture gesture;
 
 List<Integer> currentSubset = Arrays.asList(0);
 // Keyboard variables
@@ -49,9 +53,10 @@ void setup()
   Collections.shuffle(Arrays.asList(phrases)); //randomize the order of the phrases
     
   orientation(PORTRAIT); //can also be LANDSCAPE -- sets orientation on android device
-  size(1000, 1000); //Sets the size of the app. You may want to modify this to your device. Many phones today are 1080 wide by 1920 tall.
-  textFont(createFont("Arial", 24)); //set the font to arial 24
+  size(1080, 1920); //Sets the size of the app. You may want to modify this to your device. Many phones today are 1080 wide by 1920 tall.
+  textFont(createFont("Arial", 36)); //set the font to arial 24
   scaleFactor = 1;
+  gesture = new KetaiGesture(this);
 	
 }
 
@@ -94,13 +99,13 @@ void draw()
   if (startTime!=0)
   {
     //you will need something like the next 10 lines in your code. Output does not have to be within the 2 inch area!
-    textSize(24);
+    textSize(42);
     textAlign(LEFT); //align the text left
     fill(128);
     text("Phrase " + (currTrialNum+1) + " of " + totalTrialNum, 70, 50); //draw the trial count
     fill(255);
-    text("Target:   " + currentPhrase, 70, 100); //draw the target string
-    text("Entered:  " + currentTyped, 70, 140); //draw what the user has entered thus far 
+    text("Target:   " + currentPhrase, 70, screenStart + 2*sizeOfInputArea); //draw the target string
+    text("Entered:  " + currentTyped, 70, 140 + screenStart + 2*sizeOfInputArea); //draw what the user has entered thus far 
     fill(255, 0, 0);
     rect(800, 00, 200, 200); //drag next button
     fill(255);
@@ -127,12 +132,6 @@ void drawKeys(List<String> row, int rowNumber) {
     float keyX = screenStart + (i * sizeOfInputArea / maxKeysPerRow) - offset;
     float keyY = screenStart + (rowNumber-1) * keyHeight;
     
-    // ArrayList<Float> thisKeyBounds = new ArrayList<Float>();
-    //
-    // thisKeyBounds.add(keyX); thisKeyBounds.add(keyY);
-    // thisKeyBounds.add(keyWidth); thisKeyBounds.add(keyHeight);
-    // keyLocations.put(thisKeyBounds, row.get(i).charAt(0));
-
   	if ( row.get(i).charAt(0) == flashKey ) {
 			fill(180, 213, 255);
 		} else {
@@ -179,8 +178,18 @@ void drawKeysSubset(List<String> row, int start, int stop, int rowNumber) {
 void drawWholeKeyboard() {
   drawKeys(kbRow1, 1);
   drawKeys(kbRow2, 2);
-  drawKeys(kbRow3, 3);  
+  drawKeys(kbRow3, 3);
   drawKeys(kbRow4, 4);
+
+	fill(200, 0, 0, 128);
+	rect(200, 200, 135, 445);
+	
+	fill(0, 200, 0, 128);
+	rect(335, 200, 135, 445);
+	
+	fill(0,0,200,128);
+	rect(470, 200, 170, 445);
+	
 }
 
 void drawSubset(int start, int finish) {
@@ -231,9 +240,8 @@ void mousePressed()
 	    if (didMouseClick(corner0, corner1, corner2, corner3)){
 	      if ( keyLocations.get(key) != "<".charAt(0) ) { 
 	        currentTyped += keyLocations.get(key);
-					if ( keyLocations.get(key) != " ".charAt(0) ) {
-		        zoomed = false;
-					}
+	        zoomed = false;
+
 					flashKey = keyLocations.get(key);
 	        break;					
 				} else {
@@ -310,8 +318,20 @@ void nextTrial()
   //currentPhrase = "abc"; // uncomment this to override the test phrase (useful for debugging)
 }
 
+void onPinch(float x, float y, float d)
+{
+  if ( zoomed && startTime != 0 ) {
+   zoomed = false; 
+  } 
+}
+public boolean surfaceTouchEvent(MotionEvent event) {
 
+  //call to keep mouseX, mouseY, etc updated
+  super.surfaceTouchEvent(event);
 
+  //forward event to class for processing
+  return gesture.surfaceTouchEvent(event);
+}
 
 //=========SHOULD NOT NEED TO TOUCH THIS AT ALL!==============
 int computeLevenshteinDistance(String phrase1, String phrase2)  
