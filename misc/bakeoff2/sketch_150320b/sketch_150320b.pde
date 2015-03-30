@@ -12,7 +12,7 @@ float translateY;
 
 // Typing variables
 String[] phrases;
-int totalTrialNum = 4; //the total number of phrases to be tested - set this low for testing. Might be ~10 for the real bakeoff!
+int totalTrialNum = 2 ; //the total number of phrases to be tested - set this low for testing. Might be ~10 for the real bakeoff!
 int currTrialNum = 0; // the current trial number (indexes into trials array above)
 float startTime = 0; // time starts when the first letter is entered
 float finishTime = 0; // records the time of when the final trial ends
@@ -120,6 +120,7 @@ void draw()
 			drawSubset(currentSubset.get(0), currentSubset.get(1));
 		}
   }
+
   // popMatrix();
 }
 
@@ -180,16 +181,16 @@ void drawWholeKeyboard() {
   drawKeys(kbRow2, 2);
   drawKeys(kbRow3, 3);
   drawKeys(kbRow4, 4);
-
-	fill(200, 0, 0, 128);
-	rect(200, 200, 135, 445);
-	
-	fill(0, 200, 0, 128);
-	rect(335, 200, 135, 445);
-	
-	fill(0,0,200,128);
-	rect(470, 200, 170, 445);
-	
+//
+//	fill(200, 0, 0, 128);
+//	rect(200, 200, 135, 445);
+//	
+//	fill(0, 200, 0, 128);
+//	rect(335, 200, 135, 445);
+//	
+//	fill(0,0,200,128);
+//	rect(470, 200, 170, 445);
+//	
 }
 
 void drawSubset(int start, int finish) {
