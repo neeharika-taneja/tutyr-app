@@ -1,1 +1,47 @@
-/* Empty. Add your own CSS if you like */
+
+.menu .scroll-content {
+	background: #444;
+}
+.menu .item, .menu .item-content {
+	background: #444;
+	color: #fafafa;
+}
+
+.menu .item .icon { 
+	margin-right: 20px;
+	font-size: 1.5em;
+}
+.menu .item .icon-wrap {
+	width: 40px;
+	display: inline;
+	padding: 5px;
+}
+.menu .item {
+	text-align: left;
+	font-size: 1.3em;
+}
+
+.user.user-name { 
+	color: #fff;
+	text-align: center;
+}
+
+.user.user-status {
+	color: #fff;
+	text-align: center;
+	font-weight: 300;
+	padding-bottom: 1em;
+	
+}
+
+.user.user-image {
+	width: 10em;
+	height: 10em;
+	margin: 0 auto;
+	margin-top: 2em;
+}
+.user.user-image img {
+	width: 10em;
+	border-radius: 5em;
+	border: 0.5em solid #fafafa;
+}

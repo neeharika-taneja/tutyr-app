@@ -14,20 +14,48 @@
 
   <ion-side-menu side="left">
     <ion-header-bar class="bar-stable">
-      <h1 class="title">Menu</h1>
+      <h1 class="title">Tutyr</h1>
     </ion-header-bar>
     <ion-content>
-      <ion-list>
-        <ion-item nav-clear menu-close ng-click="login()">
-          Login
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/settings">
-					Settings
-        </ion-item>
-        <ion-item nav-clear menu-close href="#/app/about">
-					About
-        </ion-item>
-      </ion-list>
+			<div ng-if="!currentUser.loggedIn">
+				<!-- Menu for logged out users -->
+				<ion-list>
+	        <ion-item nav-clear menu-close ng-click="login()">
+	          <i class="icon ion-log-in"></i> Login
+	        </ion-item>
+	        <ion-item nav-clear menu-close href="#/app/about">
+						<i class="icon ion-help"></i> Help and Feedback
+	        </ion-item>			
+				</ion-list>
+			</div>	
+			
+			<div ng-if="currentUser.loggedIn">
+				<!-- Menu for logged in users -->
+				<div class="user user-image">
+					<img src="img/{{currentUser.image}}" />
+				</div>	
+				<h2 class="user user-name">{{currentUser.first}} {{currentUser.last}}</h2>
+				<h3 class="user user-status">
+					<span ng-show="currentUser.tutor">Tutor</span>
+					<span ng-show="!currentUser.tutor">Student</span>
+				</h3>
+					
+	      <ion-list>
+	        <ion-item nav-clear menu-close ng-click="#/app/newsfeed">
+						<div class="icon-wrap"><i class="icon ion-document-text"></i></div> News Feed
+	        </ion-item>
+	        <ion-item nav-clear menu-close ng-click="#/app/profile">
+						<div class="icon-wrap"><i class="icon ion-edit"></i></div> Profile
+	        </ion-item>
+	        <ion-item nav-clear menu-close href="#/app/settings">
+						<div class="icon-wrap"><i class="icon ion-gear-a"></i></div> Preferences
+	        </ion-item>
+	        <ion-item nav-clear menu-close href="#/app/about">
+						<div class="icon-wrap"><i class="icon ion-help"></i></div> Help and Feedback
+	        </ion-item>
+	      </ion-list>
+			</h2>
+				
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>
