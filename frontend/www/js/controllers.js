@@ -4,7 +4,7 @@ angular.module('starter.controllers', [])
   // Form data for the login modal
   $scope.loginData = {};
 	$scope.currentUser = {
-		loggedIn: true,
+		loggedIn: false,
 		first: 'Andrea',
 		last: 'Smith',
 		email: 'test.person@example.com',

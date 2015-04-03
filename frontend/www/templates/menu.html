@@ -20,10 +20,10 @@
 			<div ng-if="!currentUser.loggedIn">
 				<!-- Menu for logged out users -->
 				<ion-list>
-	        <ion-item nav-clear menu-close ng-click="login()">
+	        <ion-item class="item-icon-left" nav-clear menu-close ng-click="login()">
 	          <i class="icon ion-log-in"></i> Login
 	        </ion-item>
-	        <ion-item nav-clear menu-close href="#/app/about">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
 						<i class="icon ion-help"></i> Help and Feedback
 	        </ion-item>			
 				</ion-list>
@@ -41,16 +41,16 @@
 				</h3>
 					
 	      <ion-list>
-	        <ion-item nav-clear menu-close ng-click="#/app/newsfeed">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/newsfeed">
 						<div class="icon-wrap"><i class="icon ion-document-text"></i></div> News Feed
 	        </ion-item>
-	        <ion-item nav-clear menu-close ng-click="#/app/profile">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/profile">
 						<div class="icon-wrap"><i class="icon ion-edit"></i></div> Profile
 	        </ion-item>
-	        <ion-item nav-clear menu-close href="#/app/settings">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/settings">
 						<div class="icon-wrap"><i class="icon ion-gear-a"></i></div> Preferences
 	        </ion-item>
-	        <ion-item nav-clear menu-close href="#/app/about">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
 						<div class="icon-wrap"><i class="icon ion-help"></i></div> Help and Feedback
 	        </ion-item>
 	      </ion-list>

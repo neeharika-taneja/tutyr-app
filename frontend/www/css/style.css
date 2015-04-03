@@ -1,3 +1,11 @@
+/* Global */
+.button.button-tutyr {
+	background: #0f9a8c;
+	border-color: #0f9aa9;
+	color: #fff;
+}
+
+/* Menu */
 
 .menu .scroll-content {
 	background: #444;
@@ -44,4 +52,20 @@
 	width: 10em;
 	border-radius: 5em;
 	border: 0.5em solid #fafafa;
+}
+
+
+/* Login and newsfeed */
+#intro {
+	background: #444;
+	color: #fafafa;
+}
+#intro h1, h2 { 
+	color: #fafafa;
+}
+#intro h1 { 
+	font-size: 4em;
+}
+.login { 
+	margin: 2em;
 }
