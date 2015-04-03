@@ -5,7 +5,7 @@
 			<h2>Log in for an easy to use, on-demand tutoring service.</h2>
 			<br />
 
-			<button class="button button-block button-calm">
+			<button class="button button-block button-calm" ng-click="login('fake')">
 				Login With Facebook
 			</button>			
 			<button class="button button-block button-tutyr">
@@ -14,7 +14,37 @@
 			
 		</div>
 		<div ng-if="currentUser.loggedIn" class="newsfeed">	
-			<p>News feed goes here</p>
-		</div>	
+			<div class="header">
+					
+				<div class="list list-inset">
+				  <label class="item item-input">
+				    <i class="icon ion-search placeholder-icon"></i>
+				    <input type="text" placeholder="Search">
+				  </label>
+				</div>
+			</div>	
+			
+			<div class="newsfeed-profiles">
+				<div ng-repeat="profile in mockNewsfeed.profiles" class="profile card">
+					<div class="row profile-main">
+						<div class="col col-25">
+							<div class="profile-image">
+								<img src="img/{{profile.profileimage}}" />
+							</div>					
+						</div>
+						<div class="col col-50">	
+							<p class="profile-name">{{profile.realname}}</p>
+							<p class="profile-bio">{{profile.bio1}}</p>
+						</div>
+						<div class="col col-25">	
+							<p class="profile-rating">{{profile.rating}} / 5</p>
+						</div>	
+					</div>	
+					<hr />
+					<div class="row profile-meta">
+						<i class="icon ion-location"></i> {{profile.customlocation}}
+					</div>
+			</div> <!-- /profile -->						
+		</div>	<!-- /profiles -->
   </ion-content>
 </ion-view>

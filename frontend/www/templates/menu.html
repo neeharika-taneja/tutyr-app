@@ -20,7 +20,7 @@
 			<div ng-if="!currentUser.loggedIn">
 				<!-- Menu for logged out users -->
 				<ion-list>
-	        <ion-item class="item-icon-left" nav-clear menu-close ng-click="login()">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/intro">
 	          <i class="icon ion-log-in"></i> Login
 	        </ion-item>
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
@@ -32,9 +32,9 @@
 			<div ng-if="currentUser.loggedIn">
 				<!-- Menu for logged in users -->
 				<div class="user user-image">
-					<img src="img/{{currentUser.image}}" />
+					<img src="img/{{currentUser.profileimage}}" />
 				</div>	
-				<h2 class="user user-name">{{currentUser.first}} {{currentUser.last}}</h2>
+				<h2 class="user user-name">{{currentUser.realname}}</h2>
 				<h3 class="user user-status">
 					<span ng-show="currentUser.tutor">Tutor</span>
 					<span ng-show="!currentUser.tutor">Student</span>
@@ -53,9 +53,17 @@
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
 						<div class="icon-wrap"><i class="icon ion-help"></i></div> Help and Feedback
 	        </ion-item>
+					<ion-item class="item-toggle" nav-clear>
+			      Tutor Mode
+			      <label class="toggle toggle-assertive">
+			        <input type="checkbox">
+			        <div class="track">
+			          <div class="handle"></div>
+			        </div>
+			      </label>
+					
+					</ion-item>
 	      </ion-list>
-			</h2>
-				
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

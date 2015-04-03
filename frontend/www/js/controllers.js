@@ -5,12 +5,65 @@ angular.module('starter.controllers', [])
   $scope.loginData = {};
 	$scope.currentUser = {
 		loggedIn: false,
-		first: 'Andrea',
-		last: 'Smith',
+		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
-		image: 'test-person.jpg',
+		profileimage: 'test-person.jpg',
 		tutor: true
 	};
+	$scope.mockNewsfeed = {
+		profiles: [
+			{
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University'
+			},
+			{
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University'
+			},
+			{
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University'
+			},
+			{
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University'
+			}
+		],
+		subjectlist: [
+			{
+				subjectname: 'English',
+				subjectid: 1
+			},
+			{
+				subjectname: 'Math',
+				subjectid: 2
+			},
+			{
+				subjectname: 'History',
+				subjectid: 3
+			},
+			{
+				subjectname: 'Computer Science',
+				subjectid: 4
+			},
+			{
+				subjectname: 'Design',
+				subjectid: 5
+			}
+		]
+	}
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
@@ -24,8 +77,12 @@ angular.module('starter.controllers', [])
   };
 
   // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
+  $scope.login = function(debug) {
+		if ( debug == 'fake' ) {
+			$scope.currentUser.loggedIn = true;
+		} else {
+	    $scope.modal.show();			
+		}
   };
 
   // Perform the login action when the user submits the login form

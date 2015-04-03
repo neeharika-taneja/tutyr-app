@@ -26,12 +26,12 @@
 }
 .menu .item {
 	text-align: left;
-	font-size: 1.3em;
 }
 
 .user.user-name { 
 	color: #fff;
 	text-align: center;
+	font-size: 1.5em;
 }
 
 .user.user-status {
@@ -39,6 +39,7 @@
 	text-align: center;
 	font-weight: 300;
 	padding-bottom: 1em;
+	font-size: 1em;
 	
 }
 
@@ -55,7 +56,7 @@
 }
 
 
-/* Login and newsfeed */
+/* Login */
 #intro {
 	background: #444;
 	color: #fafafa;
@@ -68,4 +69,47 @@
 }
 .login { 
 	margin: 2em;
+}
+
+/* Newsfeed */
+.newsfeed .header {
+	background: #444;
+	padding: 1em 0 1em 0;
+}
+.newsfeed-profiles {
+	background: #eee;
+	padding: 1em 0 1em 0;
+	color: #111;
+}
+.newsfeed p {
+	margin-bottom: 5px;
+}
+.newsfeed .profile {
+	width: 90%;
+	margin: 0 auto;
+	padding: 0.5em;
+	margin-bottom: 0.5em;
+}
+.profile-name {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+.profile-image {
+	width: 3.85em;
+	height: 3.85em;
+
+}
+.profile-image img {
+	width: 3.85em;
+	border-radius: 1.925em;
+}
+.profile-rating {
+	text-align: right;
+}
+.profile-meta { 
+	color: #444;
+}
+.profile-meta .ion-location {
+	padding-right: 10px;
+	font-size: 1.75em;
 }
