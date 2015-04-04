@@ -1,14 +1,36 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-  // Form data for the login modal
-  $scope.loginData = {};
+	$scope.genFBUser = function() {
+	  openFB.api({
+	    path: '/me',
+	    params: {fields: 'id,name,email'},
+	    success: function(user) {
+	      $scope.$apply(function() {
+	        $scope.fbUser = {
+	        	loggedIn: true,
+						realname: user.name,
+						email: user.email,
+						fbID: user.id,
+						profileimage: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
+						tutor: false
+	        };
+					$scope.currentUser.loggedIn = true;
+					console.log($scope.fbUser);
+	      });
+	    },
+	    error: function(error) {
+	      alert('Facebook error: ' + error.error_description);
+	    }
+	  });		
+	}
+
 	$scope.currentUser = {
 		loggedIn: false,
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
 		profileimage: 'test-person.jpg',
-		tutor: true
+		tutor: false
 	};
 	$scope.mockNewsfeed = {
 		profiles: [
@@ -64,26 +86,19 @@ angular.module('starter.controllers', [])
 			}
 		]
 	}
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function(debug) {
-		if ( debug == 'fake' ) {
-			$scope.currentUser.loggedIn = true;
-		} else {
-	    $scope.modal.show();			
-		}
-  };
+	$scope.fbLogin = function() {
+    openFB.login(
+			function(response) {
+				if (response.status === 'connected') {
+				    console.log('Facebook login succeeded');
+						$scope.genFBUser();
+				} else {
+				    alert('Facebook login failed');
+				}
+			},
+			{scope: 'public_profile,email'}
+		);
+	}
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {

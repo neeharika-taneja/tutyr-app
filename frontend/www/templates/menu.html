@@ -32,9 +32,9 @@
 			<div ng-if="currentUser.loggedIn">
 				<!-- Menu for logged in users -->
 				<div class="user user-image">
-					<img src="img/{{currentUser.profileimage}}" />
+					<img src="{{fbUser.profileimage}}" />
 				</div>	
-				<h2 class="user user-name">{{currentUser.realname}}</h2>
+				<h2 class="user user-name">{{fbUser.realname}}</h2>
 				<h3 class="user user-status">
 					<span ng-show="currentUser.tutor">Tutor</span>
 					<span ng-show="!currentUser.tutor">Student</span>
@@ -54,14 +54,14 @@
 						<div class="icon-wrap"><i class="icon ion-help"></i></div> Help and Feedback
 	        </ion-item>
 					<ion-item class="item-toggle" nav-clear>
-			      Tutor Mode
-			      <label class="toggle toggle-assertive">
+			      <label class="toggle toggle-tutyr">
 			        <input type="checkbox">
 			        <div class="track">
 			          <div class="handle"></div>
 			        </div>
 			      </label>
-					
+
+			      Tutor Mode					
 					</ion-item>
 	      </ion-list>
     </ion-content>

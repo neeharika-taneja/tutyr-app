@@ -4,15 +4,23 @@
 	border-color: #0f9aa9;
 	color: #fff;
 }
+.toggle.toggle-tutyr input:checked + .track {
+	background: #0f9a8c;
+	border-color: #0f9aa9;
 
+}
 /* Menu */
 
 .menu .scroll-content {
-	background: #444;
+	background: #02272d;
 }
 .menu .item, .menu .item-content {
-	background: #444;
+	background: #02272d;
 	color: #fafafa;
+}
+
+.menu .item.active, .menu .item.activated, .menu .item-complex.active .menu .item-complex.activated {
+	background: #074b44;
 }
 
 .menu .item .icon { 
