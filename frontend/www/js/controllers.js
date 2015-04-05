@@ -2,10 +2,15 @@ angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 	$scope.genFBUser = function() {
+		// Grab the user
 	  openFB.api({
 	    path: '/me',
 	    params: {fields: 'id,name,email'},
 	    success: function(user) {
+				// When the backend goes live, something like
+				// send FB ID to backend 
+				// if the ID is already associated with an account, send back info and stick in fbUser
+				// otherwise, do the same but also send back a 'new account' message
 	      $scope.$apply(function() {
 	        $scope.fbUser = {
 	        	loggedIn: true,
@@ -16,7 +21,6 @@ angular.module('starter.controllers', [])
 						tutor: false
 	        };
 					$scope.currentUser.loggedIn = true;
-					console.log($scope.fbUser);
 	      });
 	    },
 	    error: function(error) {
@@ -24,12 +28,16 @@ angular.module('starter.controllers', [])
 	    }
 	  });		
 	}
+	$scope.fakeLogin = function() {
+		$scope.currentUser.loggedIn = true;
+		$scope.fbUser = $scope.currentUser;
+	}
 
 	$scope.currentUser = {
 		loggedIn: false,
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
-		profileimage: 'test-person.jpg',
+		profileimage: 'img/test-person.jpg',
 		tutor: false
 	};
 	$scope.mockNewsfeed = {
