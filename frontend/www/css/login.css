@@ -1,0 +1,9 @@
+.title h1 {
+	margin-left: 20%;
+	margin-top: 20%;
+}
+.background, .background .pane, .background .item, .background .item-complex .item-content{
+    background-color: yellow;
+}
+
+<ion-nav-view class="background"></ion-nav-view>
