@@ -12,10 +12,10 @@
 /* Menu */
 
 .menu .scroll-content {
-	background: #02272d;
+	background: #333;
 }
 .menu .item, .menu .item-content {
-	background: #02272d;
+	background: #444;
 	color: #fafafa;
 }
 
@@ -24,14 +24,15 @@
 }
 
 .menu .item .icon { 
-	margin-right: 20px;
-	font-size: 1.5em;
+  background: #fafafa;
+  width: 30px;
+  border-radius: 50%;
+  height: 30px;
+  color: #333;
+  margin-top: 10px;
+	font-size: 1.3em;
 }
-.menu .item .icon-wrap {
-	width: 40px;
-	display: inline;
-	padding: 5px;
-}
+
 .menu .item {
 	text-align: left;
 }

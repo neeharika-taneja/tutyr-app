@@ -38,7 +38,7 @@ angular.module('starter.controllers', [])
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
 		profileimage: 'img/test-person.jpg',
-		tutor: false
+		tutor: true
 	};
 	$scope.mockNewsfeed = {
 		profiles: [
