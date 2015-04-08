@@ -1,0 +1,29 @@
+<ion-view view-title="Incoming Requests">
+  <ion-content>
+		<div ng-if="mockRequests.length==0" id="request-list-empty">
+			<p><i class="icon ion-email"></i></p>
+			<p>No requests at the moment.</p>
+		</div>
+		<div ng-if="mockRequests.length>0" id="request-list">
+			<div class="card" ng-repeat="request in mockRequests">
+				<ion-item class="item-text-wrap">
+					<div class="profile-image">
+						<img src="{{request.profileimage}}">
+					</div>
+					<p class="profile-name">{{request.from}}</p>
+					<p ng-show="request.comments">Comment: "{{request.comments}}"</p>
+				</ion-item>
+			  <ion-item class="tabs tabs-icon">
+			    <a class="tab-item" href="#/app/tutor_requests/{{request.requestid}}">
+			      <i class="icon ion-thumbsup"></i>
+			    </a>
+			    <a class="tab-item" ng-click="decline(request.requestid)">
+			      <i class="icon ion-thumbsdown"></i>
+			      Decline
+			    </a>
+			  </ion-item>
+				
+			</div>	
+		</div>	
+  </ion-content>
+</ion-view>

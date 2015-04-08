@@ -122,3 +122,31 @@
 	padding-right: 10px;
 	font-size: 1.75em;
 }
+
+/* Requests */
+#request-list-empty p {
+	color: #777;
+	text-align: center;
+	margin-top: 15%;
+	font-size: 1.5em;
+}
+#request-list-empty p i { 
+	font-size: 5em;
+	color: #aaa;
+}
+#request-list .profile-image {
+	margin: 0.5em auto;
+	width: 8em;
+	height: 8em;
+}
+#request-list .profile-image img {
+	width: 8em;
+	height: 8em;
+	border-radius: 4em;	
+	border: 5px solid #444;
+}
+#request-list .profile-name {
+	text-align: center;
+	font-size: 1.5em;
+	line-height: 2em;
+}

@@ -40,6 +40,34 @@ angular.module('starter.controllers', [])
 		profileimage: 'img/test-person.jpg',
 		tutor: true
 	};
+	
+	$scope.fbLogin = function() {
+    openFB.login(
+			function(response) {
+				if (response.status === 'connected') {
+				    console.log('Facebook login succeeded');
+						$scope.genFBUser();
+				} else {
+				    alert('Facebook login failed');
+				}
+			},
+			{scope: 'public_profile,email'}
+		);
+	}
+
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
+  };
+})
+
+.controller('HomeScreenController', function($scope){
 	$scope.mockNewsfeed = {
 		profiles: [
 			{
@@ -93,43 +121,36 @@ angular.module('starter.controllers', [])
 				subjectid: 5
 			}
 		]
-	}
-	$scope.fbLogin = function() {
-    openFB.login(
-			function(response) {
-				if (response.status === 'connected') {
-				    console.log('Facebook login succeeded');
-						$scope.genFBUser();
-				} else {
-				    alert('Facebook login failed');
-				}
-			},
-			{scope: 'public_profile,email'}
-		);
-	}
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
+	};
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+.controller('TutorRequestsController', function($scope, $ionicModal) {
+	$scope.mockRequests = [
+		{
+			from: 'Bob',
+			comments: 'I want help understanding mitochondria',
+			profileimage: 'img/test-person.jpg',
+			status: 0,
+			request_time: '2015-04-07T19:43:37-0500',
+			requestid: 1
+		},
+		{
+			from: 'Mary',
+			comments: "Need help with my HCI project",
+			profileimage: 'img/test-person.jpg',
+			status: 0,
+			request_time: '2015-04-07T19:43:37-0500',
+			requestid: 2
+		}
+	];
+	$scope.accept = function(requestid) {
+		alert("You accepted request #" + requestid);
+	}
+	$scope.decline = function(requestid) {
+		alert("You declined request #" + requestid);
+	}
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('TutorRequestController', function($scope, TutorRequest) {
+	$scope.request = TutorRequest;
 });

@@ -27,6 +27,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 	
   $stateProvider
 
+	/* Menu */
   .state('app', {
     url: "/app",
     abstract: true,
@@ -34,6 +35,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     controller: 'AppCtrl'
   })
 
+	/* About screen */
   .state('app.about', {
     url: "/about",
     views: {
@@ -43,14 +45,46 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
   })
 
+	/* Login and newsfeed */
   .state('app.intro', {
     url: "/intro",
     views: {
       'menuContent': {
-        templateUrl: "templates/intro.html"
+        templateUrl: "templates/intro.html",
+				controller: 'HomeScreenController'	
       }
-    }
-
+    },
+  })
+	
+	/* Tutor requests screen */
+	.state('app.tutor_requests', {
+		abstract: true,
+		url: '/tutor_requests',
+		views: {
+			'tutor_requests': {
+				template: '<ion-nav-view></ion-nav-view>'
+			},
+			'menuContent': {
+				template: '<ion-nav-view></ion-nav-view>'
+			}			
+		}
+	})
+	
+  .state('app.tutor_requests.index', {
+    url: "",		
+		templateUrl: "templates/tutor_requests.html",
+		controller: 'TutorRequestsController'
+  })
+	
+  .state('app.tutor_requests.detail', {
+    url: "/:tutor_request",
+		templateUrl: "templates/tutor_request.html",
+		controller: 'TutorRequestController',
+		resolve: {
+			TutorRequest: function($stateParams) {
+				return {id: $stateParams.tutor_request};
+			}
+		}
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/intro');
