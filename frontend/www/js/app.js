@@ -40,7 +40,27 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     url: "/about",
     views: {
       'menuContent': {
-        templateUrl: "templates/about.html"
+        templateUrl: "templates/about.html",
+				controller: 'AboutController'
+      }
+    }
+  })
+	
+	.state('app.credits', {
+		url: "/about/credits",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/about_credits.html"
+			}			
+		}
+	}) 
+	
+	/* Preferences screen */
+  .state('app.preferences', {
+    url: "/settings",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/settings.html"
       }
     }
   })

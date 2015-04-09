@@ -67,6 +67,13 @@ angular.module('starter.controllers', [])
   };
 })
 
+.controller('AboutController', function($scope) {
+	$scope.emailFeedback = function() {		
+		var link = "mailto:tutyrapp@gmail.com?subject=Tutyr";
+		window.location = link;
+	}	
+})
+
 .controller('HomeScreenController', function($scope){
 	$scope.mockNewsfeed = {
 		profiles: [
