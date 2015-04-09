@@ -131,28 +131,12 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('TutorRequestsController', function($scope, $ionicModal) {
-	$scope.mockRequests = [
-		{
-			from: 'Bob',
-			comments: 'I want help understanding mitochondria',
-			profileimage: 'img/test-person.jpg',
-			status: 0,
-			request_time: '2015-04-07T19:43:37-0500',
-			requestid: 1
-		},
-		{
-			from: 'Mary',
-			comments: "Need help with my HCI project",
-			profileimage: 'img/test-person.jpg',
-			status: 0,
-			request_time: '2015-04-07T19:43:37-0500',
-			requestid: 2
-		}
-	];
-	$scope.accept = function(requestid) {
-		alert("You accepted request #" + requestid);
-	}
+.controller('TutorRequestsController', function($scope, $ionicModal, TutorRequestService) {
+	$scope.requests = TutorRequestService.requests;
+	$scope.nRequests = {
+		total: Object.keys($scope.requests).length
+	};
+
 	$scope.decline = function(requestid) {
 		alert("You declined request #" + requestid);
 	}

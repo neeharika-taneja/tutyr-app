@@ -1,11 +1,11 @@
 <ion-view view-title="Incoming Requests">
   <ion-content>
-		<div ng-if="mockRequests.length==0" id="request-list-empty">
+		<div ng-if="nRequests.total == 0" id="request-list-empty">
 			<p><i class="icon ion-email"></i></p>
 			<p>No requests at the moment.</p>
 		</div>
-		<div ng-if="mockRequests.length>0" id="request-list">
-			<div class="card" ng-repeat="request in mockRequests">
+		<div ng-if="nRequests.total > 0" id="request-list">
+			<div class="card" ng-repeat="(id, request) in requests">
 				<ion-item class="item-text-wrap">
 					<div class="profile-image">
 						<img src="{{request.profileimage}}">

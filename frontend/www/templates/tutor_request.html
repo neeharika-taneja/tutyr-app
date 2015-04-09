@@ -1,12 +1,17 @@
-<ion-view view-title="Requests">
+<ion-view view-title="Tutoring Request">
   <ion-content>
-		<div class="card">
-			<ion-item class="item-divider">
-				Hello!
-			</ion-item>
-			<ion-item class="item-text-wrap">
-				Debug: you viewed request with index {{request.id}}
-			</ion-item>
-		</div>	
+		<div id="request" class="item">
+			<div class="profile-image">
+				<img src="{{request.profileimage}}" />
+			</div>
+			<p class="profile-name">{{request.from}} is requesting a session</p>
+			<p class="comments">&#8220;{{request.comments}}&#8221;</p>
+			<p>Debug: you viewed request with index {{request.requestid}}</p>
+			<br />
+			<button class="button button-block button-tutyr" href="#">
+				Start Session
+			</button>
+		</div>
+							
   </ion-content>
 </ion-view>
