@@ -54,6 +54,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 			}			
 		}
 	}) 
+
+
 	
 	/* Preferences screen */
   .state('app.preferences', {
@@ -75,7 +77,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     },
   })
-	
+	 /* view a tutor's profile */
+  .state('app.intro', {
+    url: "/view_profile",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/view_profile.html",
+        controller: 'HomeScreenController'  
+      }
+    },
+  })
 	/* Tutor requests screen */
 	.state('app.tutor_requests', {
 		abstract: true,
