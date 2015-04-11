@@ -78,7 +78,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     },
   })
 	 /* view a tutor's profile */
-  .state('app.intro', {
+  .state('app.view_profile', {
     url: "/view_profile",
     views: {
       'menuContent': {
