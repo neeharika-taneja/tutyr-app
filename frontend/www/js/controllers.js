@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, LoginService) {
 	$scope.genFBUser = function() {
 		// Grab the user
 	  openFB.api({
@@ -20,7 +20,11 @@ angular.module('starter.controllers', [])
 						profileimage: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
 						tutor: false
 	        };
-					$scope.currentUser.loggedIn = true;
+					// request to backend 
+					$scope.login = LoginService.login($scope.fbUser, true);
+					$scope.$on("Login.success", function() {
+						$scope.currentUser.loggedIn = true;						
+					});
 	      });
 	    },
 	    error: function(error) {

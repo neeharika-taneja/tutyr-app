@@ -1,4 +1,42 @@
 angular.module('starter.services', [])
+
+.factory('API', function() {
+	var base = "https://tutyr.heroku.com/api/";
+	
+	return {
+		login: base + "account/register"
+	};
+	
+})
+
+
+.factory('LoginService', function($rootScope, $http, API) {
+	var login = function(fbUser, debug) {
+		var self = this;
+		if ( !debug ) {
+			$http.post(API.login, fbUser)
+			.success(function(data, status) {
+				// success
+				$rootScope.$broadcast("Login.success");
+			})
+			.error(function(data, status) {
+				// on http error
+				$rootScope.$broadcast("Login.fail");
+			});			
+		} else {
+			angular.extend(self.user, fbUser)
+			$rootScope.$broadcast("Login.success");
+		}
+	};
+	
+	//////// 
+	
+	return {
+		login: login,
+		user: {}
+	}
+})
+
 .factory('TutorRequestService', function(){
 	var requests = {
 		1: {
