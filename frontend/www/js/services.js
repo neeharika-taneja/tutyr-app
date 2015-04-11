@@ -33,7 +33,11 @@ angular.module('starter.services', [])
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
+				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" + 
+						"and do math all day long. Please request me because I am a good person",
 				rating: 4,
+				rate: "$8/hr",
+				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 1
 			},
@@ -41,7 +45,11 @@ angular.module('starter.services', [])
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
+				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" + 
+						"and do math all day long. Please request me because I am a good person",
 				rating: 4,
+				rate: "$8/hr",
+				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 2
 			},
@@ -49,7 +57,11 @@ angular.module('starter.services', [])
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
+				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" + 
+						"and do math all day long. Please request me because I am a good person", 
 				rating: 4,
+				rate: "$8/hr",
+				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 3
 			},
@@ -57,7 +69,11 @@ angular.module('starter.services', [])
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
+				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" +
+						"and do math all day long. Please request me because I am a good person", 
 				rating: 4,
+				rate: "$8/hr",
+				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 4
 			}

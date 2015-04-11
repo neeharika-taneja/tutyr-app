@@ -112,6 +112,10 @@
 	width: 3.85em;
 	border-radius: 1.925em;
 }
+#tutor .profile-image img {
+	width: 3.85em;
+	margin:auto;
+}
 .profile-rating {
 	text-align: right;
 }
@@ -121,6 +125,17 @@
 .profile-meta .ion-location {
 	padding-right: 10px;
 	font-size: 1.75em;
+}
+
+.item .profile-summary h3 {
+	color:#0f9a8c;
+
+}
+.item .profile-summary p {
+	margin-left: 0.75em;
+	text-align:left;
+	
+
 }
 
 /* Requests */

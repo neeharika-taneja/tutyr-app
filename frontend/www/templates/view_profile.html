@@ -1,12 +1,13 @@
 
-<ion-view view-title="Tutyr Profile">
+<ion-view view-title="{{profile.realname}}">
   <ion-content>
 		<div class="card">
 			<ion-item class="item-text-wrap">
 				<p>Debug: requested account ID {{profile.id}}</p>
-				<div class="profile-image">
-					<img src="http://i.imgur.com/jKJ3Ltg.jpg">
+				<div id = "tutor" class="profile-image">
+					<img src="img/{{profile.profileimage}}"> <!--not centering the image-->
 				</div>
+				<p class="profile-name" align = "middle">{{profile.realname}}</p>
 				<br />
 				<ion-item class="tabs tabs-icon">
 					<button class="button button-block button-tutyr" href="#">
@@ -14,5 +15,31 @@
 					</button>
 				</ion-item>	
 		</div>
+		<div class="card">
+			<ion-item class="item-text-wrap">
+				<div id = "summary" class = "profile-summary">
+					<h1>Profile</h1>
+						<h3>Rating</h3>
+							<p>{{profile.rating}}</p>
+						<h3>Subjects</h3>
+							<p>{{profile.subjects}}</p>
+						<h3>Rate</h3>
+							<p>{{profile.rate}}</p>
+						<h3>About Me</h3>
+							<p>{{profile.bio2}}</p>
+						
+				</div>
+		</div>
+		<div class="card">
+			<ion-item class="item-text-wrap">
+				<div class = "profile-summary">
+					<h1>Reviews</h1>
+						<h3 float = "left">{{fbUser.realname}} {{profile.rating}} / 5</h3>
+							<p>This is a test review from a test reviewer.</p>
+				</div>
+				
+				</ion-item>	
+		</div>
+		
   </ion-content>
 </ion-view>
