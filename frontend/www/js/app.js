@@ -79,11 +79,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
 	 /* view a tutor's profile */
   .state('app.view_profile', {
-    url: "/view_profile",
+    url: "/view_profile/:id",
     views: {
       'menuContent': {
         templateUrl: "templates/view_profile.html",
-        controller: 'HomeScreenController'  
+        controller: 'ViewProfileController',
+				resolve: {
+					ProfileObject: function($stateParams, ProfileService) {
+						return ProfileService.getProfile($stateParams.id);
+					}
+				}
       }
     },
   })

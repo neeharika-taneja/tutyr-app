@@ -25,4 +25,51 @@ angular.module('starter.services', [])
 			return requests[id];
 		}
 	}
+})
+
+.factory('ProfileService', function(){
+	var profiles = {
+		1:	{
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University',
+				id: 1
+			},
+		2:	{
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University',
+				id: 2
+			},
+		3: {
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University',
+				id: 3
+			},
+		4: {
+				realname: 'Firstname Lastname',
+				profileimage: 'test-person.jpg',
+				bio1: 'Hi, I am a piece of testing data.',
+				rating: 4,
+				customlocation: 'Carnegie Mellon University',
+				id: 4
+			}
+		};		
+		
+		return {
+			getProfile: function(id) {
+				if ( profiles.hasOwnProperty(id) ) {
+					return profiles[id];
+				} else {
+					return {error: "Profile not found."};
+				}
+			}
+		}
 });

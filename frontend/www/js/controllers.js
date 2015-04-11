@@ -82,28 +82,32 @@ angular.module('starter.controllers', [])
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
-				customlocation: 'Carnegie Mellon University'
+				customlocation: 'Carnegie Mellon University',
+				id: 1
 			},
 			{
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
-				customlocation: 'Carnegie Mellon University'
+				customlocation: 'Carnegie Mellon University',
+				id: 2
 			},
 			{
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
-				customlocation: 'Carnegie Mellon University'
+				customlocation: 'Carnegie Mellon University',
+				id: 3
 			},
 			{
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
-				customlocation: 'Carnegie Mellon University'
+				customlocation: 'Carnegie Mellon University',
+				id: 4
 			}
 		],
 		subjectlist: [
@@ -129,6 +133,10 @@ angular.module('starter.controllers', [])
 			}
 		]
 	};
+})
+
+.controller('ViewProfileController', function($scope, ProfileObject) {
+	$scope.profile = ProfileObject;
 })
 
 .controller('TutorRequestsController', function($scope, $ionicModal, TutorRequestService) {
