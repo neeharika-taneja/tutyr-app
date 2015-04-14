@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicViewService) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory) {
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -71,7 +71,7 @@ angular.module('starter.controllers', [])
 		if ( $scope.currentUser.loggedIn == true ) {
 			$scope.currentUser.loggedIn = false;
 			$scope.fbUser = {};
-			$ionicViewService.nextViewOptions({
+			$ionicHistory.nextViewOptions({
 				disableBack: true
 			});
 			$state.go('app.intro');

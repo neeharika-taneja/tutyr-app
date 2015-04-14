@@ -1,5 +1,15 @@
-/* Menu */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
 
+/* Menu */
 .menu .scroll-content {
 	background: #333;
 }
@@ -194,17 +204,17 @@ p.comments {
 }
 
 /* Session active screen */
-#session .profile-image {
+#session .profile-image, .header .profile-image {
 	width: 8em;
 	height: 8em;
 	margin: 0 auto;
 }
-#session .profile-image img {
+#session .profile-image img, .header .profile-image img {
 	width: 8em;
 	height: 8em;
 	border-radius: 4em;
 }
-#session .profile-name {
+#session .profile-name, .header .profile-name {
 	text-align: center;
 	padding-top: 1em;
 	font-size: 1.25em;
@@ -216,8 +226,6 @@ p.comments {
 .tutor-view-header p {
 	overflow:visible;
 }
-<<<<<<< HEAD
-=======
 #session .inactive-session {
 	color: #777;
 	text-align: center;
@@ -231,4 +239,16 @@ p.comments {
 #session .inactive-session p {
 	margin-top: 1em;
 }
->>>>>>> origin/master
+
+/* View profile */
+#profile .header {
+	text-align: center;
+}
+#profile .profile-image img {
+	border: 3px solid #fff;
+}
+#profile .header .profile-name {
+	color: #fff;
+	font-size: 1.5em;
+	margin-bottom: 1em;
+}

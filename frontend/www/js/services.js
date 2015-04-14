@@ -46,7 +46,7 @@ angular.module('starter.services', [])
 				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" + 
 						"and do math all day long. Please request me because I am a good person",
 				rating: 4,
-				rate: "$8/hr",
+				rate: "8",
 				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 1
@@ -58,7 +58,7 @@ angular.module('starter.services', [])
 				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" + 
 						"and do math all day long. Please request me because I am a good person",
 				rating: 4,
-				rate: "$8/hr",
+				rate: "8",
 				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 2
@@ -70,7 +70,7 @@ angular.module('starter.services', [])
 				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" + 
 						"and do math all day long. Please request me because I am a good person", 
 				rating: 4,
-				rate: "$8/hr",
+				rate: "8",
 				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 3
@@ -82,7 +82,7 @@ angular.module('starter.services', [])
 				bio2: "This is all about me. I'm a really nice junior who likes to eat pizza" +
 						"and do math all day long. Please request me because I am a good person", 
 				rating: 4,
-				rate: "$8/hr",
+				rate: "8",
 				subjects: "Math, Computer Science, Java, Python, Calculus",
 				customlocation: 'Carnegie Mellon University',
 				id: 4

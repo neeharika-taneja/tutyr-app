@@ -1,47 +1,45 @@
-
-<ion-view view-title="{{profile.realname}}">
-  <ion-content>
-		<div class="card">
-			<ion-item class="item-text-wrap">
-				<p>Debug: requested account ID {{profile.id}}</p>
-				<div id = "tutor" class="profile-image">
-					<img src="img/{{profile.profileimage}}"> <!--not centering the image-->
-				</div>
-				<p class="profile-name" align = "middle">{{profile.realname}}</p>
-				<br />
-				<ion-item class="tabs tabs-icon">
-
-					<a href = "#/app/confirm/{{profile.id}}"><button class="button button-balanced" ng-click="showPrompt()">Request Tutor</button></a>
-				
-
-					<!-- can't get popup to show-->
-				</ion-item>	
-
+<ion-view view-title="Tutyr Profile" id="profile">
+  <ion-content>	
+		<div class="header">
+			<div class="profile-image">
+				<img src="img/{{profile.profileimage}}"> 
+			</div>			
+			<p class="profile-name">{{profile.realname}}</p>
+			<a href="#/app/confirm/{{profile.id}}">
+				<button class="button button-block button-tutyr" ng-click="showPrompt()">Request Tutor</button>
+			</a>				
 		</div>
+		
 		<div class="card">
+			<ion-item class="item-divider">Rating</ion-item>
+			<ion-item class="item-text-wrap">				
+				<rating ng-model="profile.rating" readonly="true">
+			</ion-item>	
+
+			<ion-item class="item-divider">Subjects</ion-item>
 			<ion-item class="item-text-wrap">
-				<div id = "summary" class = "profile-summary">
-					<h1>Profile</h1>
-						<h3>Rating</h3>
-							<p>{{profile.rating}}</p>
-						<h3>Subjects</h3>
-							<p>{{profile.subjects}}</p>
-						<h3>Rate</h3>
-							<p>{{profile.rate}}</p>
-						<h3>About Me</h3>
-							<p>{{profile.bio2}}</p>
-						
-				</div>
+				{{profile.subjects}}
+			</ion-item>				
+
+			<ion-item class="item-divider">Hourly Rate</ion-item>
+			<ion-item class="item-text-wrap">
+				${{profile.rate}}/hr
+			</ion-item>
+
+			<ion-item class="item-divider">About Me</ion-item>			
+			<ion-item class="item-text-wrap">
+				<p>{{profile.bio2}}</p>
+			</ion-item>		
 		</div>
+		
 		<div class="card">
+			<ion-item class="item-divider item-dark">Reviews</ion-item>			
 			<ion-item class="item-text-wrap">
-				<div class = "profile-summary">
-					<h1>Reviews</h1>
-						<h3 float = "left">{{fbUser.realname}} {{profile.rating}} / 5</h3>
-							<p>This is a test review from a test reviewer.</p>
+				<div class="profile-summary">
+						<h3>{{currentUser.realname}} &mdash; <rating ng-model="profile.rating" readonly="true"></h3>
+						<p>This is a test review from a test reviewer.</p>
 				</div>
-				
-				</ion-item>	
+			</ion-item>	
 		</div>
 		
   </ion-content>
