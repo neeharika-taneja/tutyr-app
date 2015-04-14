@@ -104,6 +104,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 		}
 	})
 	
+	/* in progress */
+	.state('app.session', {
+		url: "/session",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/session_inprog.html",
+				controller: "TutorSessionController"
+			}
+		}
+	})
+	
 	/* Tutor requests screen */
 	.state('app.tutor_requests', {
 		abstract: true,
