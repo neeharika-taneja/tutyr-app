@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicViewService) {
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -65,6 +65,19 @@ angular.module('starter.controllers', [])
 				$scope.currentUser.loggedIn = true;
 			});
 		}	
+	}
+
+	$scope.logout = function() {
+		if ( $scope.currentUser.loggedIn == true ) {
+			$scope.currentUser.loggedIn = false;
+			$scope.fbUser = {};
+			$ionicViewService.nextViewOptions({
+				disableBack: true
+			});
+			$state.go('app.intro');
+		} else {
+			alert("You attempted to log out, but you're not logged in.");
+		}
 	}
 
 	$scope.fakeLogin = function() {

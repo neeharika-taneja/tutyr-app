@@ -6,7 +6,9 @@
 			</ion-item>
 		</div>	
 		<div class="list card">			
-			<a href="#" class="item item-icon-left" ng-if="fbUser.loggedIn==true||currentUser.loggedIn==true">
+			<a href="#" class="item item-icon-left" 
+			ng-if="fbUser.loggedIn==true||currentUser.loggedIn==true"
+			ng-click="logout()">
 				<i class="icon ion-log-out"></i>
 				Log Out
 			</a>
