@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, LoginService) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API) {
 	$scope.genFBUser = function() {
 		// Grab the user
 	  openFB.api({
@@ -20,18 +20,32 @@ angular.module('starter.controllers', [])
 						profileimage: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
 						tutor: false
 	        };
-					// request to backend 
-					$scope.login = LoginService.login($scope.fbUser, true);
-					$scope.$on("Login.success", function() {
-						$scope.currentUser.loggedIn = true;						
-					});
 	      });
+				
+				// request to backend 
+				$scope.login($scope.fbUser, true);								
 	    },
 	    error: function(error) {
 	      alert('Facebook error: ' + error.error_description);
 	    }
 	  });		
 	}
+	
+	$scope.login = function(fbUser, debug) {
+		if ( !debug ) {
+			$http.post(API.login, fbUser)
+			.success(function(data, status) {
+				$scope.currentUser = data;
+				$scope.currentUser.loggedIn = true;
+			})
+			.error(function(data, status) {
+				alert("There was an error logging you in");
+			});			
+		} else {
+			$scope.fakeLogin();
+		}	
+	}
+
 	$scope.fakeLogin = function() {
 		$scope.currentUser.loggedIn = true;
 		$scope.fbUser = $scope.currentUser;
@@ -59,16 +73,6 @@ angular.module('starter.controllers', [])
 		);
 	}
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
 })
 
 .controller('AboutController', function($scope) {

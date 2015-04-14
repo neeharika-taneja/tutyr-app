@@ -56,7 +56,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 	}) 
 
 
-	
 	/* Preferences screen */
   .state('app.preferences', {
     url: "/settings",
