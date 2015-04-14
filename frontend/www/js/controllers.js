@@ -1,19 +1,37 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API) {
+	$scope.fbLogin = function() {
+		/**
+			Handle communication with the openFB library to authenticate user using
+			the Facebook API.
+		 */
+    openFB.login(
+			function(response) {
+				if (response.status === 'connected') {
+				    console.log('Facebook login succeeded');
+						$scope.genFBUser();
+				} else {
+				    alert('Facebook login failed');
+				}
+			},
+			{scope: 'public_profile,email'}
+		);
+	}
+	
 	$scope.genFBUser = function() {
-		// Grab the user
+		/**
+			Get user information from Facebook once authentication succeeds.
+		 */
+		
+		// Request name, email, ID, profile image
 	  openFB.api({
 	    path: '/me',
 	    params: {fields: 'id,name,email'},
 	    success: function(user) {
-				// When the backend goes live, something like
-				// send FB ID to backend 
-				// if the ID is already associated with an account, send back info and stick in fbUser
-				// otherwise, do the same but also send back a 'new account' message
 	      $scope.$apply(function() {
 	        $scope.fbUser = {
-	        	loggedIn: true,
+	        	loggedIn: false,
 						realname: user.name,
 						email: user.email,
 						fbID: user.id,
@@ -22,7 +40,7 @@ angular.module('starter.controllers', [])
 	        };
 	      });
 				
-				// request to backend 
+				// Send this information to the Tutyr backend
 				$scope.login($scope.fbUser, true);								
 	    },
 	    error: function(error) {
@@ -42,13 +60,15 @@ angular.module('starter.controllers', [])
 				alert("There was an error logging you in");
 			});			
 		} else {
-			$scope.fakeLogin();
+			$scope.currentUser = $scope.fbUser;
+			$scope.$apply(function() {
+				$scope.currentUser.loggedIn = true;
+			});
 		}	
 	}
 
 	$scope.fakeLogin = function() {
 		$scope.currentUser.loggedIn = true;
-		$scope.fbUser = $scope.currentUser;
 	}
 
 	$scope.currentUser = {
@@ -57,21 +77,7 @@ angular.module('starter.controllers', [])
 		email: 'test.person@example.com',
 		profileimage: 'img/test-person.jpg',
 		tutor: true
-	};
-	
-	$scope.fbLogin = function() {
-    openFB.login(
-			function(response) {
-				if (response.status === 'connected') {
-				    console.log('Facebook login succeeded');
-						$scope.genFBUser();
-				} else {
-				    alert('Facebook login failed');
-				}
-			},
-			{scope: 'public_profile,email'}
-		);
-	}
+	};	
 
 })
 
@@ -160,4 +166,10 @@ angular.module('starter.controllers', [])
 
 .controller('TutorRequestController', function($scope, TutorRequest) {
 	$scope.request = TutorRequest;
+})
+
+.controller('EditProfileController', function($scope, $http) {
+	// Reference current user's profile: $scope.currentUser
+	$scope.profile = $scope.currentUser;
+
 });

@@ -64,7 +64,6 @@
 	border: 0.5em solid #fafafa;
 }
 
-
 /* Login */
 #intro {
 	background: #444;
@@ -80,10 +79,29 @@
 	margin: 2em;
 }
 
+/* Edit profile */
+#edit-profile .profile-image, #edit-profile .profile-image img {
+	width: 9em;
+	height: 9em;
+	border-radius: 50%;
+	margin: 0 auto;
+}
+#edit-profile .profile-image img {
+	border: 3px solid #fff;
+}
+#edit-profile .input-label {
+	color: #0f9a8c;
+	font-weight: bold;
+}
+
 /* Newsfeed */
-.newsfeed .header {
+.header {
 	background: #444;
 	padding: 1em 0 1em 0;
+}
+.header h1 {
+	text-align: center;
+	color: #fff;
 }
 .newsfeed-profiles {
 	background: #eee;

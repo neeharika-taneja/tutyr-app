@@ -35,9 +35,9 @@
 			<div ng-if="currentUser.loggedIn">
 				<!-- Menu for logged in users -->
 				<div class="user user-image">
-					<img src="{{fbUser.profileimage}}" />
+					<img src="{{currentUser.profileimage}}" />
 				</div>	
-				<h2 class="user user-name">{{fbUser.realname}}</h2>
+				<h2 class="user user-name">{{currentUser.realname}}</h2>
 				<h3 class="user user-status">
 					<span ng-show="currentUser.tutor">Tutor</span>
 					<span ng-show="!currentUser.tutor">Student</span>

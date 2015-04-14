@@ -76,7 +76,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     },
   })
-	 /* view a tutor's profile */
+	
+	/* view a tutor's profile */
   .state('app.view_profile', {
     url: "/view_profile/:id",
     views: {
@@ -91,6 +92,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     },
   })
+	
+	/* edit your profile */
+	.state('app.edit_profile', {
+		url: "/edit_profile",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/edit_profile.html",
+				controller: "EditProfileController"
+			}
+		}
+	})
+	
 	/* Tutor requests screen */
 	.state('app.tutor_requests', {
 		abstract: true,
