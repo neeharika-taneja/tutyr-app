@@ -56,16 +56,17 @@
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/about">
 						<i class="icon ion-help"></i> Help and Feedback
 	        </ion-item>
-					<ion-item class="item-toggle" nav-clear>
-			      <label class="toggle toggle-tutyr">
-			        <input type="checkbox">
-			        <div class="track">
-			          <div class="handle"></div>
-			        </div>
-			      </label>
-
-			      Tutor Mode					
-					</ion-item>
+					
+					<ion-toggle 
+					ng-model="currentUser.tutor" 
+					toggle-class="toggle-tutyr"
+					ng-click="monitorTutorToggle()">Tutor Mode</ion-toggle>
+					<!-- 
+						todo:
+						$watch currentUser.tutor
+							on change toggle on server
+							etc
+						-->
 	      </ion-list>
 
     </ion-content>

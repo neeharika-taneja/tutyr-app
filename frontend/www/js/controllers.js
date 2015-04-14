@@ -91,6 +91,25 @@ angular.module('starter.controllers', [])
 		profileimage: 'img/test-person.jpg',
 		tutor: false
 	};	
+	
+	$scope.localToggleStatus = {
+		hasTapped: false
+	}
+
+	// Monitor status of Tutor toggle
+	$scope.monitorTutorToggle = function() {
+		if ( $scope.localToggleStatus.hasTapped == false ) {
+			console.log("Monitoring tutor toggle now");
+			$scope.localToggleStatus.hasTapped = true;
+			$scope.$watch('currentUser.tutor', function() {
+				if ( $scope.currentUser.tutor == true ) {
+					console.log("Tutor mode on");
+				} else {
+					console.log("Tutor mode off");
+				}
+			});					
+		}
+	}
 
 })
 
