@@ -1,6 +1,12 @@
 angular.module('starter.utils', [])
 
 .directive('timer', function($compile){
+	/**
+	 * AngularJS directive wrapper for the TimeCircles jQuery plugin.
+	 * @param {String} start Takes a date string yyyy-mm-dd hh:mm:ss.
+	 * @returns Renders a TimeCircles instance.
+	 */
+	
 	return {
 		terminal: true,
 		priority: 1000,

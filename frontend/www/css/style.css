@@ -6,10 +6,14 @@
 .menu .item, .menu .item-content {
 	background: #444;
 	color: #fafafa;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	margin: 0 5px 0 5px;
 }
 
-.menu .item.active, .menu .item.activated, .menu .item-complex.active .menu .item-complex.activated {
-	background: #074b44;
+.menu .item-content.activated {
+	background: #666;
 }
 
 .menu .item .icon { 
@@ -205,6 +209,26 @@ p.comments {
 	padding-top: 1em;
 	font-size: 1.25em;
 }
-.tutor-view-header p{
+#session .profile-meta {
+	text-align: center;
+	font-weight: 300;
+}
+.tutor-view-header p {
 	overflow:visible;
 }
+<<<<<<< HEAD
+=======
+#session .inactive-session {
+	color: #777;
+	text-align: center;
+	margin-top: 15%;
+	font-size: 1.5em;	
+}
+#session .inactive-session .icon {
+	font-size: 4em;
+	color: #999;
+}
+#session .inactive-session p {
+	margin-top: 1em;
+}
+>>>>>>> origin/master

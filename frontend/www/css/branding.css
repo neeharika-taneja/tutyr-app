@@ -1,12 +1,17 @@
+/****
+Base color: hex #0f9a8c
+Lighter: hex #12c1b1
+Darker: 
+****/
+
 .button.button-tutyr {
 	background: #0f9a8c;
-	border-color: #0f9aa9;
+	border-color: #12c1b1;
 	color: #fff;
 }
 .toggle.toggle-tutyr input:checked + .track {
 	background: #0f9a8c;
-	border-color: #0f9aa9;
-
+	border-color: #12c1b1;
 }
 
 .button.button-tutyr:hover {
@@ -32,3 +37,9 @@
     background-color: #13c7b6;
     box-shadow: none;
     color: #fff; }
+		
+.item.item-tutyr {
+	background: #0f9a8c;
+	color: #fff;
+	border-color: #12c1b1;
+}
