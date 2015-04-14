@@ -76,7 +76,7 @@ angular.module('starter.controllers', [])
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
 		profileimage: 'img/test-person.jpg',
-		tutor: true
+		tutor: false
 	};	
 
 })
@@ -171,15 +171,24 @@ angular.module('starter.controllers', [])
 .controller('EditProfileController', function($scope, $http) {
 	// Reference current user's profile: $scope.currentUser
 	$scope.profile = $scope.currentUser;
-
 })
 
 .controller('TutorSessionController', function($scope) {
 	$scope.session = {
 		started: "2015-04-14 10:30:00",
+		active: true,
 		tutee: {
 			realname: "Henry Kip",
 			profileimage: "img/test-person.jpg"
+		},
+		tutor: {
+			realname: "Andrea Smith",
+			profileimage: "http://placekitten.com/512/512",
+			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+			bio2: 10,
+			bio3: "",
+			location: [null, null],
+			customLocation: "Hunt Library, 3rd floor"
 		}
 	};
 
