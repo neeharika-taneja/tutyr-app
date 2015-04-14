@@ -6,10 +6,14 @@
 .menu .item, .menu .item-content {
 	background: #444;
 	color: #fafafa;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	margin: 0 5px 0 5px;
 }
 
-.menu .item.active, .menu .item.activated, .menu .item-complex.active .menu .item-complex.activated {
-	background: #074b44;
+.menu .item-content.activated {
+	background: #666;
 }
 
 .menu .item .icon { 
