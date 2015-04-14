@@ -92,6 +92,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     },
   })
+  	/* confirm tutor request */
+  .state('app.confirm', {
+    url: "/confirm/:id",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/confirm.html",
+        controller: 'ViewProfileController',
+				resolve: {
+					ProfileObject: function($stateParams, ProfileService) {
+						return ProfileService.getProfile($stateParams.id);
+					}
+				}
+      }
+    },
+  })
 	
 	/* edit your profile */
 	.state('app.edit_profile', {

@@ -1,0 +1,44 @@
+
+<ion-view view-title="Confirm Request">
+  <ion-content>
+		<div class="card">
+			<ion-item class="item-text-wrap">
+				<div class="row profile-main">
+						<div class="col col-25">
+							<div class="profile-image">
+								<img src="img/{{profile.profileimage}}" />
+							</div>					
+						</div>
+						<div class="col col-75 col-offset-10">	
+							<p>You are requesting a tutoring session with</p> <p class="profile-name">{{profile.realname}}</p>
+						</div>
+				</div>
+			</ion-item>	
+
+
+
+			<div class = "details">
+				<p> Please enter any additional information your tutor should know before you send the request:</p>
+				<label class="item item-input">
+ 					<span class="input-label"></span>
+  					<input type="text">
+				</label>
+
+			</div>
+				<div class = "row">
+					<div class = "col-50">
+						<!--cancel needs to go back to profile-->
+						<a href = "#/app/view_profile/{profile.id}}"><button class="button button-balanced">Cancel</button></a>
+					</div>
+					<div class = "col-50">
+						<button class="button button-balanced">Confirm</button>
+					</div>
+				</div>
+		</div>
+				
+
+		
+		
+		
+  </ion-content>
+</ion-view>

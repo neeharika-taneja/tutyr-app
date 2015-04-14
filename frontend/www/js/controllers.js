@@ -81,6 +81,7 @@ angular.module('starter.controllers', [])
 
 })
 
+
 .controller('AboutController', function($scope) {
 	$scope.emailFeedback = function() {		
 		var link = "mailto:tutyrapp@gmail.com?subject=Tutyr";

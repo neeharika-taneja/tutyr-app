@@ -10,10 +10,13 @@
 				<p class="profile-name" align = "middle">{{profile.realname}}</p>
 				<br />
 				<ion-item class="tabs tabs-icon">
-					<button class="button button-block button-tutyr" href="#">
-					Request Tutor
-					</button>
+
+					<a href = "#/app/confirm/{{profile.id}}"><button class="button button-balanced" ng-click="showPrompt()">Request Tutor</button></a>
+				
+
+					<!-- can't get popup to show-->
 				</ion-item>	
+
 		</div>
 		<div class="card">
 			<ion-item class="item-text-wrap">
