@@ -176,35 +176,11 @@ angular.module('starter.controllers', [])
 
 .controller('TutorSessionController', function($scope) {
 	$scope.session = {
-		started: "2015-04-14 00:00:00"
+		started: "2015-04-14 10:30:00",
+		tutee: {
+			realname: "Henry Kip",
+			profileimage: "img/test-person.jpg"
+		}
 	};
-	
-	$(".timer").TimeCircles({
-    "animation": "smooth",
-    "bg_width": 1.2,
-    "fg_width": 0.1,
-    "circle_bg_color": "#60686F",
-    "time": {
-        "Days": {
-            "text": "Days",
-            "color": "#FFCC66",
-            "show": false
-        },
-        "Hours": {
-            "text": "Hours",
-            "color": "#99CCFF",
-            "show": false
-        },
-        "Minutes": {
-            "text": "Minutes",
-            "color": "#0f9a8c",
-            "show": true
-        },
-        "Seconds": {
-            "text": "Seconds",
-            "color": "#14b3a3",
-            "show": true
-        }
-    }
-	});	
+
 });
