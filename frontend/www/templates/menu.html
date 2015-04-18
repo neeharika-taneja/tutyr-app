@@ -1,5 +1,5 @@
 <ion-side-menus enable-menu-with-back-views="false">
-  <ion-side-menu-content>
+  <ion-side-menu-content ng-class="currentUser.tutor ? 'is-tutyr' : ''">
     <ion-nav-bar class="bar-dark">
       <ion-nav-back-button class="button-stable"> 
 				<i class="ion-arrow-left-c"></i> Back
@@ -44,11 +44,12 @@
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/tutor_requests" ng-if="currentUser.tutor">
 						<i class="icon ion-email"></i> Requests
 	        </ion-item>
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/edit_profile" ng-if="currentUser.tutor">
+						<i class="icon ion-edit"></i> Profile
+	        </ion-item>
+					
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/newsfeed">
 						<i class="icon ion-document-text"></i> News Feed
-	        </ion-item>
-	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/profile">
-						<i class="icon ion-edit"></i> Profile
 	        </ion-item>
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/settings">
 						<i class="icon ion-gear-a"></i> Preferences

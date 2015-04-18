@@ -69,16 +69,20 @@ angular.module('starter.controllers', [])
 
 	$scope.logout = function() {
 		if ( $scope.currentUser.loggedIn == true ) {
-			$scope.currentUser.loggedIn = false;
-			$scope.fbUser = {};
-			$ionicHistory.nextViewOptions({
-				disableBack: true
+			openFB.logout(function(){
+				$scope.currentUser.loggedIn = false;
+				$scope.fbUser = {};
+				$ionicHistory.nextViewOptions({
+					disableBack: true
+				});
+				$state.go('app.intro');				
+			}, function(err) {
+				alert(err.message);
 			});
-			$state.go('app.intro');
 		} else {
 			alert("You attempted to log out, but you're not logged in.");
 		}
-	}
+	};
 
 	$scope.fakeLogin = function() {
 		$scope.currentUser.loggedIn = true;
@@ -89,6 +93,9 @@ angular.module('starter.controllers', [])
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
 		profileimage: 'img/test-person.jpg',
+		bio1: "",
+		bio2: "",
+		bio3: "",
 		tutor: false
 	};	
 	
@@ -104,7 +111,17 @@ angular.module('starter.controllers', [])
 			$scope.$watch('currentUser.tutor', function() {
 				if ( $scope.currentUser.tutor == true ) {
 					console.log("Tutor mode on");
+					if ( $scope.currentUser.bio1 == "" ) {
+						// toast("Let's fill out your Tutyr profile!")
+						$ionicHistory.nextViewOptions({
+							disableBack: true
+						});
+						$state.go('app.edit_profile');
+					}
+					// Send current user to server
+					// If current profile is not complete				
 				} else {
+					// Send current user to server
 					console.log("Tutor mode off");
 				}
 			});					

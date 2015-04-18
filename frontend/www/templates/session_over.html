@@ -1,0 +1,44 @@
+<ion-view view-title="Tutyr Session Over" id="session">
+  <ion-content>
+		
+		<!-- ====== Tutor-side rating view ====== -->		
+		<div ng-if="currentUser.tutor" class="tutor">
+			<div ng-if="session.active" class="active-session">
+				<ion-item class="tutor-view-header">
+					<div class="profile-image">
+						<img src="{{session.tutee.profileimage}}" />
+					</div>
+					<p class="profile-name">You tutored {{session.tutee.realname}}</p>
+				</ion-item>	
+			</div>
+			<div ng-if="!session.active" class="inactive-session">				
+				<i class="icon ion-help-circled"></i>
+				<p>Oops! You don't have an active tutoring session right now.</p>
+			</div>					
+		</div>	
+		
+		<!-- =========================================== -->
+		
+		<!-- ====== Student-side rating view ====== -->
+		<div ng-if="!currentUser.tutor">
+			<div ng-if="session.active" class="active-session">
+				<ion-item class="tutee-view-header">
+					<p class="profile-image">
+						<img src="{{session.tutor.profileimage}}">
+					</p>
+					<p class="profile-name">Your tutor was {{session.tutor.realname}}</p>
+					<p class="profile-meta">
+						<span class="rate">${{session.tutor.bio2}}/hour</span> 
+						&bull; 
+						<span class="location">At {{session.tutor.customLocation}}</span>
+					</p>
+				</ion-item>					
+			</div>	
+						
+			<div ng-if="!session.active" class="inactive-session">				
+				<i class="icon ion-help-circled"></i>
+				<p>You don't have an active tutoring session right now.</p>
+			</div>								
+		</div>	
+  </ion-content>
+</ion-view>
