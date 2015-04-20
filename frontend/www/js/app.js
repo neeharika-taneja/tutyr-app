@@ -119,7 +119,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 		}
 	})
 	
-	/* in progress */
+	/* --------- SESSIONS --------- */
+	
+	/* In progress state */
 	.state('app.session', {
 		url: "/session",
 		views: {
@@ -129,6 +131,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 			}
 		}
 	})
+	
+	/* Session over state (includes ratings) */
+	.state('app.session_over', {
+		url: "/session_over",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/session_over.html",
+				controller: "TutorSessionOverController"
+			}
+		}
+	})
+	
 	
 	/* Tutor requests screen */
 	.state('app.tutor_requests', {

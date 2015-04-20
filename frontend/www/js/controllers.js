@@ -223,6 +223,12 @@ angular.module('starter.controllers', [])
 	$scope.profile = $scope.currentUser;
 })
 
+/* ------ Tutoring session controllers ------ */
+
+.controller('TutorSessionPendingController', function($scope) {
+
+})
+
 .controller('TutorSessionController', function($scope) {
 	$scope.session = {
 		started: "2015-04-14 10:30:00",
@@ -241,5 +247,25 @@ angular.module('starter.controllers', [])
 			customLocation: "Hunt Library, 3rd floor"
 		}
 	};
+})	
 
+.controller('TutorSessionOverController', function($scope){
+	$scope.session = {
+		started: "2015-04-14 10:30:00",
+		active: true,
+		rating: null,
+		tutee: {
+			realname: "Henry Kip",
+			profileimage: "img/test-person.jpg"
+		},
+		tutor: {
+			realname: "Andrea Smith",
+			profileimage: "http://placekitten.com/512/512",
+			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+			bio2: 10,
+			bio3: "",
+			location: [null, null],
+			customLocation: "Hunt Library, 3rd floor"
+		}
+	};
 });

@@ -240,6 +240,12 @@ p.comments {
 	margin-top: 1em;
 }
 
+#session .rating {
+	text-align: center;
+	color: #0f9a8c;	
+	font-size: 1.5em;
+}
+
 /* View profile */
 #profile .header {
 	text-align: center;
