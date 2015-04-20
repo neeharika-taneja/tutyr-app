@@ -163,6 +163,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 		templateUrl: "templates/tutor_requests.html",
 		controller: 'TutorRequestsController'
   })
+  
+  .state('app.waiting', {
+    url: "/waiting",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/waiting.html",
+      }
+    },
+  })
 	
   .state('app.tutor_requests.detail', {
     url: "/:tutor_request",
