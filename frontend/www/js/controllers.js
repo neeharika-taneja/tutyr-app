@@ -139,12 +139,16 @@ angular.module('starter.controllers', [])
 })
 
 .controller('HomeScreenController', function($scope){
+	$scope.refresh = function() {
+		// Would grab from API here...
+		$scope.$broadcast('scroll.refreshComplete');
+	}
 	$scope.mockNewsfeed = {
 		profiles: [
 			{
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
-				bio1: 'Hi, I am a piece of testing data.',
+				bio1: 'Python, Java',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
 				id: 1
@@ -152,7 +156,7 @@ angular.module('starter.controllers', [])
 			{
 				realname: 'Firstname Lastname',
 				profileimage: 'test-person.jpg',
-				bio1: 'Hi, I am a piece of testing data.',
+				bio1: 'English, Math',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
 				id: 2
