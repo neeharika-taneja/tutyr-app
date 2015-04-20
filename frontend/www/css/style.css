@@ -93,7 +93,7 @@
 	border: 3px solid #fff;
 }
 #edit-profile .input-label {
-	color: #fff;
+	color: #00B197;
 	font-weight: bold;
 }
 
@@ -151,7 +151,7 @@
 }
 
 .item .profile-summary h3 {
-	color:#0f9a8c;
+	color:#00B197;
 
 }
 .item .profile-summary p {
@@ -248,7 +248,7 @@ p.comments {
 }
 
 #session-pending .item.directions h2 {
-	color: #12c1b1;
+	color: #00D3B6;
 	font-weight: bold;
 }
 #session-pending .angular-google-map-container { height: 15em; } 
@@ -291,7 +291,7 @@ p.comments {
 
 #session .rating {
 	text-align: center;
-	color: #0f9a8c;	
+	color: #00B197;	
 	font-size: 1.5em;
 }
 

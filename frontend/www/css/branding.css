@@ -1,49 +1,57 @@
 /****
-Base color: hex #0f9a8c
-Lighter: hex #12c1b1
+Base color: hex #00B197
+Lighter: hex #00D3B6
 Darker: 
 ****/
+body, div, button, input, h1, h2, h3, h4, p, em {
+	font-family: 'Open Sans', 'Helvetica', 'Roboto', sans-serif;
+}
 
+.nav-bar-block .title {
+	font-family: 'Hind', 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 1.5em;
+}
 .button.button-tutyr {
-	background: #0f9a8c;
-	border-color: #12c1b1;
+	background: #00B197;
+	border-color: #00D3B6;
 	color: #fff;
 }
 .toggle.toggle-tutyr input:checked + .track {
-	background: #0f9a8c;
-	border-color: #12c1b1;
+	background: #00B197;
+	border-color: #00D3B6;
 }
 
 .button.button-tutyr:hover {
   color: #fff;
   text-decoration: none; }
 .button.button-tutyr.active, .button.button-tutyr.activated {
-  border-color: #12c1b1;
+  border-color: #00D3B6;
   background-color: #0fb5a6;
   box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1); }
 .button.button-tutyr.button-clear {
   border-color: transparent;
   background: none;
   box-shadow: none;
-  color: #0f9a8c; }
+  color: #00B197; }
 .button.button-tutyr.button-icon {
   border-color: transparent;
   background: none; }
 .button.button-tutyr.button-outline {
-  border-color: #0f9a8c;
+  border-color: #00B197;
   background: transparent;
-  color: #0f9a8c; }
+  color: #00B197; }
   .button.button-tutyr.button-outline.active, .button.button-tutyr.button-outline.activated {
     background-color: #13c7b6;
     box-shadow: none;
     color: #fff; }
 		
 .item.item-tutyr {
-	background: #0f9a8c;
+	background: #00B197;
 	color: #fff;
-	border-color: #12c1b1;
+	border-color: #00D3B6;
 }
 
 .is-tutyr {
-	border-bottom: 10px solid #0f9a8c;
+	border-bottom: 10px solid #00B197;
 }

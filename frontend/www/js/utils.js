@@ -25,7 +25,7 @@ angular.module('starter.utils', [])
 		        },
 		        "Minutes": {
 		          "show": true,
-							"color": "#0f9a8c"
+							"color": "#00B197"
 		        },
 		        "Seconds": {
 		          "show": false
