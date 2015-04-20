@@ -120,6 +120,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 	})
 	
 	/* --------- SESSIONS --------- */
+
+ 	/* Session pending state (including directions screen) */
+  .state('app.session_pending', {
+    url: "/session_pending",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/session_pending.html",
+      }
+    },
+  })
 	
 	/* In progress state */
 	.state('app.session', {
@@ -143,7 +153,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 		}
 	})
 	
-	
 	/* Tutor requests screen */
 	.state('app.tutor_requests', {
 		abstract: true,
@@ -163,15 +172,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 		templateUrl: "templates/tutor_requests.html",
 		controller: 'TutorRequestsController'
   })
-  
-  .state('app.waiting', {
-    url: "/waiting",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/waiting.html",
-      }
-    },
-  })
+
 	
   .state('app.tutor_requests.detail', {
     url: "/:tutor_request",

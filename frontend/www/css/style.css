@@ -203,6 +203,41 @@ p.comments {
 	margin: 1em 0 1em 0;
 }
 
+/* Session pending screen */
+#session-pending ion-content {
+	background: #5A5A5A;
+	text-align: center;
+	color: #fff;
+}
+#session-pending .item.grey {
+	background: #5A5A5A;	
+	border: none;
+	margin-top: 22.5%;
+	margin-bottom: 10%;
+	font-weight: 500;
+}
+#session-pending .grey p {
+	color: #fff;
+	font-size: 1.25em;
+	overflow: visible;
+}
+#session-pending .waiting, #session-pending .profile-image {
+	margin: 0 auto;
+}
+#session-pending .profile-image {
+	width: 6rem;
+	height: 6rem;	
+}
+#session-pending .profile-image img {
+	width: 5rem; height: 5rem;
+	border-radius: 3em;
+	border: 3px solid #fff;
+}
+#session-pending .waiting {
+	color: #fff;
+	font-size: 80px;
+}
+
 /* Session active screen */
 #session .profile-image, .header .profile-image {
 	width: 8em;
