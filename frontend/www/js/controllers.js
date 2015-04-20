@@ -230,7 +230,38 @@ angular.module('starter.controllers', [])
 /* ------ Tutoring session controllers ------ */
 
 .controller('TutorSessionPendingController', function($scope) {
-
+	$scope.title = "Tutyr Confirmed";
+	$scope.map = {
+		center: {latitude: 40.4414, longitude: -79.9419},
+		zoom: 10,
+		options: {
+			disableDefaultUI: true
+		}
+	};
+	
+	$scope.session = {
+		started: "2015-04-14 10:30:00",
+		active: true,
+		status: 2,
+		tutee: {
+			realname: "Henry Kip",
+			profileimage: "img/test-person.jpg"
+		},
+		tutor: {
+			realname: "Andrea Smith",
+			profileimage: "http://placekitten.com/512/512",
+			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+			bio2: 10,
+			bio3: "",
+			location: [null, null],
+			customLocation: "Hunt Library, 3rd floor"
+		}
+	};
+	
+	$scope.fakeAccept = function() {
+		$scope.session.status = 3;
+	};
+	
 })
 
 .controller('TutorSessionController', function($scope) {

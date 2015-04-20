@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.utils', 'ui.bootstrap.rating', 'ui.bootstrap.tpls'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.utils', 'ui.bootstrap.rating', 'ui.bootstrap.tpls', 'uiGmapgoogle-maps'])
 
 .run(function($rootScope, $ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -20,7 +20,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
+  uiGmapGoogleMapApiProvider.configure({
+      //    key: 'your api key',
+      v: '3.17',
+      libraries: 'geometry'
+  });
+	
 	openFB.init({
 		appId: '607765576024618'
 	});
@@ -127,6 +133,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     views: {
       'menuContent': {
         templateUrl: "templates/session_pending.html",
+				controller: "TutorSessionPendingController"
       }
     },
   })
