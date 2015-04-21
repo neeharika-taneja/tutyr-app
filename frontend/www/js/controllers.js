@@ -50,8 +50,15 @@ angular.module('starter.controllers', [])
 	}
 	
 	$scope.login = function(fbUser, debug) {
+		var registrationData = {
+			realname: fbUser.realname,
+			email: fbUser.email,
+			fbID: fbUser.fbID,
+			profileimage: fbUser.profileimage
+		};
+		
 		if ( !debug ) {
-			$http.post(API.login, fbUser)
+			$http.post(API.login, registrationData)
 			.success(function(data, status) {
 				$scope.currentUser = data;
 				$scope.currentUser.loggedIn = true;
