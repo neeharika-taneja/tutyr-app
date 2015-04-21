@@ -2,12 +2,12 @@
   <ion-content>
 		<div class="header">
 			<div class="profile-image">
-				<img src="{{profile.profileimage}}" s/>
+				<img src="{{profile.profile_pic}}" s/>
 			</div>			
 			<h1>{{profile.realname}}</h1>
 			<h3 class="user user-status">
-				<span ng-show="currentUser.tutor">Tutor</span>
-				<span ng-show="!currentUser.tutor">Student</span>
+				<span ng-show="currentUser.tutor_mode">Tutor</span>
+				<span ng-show="!currentUser.tutor_mode">Student</span>
 			</h3>
 		</div>			
 

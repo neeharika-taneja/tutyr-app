@@ -1,5 +1,5 @@
 <ion-side-menus enable-menu-with-back-views="false">
-  <ion-side-menu-content ng-class="currentUser.tutor ? 'is-tutyr' : ''">
+  <ion-side-menu-content ng-class="currentUser.tutor_mode ? 'is-tutyr' : ''">
     <ion-nav-bar class="bar-dark">
       <ion-nav-back-button class="button button-dark" style="border: none">   
 				<i class="ion-ios-arrow-back" style="font-size:2.1em"></i> <img src="img/logo-round.svg" class="logo-small" />		
@@ -34,19 +34,19 @@
 			<div ng-if="currentUser.loggedIn">
 				<!-- Menu for logged in users -->
 				<div class="user user-image">
-					<img src="{{currentUser.profileimage}}" />
+					<img src="{{currentUser.profile_pic}}" />
 				</div>	
-				<h2 class="user user-name">{{currentUser.realname}}</h2>
+				<h2 class="user user-name">{{currentUser.real_name}}</h2>
 				<h3 class="user user-status">
-					<span ng-show="currentUser.tutor">Tutor</span>
-					<span ng-show="!currentUser.tutor">Student</span>
+					<span ng-show="currentUser.tutor_mode">Tutor</span>
+					<span ng-show="!currentUser.tutor_mode">Student</span>
 				</h3>
 					
 	      <ion-list>
-	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/tutor_requests" ng-if="currentUser.tutor">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/tutor_requests" ng-if="currentUser.tutor_mode">
 						<i class="icon ion-email"></i> Requests
 	        </ion-item>
-	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/edit_profile" ng-if="currentUser.tutor">
+	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/edit_profile" ng-if="currentUser.tutor_mode">
 						<i class="icon ion-edit"></i> Profile
 	        </ion-item>
 					
@@ -61,15 +61,9 @@
 	        </ion-item>
 					
 					<ion-toggle 
-					ng-model="currentUser.tutor" 
+					ng-model="currentUser.tutor_mode" 
 					toggle-class="toggle-tutyr"
 					ng-click="monitorTutorToggle()">Tutor Mode</ion-toggle>
-					<!-- 
-						todo:
-						$watch currentUser.tutor
-							on change toggle on server
-							etc
-						-->
 	      </ion-list>
 
     </ion-content>

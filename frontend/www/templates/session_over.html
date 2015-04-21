@@ -2,11 +2,11 @@
   <ion-content>
 		
 		<!-- ====== Tutor-side rating view ====== -->		
-		<div ng-if="currentUser.tutor" class="tutor">
+		<div ng-if="currentUser.tutor_mode" class="tutor">
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutor-view-header">
 					<div class="profile-image">
-						<img src="{{session.tutee.profileimage}}" />
+						<img src="{{session.tutee.profile_pic}}" />
 					</div>
 					<p class="profile-name">You tutored {{session.tutee.realname}}</p>
 				</ion-item>	
@@ -34,11 +34,11 @@
 		<!-- =========================================== -->
 		
 		<!-- ====== Student-side rating view ====== -->
-		<div ng-if="!currentUser.tutor">
+		<div ng-if="!currentUser.tutor_mode">
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutee-view-header">
 					<p class="profile-image">
-						<img src="{{session.tutor.profileimage}}">
+						<img src="{{session.tutor.profile_pic}}">
 					</p>
 					<p class="profile-name">Your tutor was {{session.tutor.realname}}</p>
 					<p class="profile-meta">

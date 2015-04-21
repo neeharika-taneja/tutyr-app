@@ -35,13 +35,13 @@ angular.module('starter.controllers', [])
 						realname: user.name,
 						email: user.email,
 						fbID: user.id,
-						profileimage: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
+						profile_pic: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
 						tutor: false
 	        };
 	      });
 				
 				// Send this information to the Tutyr backend
-				$scope.login($scope.fbUser, true);								
+				$scope.login($scope.fbUser, false);								
 	    },
 	    error: function(error) {
 	      alert('Facebook error: ' + error.error_description);
@@ -54,7 +54,7 @@ angular.module('starter.controllers', [])
 			realname: fbUser.realname,
 			email: fbUser.email,
 			fbID: fbUser.fbID,
-			profileimage: fbUser.profileimage
+			profile_pic: fbUser.profile_pic
 		};
 		
 		if ( !debug ) {
@@ -99,11 +99,11 @@ angular.module('starter.controllers', [])
 		loggedIn: false,
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
-		profileimage: 'img/test-person.jpg',
+		profile_pic: 'img/test-person.jpg',
 		bio1: "",
 		bio2: "",
 		bio3: "",
-		tutor: false
+		tutor_mode: false
 	};	
 	
 	$scope.localToggleStatus = {
@@ -151,8 +151,8 @@ angular.module('starter.controllers', [])
 		if ( $scope.localToggleStatus.hasTapped == false ) {
 			console.log("Monitoring tutor toggle now");
 			$scope.localToggleStatus.hasTapped = true;
-			$scope.$watch('currentUser.tutor', function() {
-				if ( $scope.currentUser.tutor == true ) {
+			$scope.$watch('currentUser.tutor_mode', function() {
+				if ( $scope.currentUser.tutor_mode == true ) {
 					console.log("Tutor mode on");
 					if ( $scope.currentUser.bio1 == "" ) {
 						// toast("Let's fill out your Tutyr profile!")
@@ -191,7 +191,7 @@ angular.module('starter.controllers', [])
 		profiles: [
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'Python, Java',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -199,7 +199,7 @@ angular.module('starter.controllers', [])
 			},
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'English, Math',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -207,7 +207,7 @@ angular.module('starter.controllers', [])
 			},
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -215,7 +215,7 @@ angular.module('starter.controllers', [])
 			},
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -289,11 +289,11 @@ angular.module('starter.controllers', [])
 		status: 2,
 		tutee: {
 			realname: "Henry Kip",
-			profileimage: "img/test-person.jpg"
+			profile_pic: "img/test-person.jpg"
 		},
 		tutor: {
 			realname: "Andrea Smith",
-			profileimage: "http://placekitten.com/512/512",
+			profile_pic: "http://placekitten.com/512/512",
 			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 			bio2: 10,
 			bio3: "",
@@ -314,11 +314,11 @@ angular.module('starter.controllers', [])
 		active: true,
 		tutee: {
 			realname: "Henry Kip",
-			profileimage: "img/test-person.jpg"
+			profile_pic: "img/test-person.jpg"
 		},
 		tutor: {
 			realname: "Andrea Smith",
-			profileimage: "http://placekitten.com/512/512",
+			profile_pic: "http://placekitten.com/512/512",
 			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 			bio2: 10,
 			bio3: "",
@@ -335,11 +335,11 @@ angular.module('starter.controllers', [])
 		rating: null,
 		tutee: {
 			realname: "Henry Kip",
-			profileimage: "img/test-person.jpg"
+			profile_pic: "img/test-person.jpg"
 		},
 		tutor: {
 			realname: "Andrea Smith",
-			profileimage: "http://placekitten.com/512/512",
+			profile_pic: "http://placekitten.com/512/512",
 			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 			bio2: 10,
 			bio3: "",
