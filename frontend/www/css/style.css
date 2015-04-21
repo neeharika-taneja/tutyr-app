@@ -19,7 +19,7 @@
 	border-left: none;
 	border-right: none;
 	border-top: none;
-	margin: 0 5px 0 5px;
+
 }
 
 .menu .item-content.activated {
@@ -71,6 +71,7 @@
 #intro {
 	background: #444;
 	color: #fafafa;
+	text-align: center;
 }
 #intro h1, h2 { 
 	color: #fafafa;
