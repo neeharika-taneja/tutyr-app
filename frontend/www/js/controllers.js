@@ -1,8 +1,16 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform) {
+	
+	// DEBUG
+	window.dumpUser = function() { console.log($scope.currentUser); }
+	
 	$scope.handleAJAXError = function(err) {
-		alert("There was a server error: " + err.message);
+		if ( typeof(err.message) != 'undefined' ) {
+			alert("There was a server error: " + err.message);			
+		} else {
+			alert(err);
+		}
 	}	
 	
 	$scope.fbLogin = function() {
@@ -107,6 +115,7 @@ angular.module('starter.controllers', [])
 		bio1: "",
 		bio2: "",
 		bio3: "",
+		subjects: [],
 		tutor_mode: false
 	};	
 	
