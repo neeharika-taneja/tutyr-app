@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast) {
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -103,8 +103,36 @@ angular.module('starter.controllers', [])
 		hasTapped: false
 	}
 	
-	$scope.pollLocation = function() {
-		
+	$scope.pollLocation = function(frequency) {
+		if ( typeof(window.LOCATION_WATCHER) === 'undefined' ) {
+			$scope.LOCATION_WATCHER = $cordovaGeolocation.watchPosition({
+				frequency: frequency,
+				timeout: 10000,
+				enableHighAccuracy: false
+			});
+			$scope.LOCATION_WATCHER.then(null,
+			function(err){
+				alert("Geolocation error: " + err);
+			},
+			function(position){
+				// Here is where you send the current location to the server
+	      var lat  = position.coords.latitude
+	      var long = position.coords.longitude
+				$scope.currentUser.location = {
+					latitude: lat,
+					longitude: long
+				};
+			});
+		}
+	};
+
+	$scope.clearLocation = function() {
+		$cordovaGeolocation.clearWatch($scope.LOCATION_WATCHER)
+			.then(function(result){
+				console.log("Geolocation stopped.");
+			}, function(err){
+				alert("Could not turn off location refreshing: " + err);
+			});
 	};
 
 	// Monitor status of Tutor toggle
@@ -123,7 +151,8 @@ angular.module('starter.controllers', [])
 						$state.go('app.edit_profile');
 					}
 					// Send current user to server
-					// If current profile is not complete				
+					// If current profile is not complete
+					// $scope.pollLocation();
 				} else {
 					// Send current user to server
 					console.log("Tutor mode off");
