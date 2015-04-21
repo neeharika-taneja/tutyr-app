@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform) {
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -104,34 +104,38 @@ angular.module('starter.controllers', [])
 	}
 	
 	$scope.pollLocation = function(frequency) {
-		if ( typeof(window.LOCATION_WATCHER) === 'undefined' ) {
-			$scope.LOCATION_WATCHER = $cordovaGeolocation.watchPosition({
-				frequency: frequency,
-				timeout: 10000,
-				enableHighAccuracy: false
-			});
-			$scope.LOCATION_WATCHER.then(null,
-			function(err){
-				alert("Geolocation error: " + err);
-			},
-			function(position){
-				// Here is where you send the current location to the server
-	      var lat  = position.coords.latitude
-	      var long = position.coords.longitude
-				$scope.currentUser.location = {
-					latitude: lat,
-					longitude: long
-				};
-			});
-		}
+		$ionicPlatform.ready(function(){
+			if ( typeof(window.LOCATION_WATCHER) === 'undefined' ) {
+				$scope.LOCATION_WATCHER = $cordovaGeolocation.watchPosition({
+					frequency: frequency,
+					timeout: 10000,
+					enableHighAccuracy: false
+				});
+				$scope.LOCATION_WATCHER.then(null,
+				function(err){
+					alert("Geolocation error: " + err);
+				},
+				function(position){
+					// Here is where you send the current location to the server
+		      var lat  = position.coords.latitude
+		      var long = position.coords.longitude
+					$scope.currentUser.location = {
+						latitude: lat,
+						longitude: long
+					};
+				});
+			}			
+		});
 	};
 
 	$scope.clearLocation = function() {
-		$cordovaGeolocation.clearWatch($scope.LOCATION_WATCHER)
-			.then(function(result){
-				console.log("Geolocation stopped.");
-			}, function(err){
-				alert("Could not turn off location refreshing: " + err);
+		$ionicPlatform.ready(function(){
+			$cordovaGeolocation.clearWatch($scope.LOCATION_WATCHER)
+				.then(function(result){
+					console.log("Geolocation stopped.");
+				}, function(err){
+					alert("Could not turn off location refreshing: " + err);
+				});			
 			});
 	};
 

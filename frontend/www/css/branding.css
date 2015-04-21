@@ -6,7 +6,18 @@ Darker:
 body, div, button, input, h1, h2, h3, h4, p, em {
 	font-family: 'Open Sans', 'Helvetica', 'Roboto', sans-serif;
 }
-
+.logo {
+	min-width: 30vw;
+	min-height: 30vh;
+	max-width: 30vw;
+	max-height: 30vh;
+}
+.logo-small {
+  height: 4.5vh;
+  padding-left: 5px;
+  position: relative;
+  top: 2px;
+}
 .nav-bar-block .title {
 	font-family: 'Hind', 'Open Sans', sans-serif;
 	font-weight: bold;
