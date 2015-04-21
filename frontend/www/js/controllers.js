@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation) {
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -102,6 +102,10 @@ angular.module('starter.controllers', [])
 	$scope.localToggleStatus = {
 		hasTapped: false
 	}
+	
+	$scope.pollLocation = function() {
+		
+	};
 
 	// Monitor status of Tutor toggle
 	$scope.monitorTutorToggle = function() {
