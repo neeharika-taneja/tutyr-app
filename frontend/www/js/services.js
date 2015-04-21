@@ -5,7 +5,8 @@ angular.module('starter.services', [])
 	
 	return {
 		login: base + "account/register",
-		tutor_mode: base + "account/tutor_mode"
+		tutor_mode: base + "account/tutor_mode",
+		profile: base + "account/profile"
 	};
 	
 })

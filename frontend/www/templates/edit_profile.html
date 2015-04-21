@@ -2,9 +2,9 @@
   <ion-content>
 		<div class="header">
 			<div class="profile-image">
-				<img src="{{profile.profile_pic}}" s/>
+				<img src="{{currentUser.profile_pic}}" s/>
 			</div>			
-			<h1>{{profile.realname}}</h1>
+			<h1>{{currentUser.realname}}</h1>
 			<h3 class="user user-status">
 				<span ng-show="currentUser.tutor_mode">Tutor</span>
 				<span ng-show="!currentUser.tutor_mode">Student</span>
@@ -12,26 +12,38 @@
 		</div>			
 
 		<div class="list">
+			<!-- list of strings -->
+			<ion-item>
+				<span class="input-label">Subjects</span>			
+				 <ul class="list">
+				   <li class="item item-checkbox" ng-repeat="subject in ['Math', 'History', 'English', 'Biology']">
+				      <label class="checkbox">
+				        <input type="checkbox">
+				      </label>
+							{{subject}}							
+				   </li>
+				 </ul>
+			</ion-item>	
 		  <label class="item item-input item-stacked-label">
-		    <span class="input-label">Subjects</span>
-		    <input type="text" placeholder="Calculus, matrix algebra, Python...">
+		    <span class="input-label">Subject specifics</span>
+		    <input type="text" placeholder="Calculus, matrix algebra, Python..." name="subjects" ng-model="currentUser.bio1">
 		  </label>
 		  <label class="item item-input item-select">
 		    <span class="input-label">My Hourly Rate</span>
-		    <select>
-		      <option selected>$0 (free!)</option>
-		      <option>$5</option>
-		      <option>$10</option>
-		      <option>$15</option>
-		      <option>$20</option>
-		      <option>$25</option>
-		      <option>$30</option>
-		      <option>$35</option>
+		    <select ng-model="currentUser.hourly_rate">
+		      <option selected value="0">$0 (free!)</option>
+		      <option value="5">$5</option>
+		      <option value"10">$10</option>
+		      <option value="15">$15</option>
+		      <option value="20">$20</option>
+		      <option value="25">$25</option>
+		      <option value="30">$30</option>
+		      <option value="35">$35</option>
 		    </select>
 		  </label>
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">About Me</span>
-		    <textarea placeholder="Why would you be a good tutor? Tell us a little about yourself!" ></textarea>
+		    <textarea placeholder="Why would you be a good tutor? Tell us a little about yourself!" ng-model="currentUser.bio2"></textarea>
 		  </label>
 			<ion-item>
 				<button class="button button-block button-tutyr">Update Profile</button>

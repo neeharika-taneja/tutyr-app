@@ -1,6 +1,10 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform) {
+	$scope.handleAJAXError = function(err) {
+		alert("There was a server error: " + err.message);
+	}	
+	
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -63,8 +67,8 @@ angular.module('starter.controllers', [])
 				$scope.currentUser = data;
 				$scope.currentUser.loggedIn = true;
 			})
-			.error(function(data, status) {
-				alert("There was an error logging you in");
+			.error(function(err) {
+				$scope.handleAJAXError(err);
 			});			
 		} else {
 			$scope.currentUser = $scope.fbUser;
@@ -152,6 +156,11 @@ angular.module('starter.controllers', [])
 			console.log("Monitoring tutor toggle now");
 			$scope.localToggleStatus.hasTapped = true;
 			$scope.$watch('currentUser.tutor_mode', function() {
+				var tutorToggleMessage = {
+					facebook_id: $scope.currentUser.facebook_id,
+					tutor_mode: $scope.currentUser.tutor_mode
+				};
+				
 				if ( $scope.currentUser.tutor_mode == true ) {
 					console.log("Tutor mode on");
 					if ( $scope.currentUser.bio1 == "" ) {
@@ -161,12 +170,32 @@ angular.module('starter.controllers', [])
 						});
 						$state.go('app.edit_profile');
 					}
-					// Send current user to server
-					// If current profile is not complete
-					// $scope.pollLocation();
+					$http.post(API.tutor_mode, tutorToggleMessage)
+						.success(function(data, status) {
+							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
+								$scope.currentUser.tutor_mode = true;
+								// $scope.pollLocation();
+							}
+						})
+						.error(function(err) {
+							// it failed, so toggle back to whatever the old state was
+							// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
+							$scope.handleAJAXError(err);
+						});
 				} else {
-					// Send current user to server
 					console.log("Tutor mode off");
+					$http.post(API.tutor_mode, tutorToggleMessage)
+						.success(function(data, status) {
+							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
+								$scope.currentUser.tutor_mode = false;
+								// $scope.clearLocation();
+							}
+						})
+						.error(function(err) {
+							// it failed, so toggle back to whatever the old state was
+							// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
+							$scope.handleAJAXError(err);
+						});
 				}
 			});					
 		}
@@ -266,9 +295,26 @@ angular.module('starter.controllers', [])
 	$scope.request = TutorRequest;
 })
 
-.controller('EditProfileController', function($scope, $http) {
-	// Reference current user's profile: $scope.currentUser
-	$scope.profile = $scope.currentUser;
+.controller('EditProfileController', function($scope, $http, API, $state) {
+	$scope.updateProfile = function() {
+		var updatedProfile = $scope.currentUser;
+		// DEBUGGING ONLY
+		updatedProfile.subjects = ["Math", "English", "History"];
+		$http.post(API.profile, $scope.currentUser)
+			.success(function(data, status){
+				if ( $scope.currentUser == data ) {
+					console.log("Profile updated successfully!");
+					// Navigate to requests inbox
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go('app.tutor_requests');				
+				}
+			})
+			.error(function(err){
+				$scope.handleAJAXError(err);
+			});
+	};	
 })
 
 /* ------ Tutoring session controllers ------ */
