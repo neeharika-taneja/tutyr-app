@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^api/tutor/(?P<username>\w+)/subjects', views.select_subjects),
     url(r'^api/subjects', views.subjects),
     url(r'^tutyr_app/(?P<pk>[0-9]+)/$', views.tutyr_detail),
+    url(r'^api/account/register', views.tutyr_register),
 ]

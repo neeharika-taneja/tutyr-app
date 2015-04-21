@@ -4,6 +4,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from tutyr_app.models import *
 from tutyr_app.serializers import *
+from datetime import datetime
 
 class JSONResponse(HttpResponse):
     """
@@ -35,7 +36,6 @@ def tutyr_profile(request, username):
         tutyr = Tutyr.objects.get(facebook_id=username)
     except:
         return HttpResponse(status=404)
-
     if request.method == 'GET':
         serializer = TutyrSerializer(tutyr)
         return JSONResponse(serializer.data)
@@ -75,7 +75,7 @@ def select_subjects(request, username):
 
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        subjects = data.subjects
+        subjects = data['subjects']
         subject_list = Subject.objects.filter(subject_id__in=subjects)
         tutyr.subjects = subject_list
         tutyr.save()
@@ -94,8 +94,35 @@ def subjects(request):
 
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        serializer = SubjectSerializer(data=data,)
+        serializer = SubjectSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JSONResponse(serializer.data)
         return JSONResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def tutyr_register(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        fb_id = data['fbID']
+        tutyr_list = Tutyr.objects.filter(facebook_id=fb_id)
+        # User not in database, so create a new user
+        if len(tutyr_list) == 0:
+            new_tutyr = Tutyr.objects.create(facebook_id=fb_id,
+                                             profile_pic=data['profileimage'],
+                                             real_name=data['realname'],
+                                             registration_date=datetime.now(),
+                                             bio1="", bio2="", bio3="",
+                                             rating=0.0, hourly_rate=0.0,
+                                             tutor_mode=False,
+                                             email=data['email'])
+            new_tutyr.save()
+            serializer = TutyrSerializer(new_tutyr)
+            return JSONResponse(serializer.data)
+
+        # Already in database -> return profile
+        else:
+            tutyr = tutyr_list[0]
+            serializer = TutyrSerializer(tutyr)
+            return JSONResponse(serializer.data)
+    return HttpResponse(status=400)

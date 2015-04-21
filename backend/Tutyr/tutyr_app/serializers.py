@@ -35,6 +35,7 @@ class TutyrSerializer(serializers.Serializer):
     longitude = serializers.DecimalField(max_digits=10, decimal_places=5)
     hourly_rate = serializers.DecimalField(max_digits=10, decimal_places=2)
     subjects = SubjectSerializer(many=True, required=False)
+    email = serializers.CharField(max_length=250)
 
     def create(self, validated_data):
         """
@@ -58,6 +59,7 @@ class TutyrSerializer(serializers.Serializer):
         instance.longitude = validated_data.get('longitude', instance.longitude)
         instance.hourly_rate = validated_data.get('hourly_rate', instance.hourly_rate)
         instance.subjects = validated_data.get('subjects', instance.subjects)
+        instance.email = validated_data.get('email', instance.email)
         instance.save()
         return instance
 
