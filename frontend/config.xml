@@ -4,9 +4,9 @@
   <description>
 	The tutoring you want when you need it.
    </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
-    </author>
+  <author email="tutyrapp@gmail.com" href="http://tutyr.me/">
+	Tutyr Team
+  </author>
   <content src="index.html"/>
   <access origin="*"/>
   <preference name="webviewbounce" value="false"/>
