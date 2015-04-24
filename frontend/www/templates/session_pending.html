@@ -1,7 +1,7 @@
 <ion-view view-title="{{title}}" id="session-pending">
   <ion-content>
 		<!-- Tutee view - waiting on request -->
-		<div id="tutee-waiting" ng-if="true">
+		<div id="tutee-waiting" ng-if="session.status==1">
 			<ion-item class="item grey">
 				<p>Waiting For Tutyr...</p>
 				<p><ion-spinner icon="dots" style="fill:#fff;stroke:#fff;"></ion-spinner></p>
@@ -9,7 +9,7 @@
 			<div class="row waiting">
 				<div class="col-33 tutee">
 					<div class="profile-image">
-						<img src="img/test-person.jpg" />
+						<img src="{{session.tutor_from.profile_pic}}" />
 					</div>	
 				</div>
 				<div class="col-33 arrows">
@@ -17,7 +17,7 @@
 				</div>
 				<div class="col-33 tutor">	
 					<div class="profile-image">
-						<img src="img/test-person.jpg" />
+						<img src="{{session.tutor_to.profile_pic}}" />
 					</div>	
 				</div>	
 			</div>			
@@ -26,17 +26,16 @@
 				<button class="button button-block button-tutyr">Cancel Request</button>
 			</ion-item>
 		</div>
-		<div id="tutee-directions" ng-if="session.status==3">
+		<div id="tutee-directions" ng-if="session.status==1">
 			<ui-gmap-google-map center='map.center' zoom='map.zoom' options='map.options'></ui-gmap-google-map>			
 			<ion-item class="item directions item-text-wrap">
 				<h2>Your Tutyr</h2>
-				<p>Andrea Smith</p>
+				<p>{{sessoin.tutor_to.realname}}</p>
 				<h2>Special Instructions</h2>
-				<p>I am sitting at the last table of the second floor of Hunt Library</p>
+				<p>{{session.location_comments}}</p>
 				<button class="button button-block button-tutyr">Get Directions</button>
-			</ion-item>
-			
-		</div>			
+			</ion-item>			
+		</div>		
   </ion-content>
 </ion-view>
 

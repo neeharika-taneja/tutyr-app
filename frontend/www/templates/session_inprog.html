@@ -2,17 +2,17 @@
   <ion-content>
 		
 		<!-- ====== Tutor-side in progress view ====== -->
-		<ion-item class="item item-divider item-tutyr" ng-if="session.started">
+		<ion-item class="item item-divider item-tutyr" ng-if="session.session_start">
 			<i class="icon ion-clock"></i> &nbsp; Session in progress debug{{debug}}
 		</ion-item>	
 		
 		<div ng-if="currentUser.tutor_mode" class="tutor">
-			<div ng-if="session.active" class="active-session">
+			<div ng-if="session.session-start" class="active-session">
 				<ion-item class="tutor-view-header">
 					<div class="profile-image">
-						<img src="{{session.tutee.profile_pic}}" />
+						<img src="{{session.tutor_to.profile_pic}}" />
 					</div>
-					<p class="profile-name">You are tutoring {{session.tutee.realname}}</p>
+					<p class="profile-name">You are tutoring {{session.tutor_to.realname}}</p>
 				</ion-item>	
 				<ion-item class="tutor-view-timer">
 					<div timer start="session.started"></div>
@@ -34,17 +34,17 @@
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutee-view-header">
 					<p class="profile-image">
-						<img src="{{session.tutor.profile_pic}}">
+						<img src="{{session.tutor_from.profile_pic}}">
 					</p>
-					<p class="profile-name">Your tutor is {{session.tutor.realname}}</p>
+					<p class="profile-name">Your tutor is {{session.tutor_from.realname}}</p>
 					<p class="profile-meta">
-						<span class="rate">${{session.tutor.bio2}}/hour</span> 
+						<span class="rate">${{session.tutor_from.rate}}/hour</span> 
 						&bull; 
-						<span class="location">At {{session.tutor.customLocation}}</span>
+						<span class="location">At {{session.location_comments}}</span>
 					</p>
 				</ion-item>					
-				<ion-item class="tutee-view-timer" ng-if="session.started">
-					<div timer start="session.started"></div>
+				<ion-item class="tutee-view-timer" ng-if="session.session_start">
+					<div timer start="session.session_start"></div>
 				</ion-item>				
 			</div>	
 						

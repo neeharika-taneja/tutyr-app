@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('API', function() {
-	var base = "http://tutyr.herokuapp.com/api/";
-	
+	// var base = "http://tutyr.herokuapp.com/api/";
+	var base = "http://localhost:8000/api/";
 	return {
 		login: base + "account/register", // POST login
 		tutor_mode: base + "account/tutor_mode", // POST toggle
@@ -43,7 +43,7 @@ angular.module('starter.services', [])
 	}
 })
 
-.factory('TutorSessionService', function() {
+.factory('TutorSessionService', function($rootScope, $http, API) {
 	var sessions = {
 		1: {
 			from: 'Bob',
@@ -66,7 +66,14 @@ angular.module('starter.services', [])
 	return {
 		sessions: sessions,
 		getSession: function(id) {
-			return sessions[id];
+			var self = this;
+			$http.get(API.session + "/" + id)
+				.success(function(data, status) {
+					angular.extend(self, data);
+				})
+				.error(function(error) {
+					$rootScope.$broadcast('Loading.error', {error: error});
+				})
 		}
 	}
 })

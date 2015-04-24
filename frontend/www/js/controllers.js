@@ -21,6 +21,10 @@ angular.module('starter.controllers', [])
 		}	
 	}	
 	
+	$scope.$on('Loading.error', function(event, args) {
+		$scope.handleAJAXError(args.error);
+	})
+	
 	$scope.dialog = function(message, title) {
 		var title = typeof(title) === "undefined" ? "" : title;
 		if ( $scope.onDevice() ) {
@@ -87,7 +91,7 @@ angular.module('starter.controllers', [])
 			realname: fbUser.realname,
 			email: fbUser.email,
 			fbID: fbUser.fbID,
-			profile_pic: fbUser.profile_pic
+			profileimage: fbUser.profile_pic
 		};
 		
 		if ( !debug ) {
@@ -182,7 +186,7 @@ angular.module('starter.controllers', [])
 		});
 	};
 	
-	$scope.pollLocation(5000);
+	// $scope.pollLocation(5000);
 	
 	$scope.clearLocation = function() {
 		$ionicPlatform.ready(function(){
@@ -361,13 +365,13 @@ angular.module('starter.controllers', [])
 		comments: null
 	};
 	$scope.generateSession = function(profile) {
-		// $http.post(API.session, $scope.sessionTemplate)
-		// 	.success(function(data, status) {
-		// 		// redirect here
-		// 	})
-		// 	.error(function(err) {
-		// 		$scope.handleAJAXError(err);
-		// 	});
+		$http.post(API.session, $scope.sessionTemplate)
+			.success(function(data, status) {
+				$state.go("app.session_pending", {id: data.id} )
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
 		// $state.go('app.session_pending', {id: 1});
 	};
 })
@@ -456,26 +460,26 @@ angular.module('starter.controllers', [])
 		}
 	};
 	
-	// $scope.session = SessionObject;
-	$scope.debug = Session;
-	$scope.session = {
-		started: "2015-04-14 10:30:00",
-		active: true,
-		tutee: {
-			realname: "Henry Kip",
-			profile_pic: "img/test-person.jpg"
-		},
-		tutor: {
-			realname: "Andrea Smith",
-			profile_pic: "http://placekitten.com/512/512",
-			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-			bio2: 10,
-			bio3: "",
-			location: [null, null],
-			customLocation: "Hunt Library, 3rd floor"
-		}
-	};
-	
+	$scope.session = Session;
+	// $scope.debug = Session;
+	// $scope.session = {
+	// 	started: "2015-04-14 10:30:00",
+	// 	active: true,
+	// 	tutee: {
+	// 		realname: "Henry Kip",
+	// 		profile_pic: "img/test-person.jpg"
+	// 	},
+	// 	tutor: {
+	// 		realname: "Andrea Smith",
+	// 		profile_pic: "http://placekitten.com/512/512",
+	// 		bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+	// 		bio2: 10,
+	// 		bio3: "",
+	// 		location: [null, null],
+	// 		customLocation: "Hunt Library, 3rd floor"
+	// 	}
+	// };
+	//
 	$scope.completeSession = function() {
 		alert("Session completed");
 	};

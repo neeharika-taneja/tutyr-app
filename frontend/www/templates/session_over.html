@@ -6,13 +6,13 @@
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutor-view-header">
 					<div class="profile-image">
-						<img src="{{session.tutee.profile_pic}}" />
+						<img src="{{session.tutor_from.profile_pic}}" />
 					</div>
-					<p class="profile-name">You tutored {{session.tutee.realname}}</p>
+					<p class="profile-name">You tutored {{session.tutor_from.realname}}</p>
 				</ion-item>	
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
-					<strong>0 minute</strong> tutoring session for <strong>$0</strong>
+					<strong>0 minute</strong> tutoring session for <strong>{{session.tutor_to.rate}}</strong>
 				</ion-item>
 				<ion-item class="item-divider">How Was Your Student?</ion-item>
 				<ion-item class="rating">
@@ -38,13 +38,13 @@
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
-						<img src="{{session.tutor.profile_pic}}">
+						<img src="{{session.tutor_to.profile_pic}}">
 					</p>
-					<p class="profile-name">Your tutor was {{session.tutor.realname}}</p>
+					<p class="profile-name">Your tutor was {{session.tutor)to.realname}}</p>
 					<p class="profile-meta">
-						<span class="rate">${{session.tutor.bio2}}/hour</span> 
+						<span class="rate">${{session.tutor_to.rate}}/hour</span> 
 						&bull; 
-						<span class="location">At {{session.tutor.customLocation}}</span>
+						<span class="location">At {{session.locationComments}}</span>
 					</p>
 				</ion-item>					
 				<ion-item class="item-divider">Summary</ion-item>

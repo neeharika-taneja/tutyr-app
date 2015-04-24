@@ -137,7 +137,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: 'TutorSessionController',
 				resolve: {
 					Session: function($stateParams, TutorSessionService) {
-						return $stateParams.id;
+						var s = TutorSessionService;
+						s.getSession($stateParams.id);
+						return s;
 					}
 				}
       }
@@ -154,7 +156,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: 'TutorSessionController',
 				resolve: {
 					Session: function($stateParams, TutorSessionService) {
-						return $stateParams.id;
+						var s = TutorSessionService;
+						s.getSession($stateParams.id);
+						return s;
 					}
 				}
       }
@@ -171,7 +175,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: 'TutorSessionController',
 				resolve: {
 					Session: function($stateParams, TutorSessionService) {
-						return $stateParams.id;
+						var s = TutorSessionService;
+						s.getSession($stateParams.id);
+						return s;
 					}
 				}
       }
