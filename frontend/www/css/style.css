@@ -75,6 +75,7 @@
 }
 #intro h1, h2 { 
 	color: #fafafa;
+	font-size: 1.4em;
 }
 #intro h1 { 
 	font-size: 4em;
@@ -140,8 +141,17 @@
 
 }
 
+#request-tutor {
+	margin: 20px;
+	margin-top: 40px;
+}
+
 .profile-rating {
 	text-align: right;
+}
+#profile .profile-meta {
+	color: #fff;
+	margin-top: -10px;
 }
 .profile-meta { 
 	color: #444;
@@ -163,6 +173,13 @@
 }
 
 /* Requests */
+#confirm-request .profile-image {
+	width: 8em;
+	height: 8em;
+}
+#confirm-request .profile-image img {
+	border-radius: 4em;
+}
 #request-list-empty p {
 	color: #777;
 	text-align: center;

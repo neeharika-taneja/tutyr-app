@@ -6,11 +6,15 @@ angular.module('starter.controllers', [])
 	window.dumpUser = function() { console.log($scope.currentUser); }
 	
 	$scope.handleAJAXError = function(err) {
-		if ( typeof(err.message) != 'undefined' ) {
-			alert("There was a server error: " + err.message);			
+		if ( err ) { 
+			if (err.hasOwnProperty('message') ) {
+				alert("There was a server error: " + err.message);			
+			} else {
+				alert(err);
+			}
 		} else {
-			alert(err);
-		}
+			alert("Error");
+		}	
 	}	
 	
 	$scope.fbLogin = function() {

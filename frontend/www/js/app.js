@@ -190,7 +190,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 				return TutorRequestService.getRequest($stateParams.tutor_request);
 			}
 		}
-  });
+  })
+	
+	.state('app.debug', {
+		url: "/debug",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/debug.html"
+			}
+		}
+	})
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/intro');
 });
