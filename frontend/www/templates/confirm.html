@@ -11,10 +11,10 @@
 				<p>Please enter any additional information you want your tutor to know about your tutoring request.</p>
 			</ion-item>
 			<ion-item class="item-input">
-				<textarea placeholder="Is there anything you want your tutor to know?"></textarea>
+				<textarea placeholder="Is there anything you want your tutor to know?" ng-model="sessionTemplate.comments"></textarea>
 			</ion-item>	
 			<ion-item>
-				<button class="button button-block button-tutyr">Submit Request</button>
+				<a class="button button-block button-tutyr" ng-click="generateSession()">Submit Request</a>
 			</ion-item>
   </ion-content>
 </ion-view>

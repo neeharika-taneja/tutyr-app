@@ -8,10 +8,24 @@
 			<p class="comments">&#8220;{{request.comments}}&#8221;</p>
 			<p>Debug: you viewed request with index {{request.requestid}}</p>
 			<br />
+		</div>
+		
+		<ion-toggle 
+		ng-model="useCustomLocation" 
+		toggle-class="toggle-tutyr">
+			Share custom location
+		</ion-toggle>
+		
+		<ion-item ng-if="useCustomLocation" class="item-input item-stacked-label">
+			<span class="input-label">Custom location</span>
+			<textarea ng-model="session.location_comments" placeholder="I'm on the third floor of the library."></textarea>
+		</ion-item>	
+		
+		<ion-item>				
 			<button class="button button-block button-tutyr" href="#">
 				Start Session
 			</button>
-		</div>
-							
+		</ion-item>
+						
   </ion-content>
 </ion-view>

@@ -1,21 +1,39 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs) {
 	
-	// DEBUG
-	window.dumpUser = function() { console.log($scope.currentUser); }
+	$scope.onDevice = function() {
+		var hasCdv = typeof(cordova) === 'undefined' ? false: true;
+    return hasCdv
+    && /^file:\/{3}[^\/]/i.test(window.location.href) 
+    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);		
+	}
 	
 	$scope.handleAJAXError = function(err) {
 		if ( err ) { 
 			if (err.hasOwnProperty('message') ) {
 				alert("There was a server error: " + err.message);			
+				$scope.dialog("Server error", err.message);
 			} else {
-				alert(err);
+				$scope.dialog(err);
 			}
 		} else {
-			alert("Error");
+			$scope.dialog("Error.");
 		}	
 	}	
+	
+	$scope.dialog = function(message, title) {
+		var title = typeof(title) === "undefined" ? "" : title;
+		if ( $scope.onDevice() ) {
+			$cordovaDialogs.alert(message, title);
+		} else {
+			if ( title == "") {
+				alert(message);
+			} else {				
+				alert(title + ": " + message);
+			}
+		}
+	}
 	
 	$scope.fbLogin = function() {
 		/**
@@ -60,7 +78,7 @@ angular.module('starter.controllers', [])
 				$scope.login($scope.fbUser, false);								
 	    },
 	    error: function(error) {
-	      alert('Facebook error: ' + error.error_description);
+				$scope.dialog(error.error_description, "Facebook error");
 	    }
 	  });		
 	}
@@ -289,8 +307,23 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('ViewProfileController', function($scope, ProfileObject) {
+.controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state) {
 	$scope.profile = ProfileObject;
+	$scope.sessionTemplate = {
+		fbID_from: $scope.currentUser.fbID,
+		fbID_to: $scope.profile.fbID,
+		comments: null
+	};
+	$scope.generateSession = function(profile) {
+		// $http.post(API.session, $scope.sessionTemplate)
+		// 	.success(function(data, status) {
+		// 		// redirect here
+		// 	})
+		// 	.error(function(err) {
+		// 		$scope.handleAJAXError(err);
+		// 	});
+		// $state.go('app.session_pending', {id: 1});
+	};
 })
 
 .controller('TutorRequestsController', function($scope, $ionicModal, TutorRequestService) {
@@ -367,7 +400,18 @@ angular.module('starter.controllers', [])
 	
 })
 
-.controller('TutorSessionController', function($scope) {
+.controller('TutorSessionController', function($scope, $http, API, $interval, Session) {
+	var refreshTimer;
+	$scope.map = {
+		center: {latitude: 40.4414, longitude: -79.9419},
+		zoom: 10,
+		options: {
+			disableDefaultUI: true
+		}
+	};
+	
+	// $scope.session = SessionObject;
+	$scope.debug = Session;
 	$scope.session = {
 		started: "2015-04-14 10:30:00",
 		active: true,
@@ -385,6 +429,37 @@ angular.module('starter.controllers', [])
 			customLocation: "Hunt Library, 3rd floor"
 		}
 	};
+	
+	$scope.completeSession = function() {
+		alert("Session completed");
+	};
+	
+	$scope.reloadSession = function() {
+		$http.get(API.session + "/" + $scope.session.id)
+			.success(function(data, status) {
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
+	}
+	
+	$scope.startWatch = function() {
+		if ( angular.isDefined(refreshTimer)) { return; }
+		refreshTimer = $interval($scope.reloadSession);
+		$scope.$watch('session.status', function() {
+			// redirect based on status change
+			return;
+		});	
+	}
+	
+	$scope.stopWatch = function() {
+		if ( angular.isDefined(refreshTimer) ){
+			$interval.cancel(refreshTimer);
+			refreshTimer = undefined;
+		}
+	}
+	
 })	
 
 .controller('TutorSessionOverController', function($scope){
