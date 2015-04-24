@@ -39,6 +39,34 @@ angular.module('starter.services', [])
 	}
 })
 
+.factory('TutorSessionService', function() {
+	var sessions = {
+		1: {
+			from: 'Bob',
+			comments: 'I want help understanding mitochondria',
+			profile_pic: 'img/test-person.jpg',
+			status: 0,
+			request_time: '2015-04-07T19:43:37-0500',
+			requestid: 1
+		},
+		2: {
+			from: 'Mary',
+			comments: "Need help with my HCI project",
+			profile_pic: 'img/test-person.jpg',
+			status: 0,
+			request_time: '2015-04-07T19:43:37-0500',
+			requestid: 2
+		}
+	};
+	
+	return {
+		sessions: sessions,
+		getSession: function(id) {
+			return sessions[id];
+		}
+	}
+})
+
 .factory('ProfileService', function(){
 	var profiles = {
 		1:	{

@@ -98,7 +98,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     },
   })
-  	/* confirm tutor request */
+
+	/* confirm tutor request */
   .state('app.confirm', {
     url: "/confirm/:id",
     views: {
@@ -129,33 +130,63 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
  	/* Session pending state (including directions screen) */
   .state('app.session_pending', {
-    url: "/session_pending",
+    url: "/session_pending/:id",
     views: {
       'menuContent': {
         templateUrl: "templates/session_pending.html",
-				controller: "TutorSessionPendingController"
+				controller: "TutorSessionPendingController",
+				resolve: {
+					SessionObject: function($stateParams, SessionService) {
+						return SessionService.getSession($stateParams.id);
+					}
+				}
+      }
+    }
+  })
+	
+  .state('app.session', {
+    url: "/session/:id",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/session_inprog.html",
+        controller: 'TutorSessionController',
+				resolve: {
+					Session: function($stateParams, TutorSessionService) {
+						return $stateParams.id;
+					}
+				}
       }
     },
   })
 	
-	/* In progress state */
-	.state('app.session', {
-		url: "/session",
-		views: {
-			'menuContent': {
-				templateUrl: "templates/session_inprog.html",
-				controller: "TutorSessionController"
-			}
-		}
-	})
+	// /* In progress state */
+	// .state('app.session', {
+	// 	url: "/session/:id",
+	// 	views: {
+	// 		'menuContent': {
+	// 			templateUrl: "templates/session_inprog.html",
+	// 			controller: "TutorSessionController",
+	// 			resolve: {
+	// 				SessionObject: function($stateParams, SessionService) {
+	// 					return SessionService.getSession($stateParams.id);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// })
 	
 	/* Session over state (includes ratings) */
 	.state('app.session_over', {
-		url: "/session_over",
+		url: "/session_over/:id",
 		views: {
 			'menuContent': {
 				templateUrl: "templates/session_over.html",
-				controller: "TutorSessionOverController"
+				controller: "TutorSessionOverController",
+				resolve: {
+					SessionObject: function($stateParams, SessionService) {
+						return SessionService.getSession($stateParams.id);
+					}
+				}
 			}
 		}
 	})
