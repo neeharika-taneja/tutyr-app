@@ -6,11 +6,11 @@
 			<i class="icon ion-clock"></i> &nbsp; Session in progress
 		</ion-item>	
 		
-		<div ng-if="currentUser.tutor" class="tutor">
+		<div ng-if="currentUser.tutor_mode" class="tutor">
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutor-view-header">
 					<div class="profile-image">
-						<img src="{{session.tutee.profileimage}}" />
+						<img src="{{session.tutee.profile_pic}}" />
 					</div>
 					<p class="profile-name">You are tutoring {{session.tutee.realname}}</p>
 				</ion-item>	
@@ -30,11 +30,11 @@
 		<!-- =========================================== -->
 		
 		<!-- ====== Student-side in progress view ====== -->
-		<div ng-if="!currentUser.tutor">
+		<div ng-if="!currentUser.tutor_mode">
 			<div ng-if="session.active" class="active-session">
 				<ion-item class="tutee-view-header">
 					<p class="profile-image">
-						<img src="{{session.tutor.profileimage}}">
+						<img src="{{session.tutor.profile_pic}}">
 					</p>
 					<p class="profile-name">Your tutor is {{session.tutor.realname}}</p>
 					<p class="profile-meta">

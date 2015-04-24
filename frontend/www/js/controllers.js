@@ -1,6 +1,22 @@
 angular.module('starter.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform) {
+	
+	// DEBUG
+	window.dumpUser = function() { console.log($scope.currentUser); }
+	
+	$scope.handleAJAXError = function(err) {
+		if ( err ) { 
+			if (err.hasOwnProperty('message') ) {
+				alert("There was a server error: " + err.message);			
+			} else {
+				alert(err);
+			}
+		} else {
+			alert("Error");
+		}	
+	}	
+	
 	$scope.fbLogin = function() {
 		/**
 			Handle communication with the openFB library to authenticate user using
@@ -35,13 +51,13 @@ angular.module('starter.controllers', [])
 						realname: user.name,
 						email: user.email,
 						fbID: user.id,
-						profileimage: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
+						profile_pic: "http://graph.facebook.com/" + user.id + "/picture?width=512&height=512",
 						tutor: false
 	        };
 	      });
 				
 				// Send this information to the Tutyr backend
-				$scope.login($scope.fbUser, true);								
+				$scope.login($scope.fbUser, false);								
 	    },
 	    error: function(error) {
 	      alert('Facebook error: ' + error.error_description);
@@ -50,14 +66,21 @@ angular.module('starter.controllers', [])
 	}
 	
 	$scope.login = function(fbUser, debug) {
+		var registrationData = {
+			realname: fbUser.realname,
+			email: fbUser.email,
+			fbID: fbUser.fbID,
+			profile_pic: fbUser.profile_pic
+		};
+		
 		if ( !debug ) {
-			$http.post(API.login, fbUser)
+			$http.post(API.login, registrationData)
 			.success(function(data, status) {
 				$scope.currentUser = data;
 				$scope.currentUser.loggedIn = true;
 			})
-			.error(function(data, status) {
-				alert("There was an error logging you in");
+			.error(function(err) {
+				$scope.handleAJAXError(err);
 			});			
 		} else {
 			$scope.currentUser = $scope.fbUser;
@@ -92,11 +115,12 @@ angular.module('starter.controllers', [])
 		loggedIn: false,
 		realname: 'Andrea Smith',
 		email: 'test.person@example.com',
-		profileimage: 'img/test-person.jpg',
+		profile_pic: 'img/test-person.jpg',
 		bio1: "",
 		bio2: "",
 		bio3: "",
-		tutor: false
+		subjects: [],
+		tutor_mode: false
 	};	
 	
 	$scope.localToggleStatus = {
@@ -144,8 +168,13 @@ angular.module('starter.controllers', [])
 		if ( $scope.localToggleStatus.hasTapped == false ) {
 			console.log("Monitoring tutor toggle now");
 			$scope.localToggleStatus.hasTapped = true;
-			$scope.$watch('currentUser.tutor', function() {
-				if ( $scope.currentUser.tutor == true ) {
+			$scope.$watch('currentUser.tutor_mode', function() {
+				var tutorToggleMessage = {
+					facebook_id: $scope.currentUser.facebook_id,
+					tutor_mode: $scope.currentUser.tutor_mode
+				};
+				
+				if ( $scope.currentUser.tutor_mode == true ) {
 					console.log("Tutor mode on");
 					if ( $scope.currentUser.bio1 == "" ) {
 						// toast("Let's fill out your Tutyr profile!")
@@ -154,12 +183,32 @@ angular.module('starter.controllers', [])
 						});
 						$state.go('app.edit_profile');
 					}
-					// Send current user to server
-					// If current profile is not complete
-					// $scope.pollLocation();
+					$http.post(API.tutor_mode, tutorToggleMessage)
+						.success(function(data, status) {
+							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
+								$scope.currentUser.tutor_mode = true;
+								// $scope.pollLocation();
+							}
+						})
+						.error(function(err) {
+							// it failed, so toggle back to whatever the old state was
+							// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
+							$scope.handleAJAXError(err);
+						});
 				} else {
-					// Send current user to server
 					console.log("Tutor mode off");
+					$http.post(API.tutor_mode, tutorToggleMessage)
+						.success(function(data, status) {
+							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
+								$scope.currentUser.tutor_mode = false;
+								// $scope.clearLocation();
+							}
+						})
+						.error(function(err) {
+							// it failed, so toggle back to whatever the old state was
+							// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
+							$scope.handleAJAXError(err);
+						});
 				}
 			});					
 		}
@@ -184,7 +233,7 @@ angular.module('starter.controllers', [])
 		profiles: [
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'Python, Java',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -192,7 +241,7 @@ angular.module('starter.controllers', [])
 			},
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'English, Math',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -200,7 +249,7 @@ angular.module('starter.controllers', [])
 			},
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -208,7 +257,7 @@ angular.module('starter.controllers', [])
 			},
 			{
 				realname: 'Firstname Lastname',
-				profileimage: 'test-person.jpg',
+				profile_pic: 'test-person.jpg',
 				bio1: 'Hi, I am a piece of testing data.',
 				rating: 4,
 				customlocation: 'Carnegie Mellon University',
@@ -259,9 +308,26 @@ angular.module('starter.controllers', [])
 	$scope.request = TutorRequest;
 })
 
-.controller('EditProfileController', function($scope, $http) {
-	// Reference current user's profile: $scope.currentUser
-	$scope.profile = $scope.currentUser;
+.controller('EditProfileController', function($scope, $http, API, $state) {
+	$scope.updateProfile = function() {
+		var updatedProfile = $scope.currentUser;
+		// DEBUGGING ONLY
+		updatedProfile.subjects = ["Math", "English", "History"];
+		$http.post(API.profile, $scope.currentUser)
+			.success(function(data, status){
+				if ( $scope.currentUser == data ) {
+					console.log("Profile updated successfully!");
+					// Navigate to requests inbox
+					$ionicHistory.nextViewOptions({
+						disableBack: true
+					});
+					$state.go('app.tutor_requests');				
+				}
+			})
+			.error(function(err){
+				$scope.handleAJAXError(err);
+			});
+	};	
 })
 
 /* ------ Tutoring session controllers ------ */
@@ -282,11 +348,11 @@ angular.module('starter.controllers', [])
 		status: 2,
 		tutee: {
 			realname: "Henry Kip",
-			profileimage: "img/test-person.jpg"
+			profile_pic: "img/test-person.jpg"
 		},
 		tutor: {
 			realname: "Andrea Smith",
-			profileimage: "http://placekitten.com/512/512",
+			profile_pic: "http://placekitten.com/512/512",
 			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 			bio2: 10,
 			bio3: "",
@@ -307,11 +373,11 @@ angular.module('starter.controllers', [])
 		active: true,
 		tutee: {
 			realname: "Henry Kip",
-			profileimage: "img/test-person.jpg"
+			profile_pic: "img/test-person.jpg"
 		},
 		tutor: {
 			realname: "Andrea Smith",
-			profileimage: "http://placekitten.com/512/512",
+			profile_pic: "http://placekitten.com/512/512",
 			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 			bio2: 10,
 			bio3: "",
@@ -328,11 +394,11 @@ angular.module('starter.controllers', [])
 		rating: null,
 		tutee: {
 			realname: "Henry Kip",
-			profileimage: "img/test-person.jpg"
+			profile_pic: "img/test-person.jpg"
 		},
 		tutor: {
 			realname: "Andrea Smith",
-			profileimage: "http://placekitten.com/512/512",
+			profile_pic: "http://placekitten.com/512/512",
 			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
 			bio2: 10,
 			bio3: "",

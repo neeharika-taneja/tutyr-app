@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.utils', 'ui.bootstrap.rating', 'ui.bootstrap.tpls', 'uiGmapgoogle-maps', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.utils', 'ui.bootstrap.rating', 'ui.bootstrap.tpls', 'uiGmapgoogle-maps', 'ngCordova', 'checklist-model'])
 
 .run(function($rootScope, $ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -190,7 +190,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 				return TutorRequestService.getRequest($stateParams.tutor_request);
 			}
 		}
-  });
+  })
+	
+	.state('app.debug', {
+		url: "/debug",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/debug.html"
+			}
+		}
+	})
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/intro');
 });

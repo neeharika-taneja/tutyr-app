@@ -1,14 +1,14 @@
 <ion-view view-title="Tutyr">
   <ion-content id="intro">
 		<div ng-if="!currentUser.loggedIn" class="login">
-			<p><img src="img/logo-round.svg" alt="Tutyr logo" class="logo" /></p>
+			<p><img src="img/logo-text.svg" alt="Tutyr logo" class="logo" /></p>
 			<h2>Log in for an easy to use, on-demand tutoring service.</h2>
 			<br />
 
-			<button class="button button-block button-calm" ng-click="fbLogin()">
-				Login With Facebook
+			<button class="button button-block button-tutyr" ng-click="fbLogin()">
+				<i class="icon ion-social-facebook"></i> &nbsp; Login With Facebook
 			</button>						
-			<button class="button button-block button-calm" ng-click="fakeLogin()">
+			<button class="button button-block button-tutyr" ng-click="fakeLogin()">
 				Fake Login
 			</button>						
 		</div>
@@ -29,15 +29,13 @@
 					<div class="row profile-main">
 						<div class="col col-25">
 							<div class="profile-image">
-								<a href="#/app/view_profile/{{profile.id}}"><img src="img/{{profile.profileimage}}" /></a>
+								<a href="#/app/view_profile/{{profile.id}}"><img src="img/{{profile.profile_pic}}" /></a>
 							</div>					
 						</div>
-						<div class="col col-50">	
+						<div class="col col-75">	
 							<p class="profile-name">{{profile.realname}}</p>
 							<p class="profile-bio">{{profile.bio1}}</p>
-						</div>
-						<div class="col col-25">	
-							<p class="profile-rating">{{profile.rating}} / 5</p>
+							<rating ng-model="profile.rating" readonly="true">
 						</div>	
 					</div>	
 					<hr />

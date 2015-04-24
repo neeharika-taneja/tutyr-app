@@ -2,34 +2,43 @@
   <ion-content>	
 		<div class="header">
 			<div class="profile-image">
-				<img src="img/{{profile.profileimage}}"> 
+				<img src="img/{{profile.profile_pic}}"> 
 			</div>			
 			<p class="profile-name">{{profile.realname}}</p>
-			<a href="#/app/confirm/{{profile.id}}">
-				<button class="button button-block button-tutyr" ng-click="showPrompt()">Request Tutor</button>
-			</a>				
+			<p class="profile-meta">
+				<span class="rate">${{profile.rate}}/hour</span> 
+				&bull; 
+				<rating ng-model="profile.rating" readonly="true">
+			</p>
+			
+			<a href="#/app/confirm/{{profile.id}}"
+				 class="button button-block button-tutyr" 
+				 id="request-tutor"
+				 ng-click="showPrompt()">Request Tutor</a>
+
 		</div>
 		
 		<div class="card">
-			<ion-item class="item-divider">Rating</ion-item>
+			<ion-item class="item-divider item-dark">About Me</ion-item>			
+			<ion-item class="item-text-wrap">
+				<p>{{profile.bio2}}</p>
+			</ion-item>
+			
+			<!--<ion-item class="item-divider item-tutyr">Rating</ion-item>
 			<ion-item class="item-text-wrap">				
 				<rating ng-model="profile.rating" readonly="true">
-			</ion-item>	
+			</ion-item>	-->
 
-			<ion-item class="item-divider">Subjects</ion-item>
+			<ion-item class="item-divider item-tutyr">Subjects</ion-item>
 			<ion-item class="item-text-wrap">
 				{{profile.subjects}}
 			</ion-item>				
 
-			<ion-item class="item-divider">Hourly Rate</ion-item>
+<!--	<ion-item class="item-divider item-tutyr">Hourly Rate</ion-item>
 			<ion-item class="item-text-wrap">
 				${{profile.rate}}/hr
-			</ion-item>
+			</ion-item>-->
 
-			<ion-item class="item-divider">About Me</ion-item>			
-			<ion-item class="item-text-wrap">
-				<p>{{profile.bio2}}</p>
-			</ion-item>		
 		</div>
 		
 		<div class="card">
