@@ -1,7 +1,7 @@
 <ion-view view-title="Tutyr">
   <ion-content id="intro">
 		<div ng-if="!currentUser.loggedIn" class="login">
-			<p><img src="img/logo-round.svg" alt="Tutyr logo" class="logo" /></p>
+			<p><img src="img/logo-text.svg" alt="Tutyr logo" class="logo" /></p>
 			<h2>Log in for an easy to use, on-demand tutoring service.</h2>
 			<br />
 
@@ -32,12 +32,10 @@
 								<a href="#/app/view_profile/{{profile.id}}"><img src="img/{{profile.profile_pic}}" /></a>
 							</div>					
 						</div>
-						<div class="col col-50">	
+						<div class="col col-75">	
 							<p class="profile-name">{{profile.realname}}</p>
 							<p class="profile-bio">{{profile.bio1}}</p>
-						</div>
-						<div class="col col-25">	
-							<p class="profile-rating">{{profile.rating}} / 5</p>
+							<rating ng-model="profile.rating" readonly="true">
 						</div>	
 					</div>	
 					<hr />

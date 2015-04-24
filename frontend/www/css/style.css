@@ -117,24 +117,24 @@
 	margin-bottom: 5px;
 }
 .newsfeed .profile {
+	border-radius: 5px;
 	width: 90%;
 	margin: 0 auto;
-	padding: 0.5em;
+	padding: 0.25em;
 	margin-bottom: 0.5em;
+	text-align: right;
 }
 .profile-name {
-	font-size: 1.5em;
+	font-size: 1.2em;
 	font-weight: bold;
 }
 .profile-image {
-	width: 3.85em;
-	height: 3.85em;
-
 }
 .profile-image img {
-	width: 3.85em;
-	border-radius: 1.925em;
-}
+  width: 5em;
+  border-radius: 2.5em;
+  margin-top: 15%;
+}}
 #tutor .profile-image img {
 	width: 3.85em;
 	margin:auto;
@@ -168,8 +168,6 @@
 .item .profile-summary p {
 	margin-left: 0.75em;
 	text-align:left;
-	
-
 }
 
 /* Requests */
@@ -177,8 +175,14 @@
 	width: 8em;
 	height: 8em;
 }
+#confirm-request .profile-main p {
+	margin-top: 1em;
+	color: #fff;
+	text-align: center;
+}
 #confirm-request .profile-image img {
 	border-radius: 4em;
+	border: 3px solid #fff;
 }
 #request-list-empty p {
 	color: #777;
@@ -205,6 +209,19 @@
 	text-align: center;
 	font-size: 1.5em;
 	line-height: 2em;
+	margin-top: 1em;
+}
+#request-list .tab-item.accept {
+	font-size: 1.2em;
+	color: #eee;
+	background: #00B197;
+	font-weight: bold;
+}
+#request-list .tab-item.decline {
+	font-size: 1.2em;
+	color: #eee;
+	background: #444;
+	font-weight: bold;
 }
 
 p.comments {

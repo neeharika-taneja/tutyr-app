@@ -13,13 +13,12 @@
 					<p class="profile-name">{{request.from}}</p>
 					<p ng-show="request.comments">Comment: "{{request.comments}}"</p>
 				</ion-item>
-			  <ion-item class="tabs tabs-icon">
-			    <a class="tab-item" href="#/app/tutor_requests/{{request.requestid}}">
-			      <i class="icon ion-thumbsup"></i>
+			  <ion-item class="tabs tabs-secondary tabs-icon-left">
+			    <a class="tab-item accept" href="#/app/tutor_requests/{{request.requestid}}">
+			      <i class="icon ion-thumbsup"></i> Accept
 			    </a>
-			    <a class="tab-item" ng-click="decline(request.requestid)">
-			      <i class="icon ion-thumbsdown"></i>
-			      Decline
+			    <a class="tab-item decline" ng-click="decline(request.requestid)">
+			      <i class="icon ion-thumbsdown"></i> Decline
 			    </a>
 			  </ion-item>
 				
