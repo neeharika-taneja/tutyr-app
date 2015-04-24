@@ -4,9 +4,13 @@ angular.module('starter.services', [])
 	var base = "http://tutyr.herokuapp.com/api/";
 	
 	return {
-		login: base + "account/register",
-		tutor_mode: base + "account/tutor_mode",
-		profile: base + "account/profile"
+		login: base + "account/register", // POST login
+		tutor_mode: base + "account/tutor_mode", // POST toggle
+		profile: base + "account/profile", // POST edit profile | GET account/profile/:id
+		feed: base + "feed", // GET newsfeed
+		location: base + "account/location", // POST update location
+		session: base + "session", // POST new session | GET session/:id
+ 		rating: base + "rate" // POST rate a user 
 	};
 	
 })

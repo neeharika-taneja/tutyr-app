@@ -3,10 +3,9 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs) {
 	
 	$scope.onDevice = function() {
-		var hasCdv = typeof(cordova) === 'undefined' ? false: true;
-    return hasCdv
+    return (window.cordova || window.PhoneGap || window.phonegap) 
     && /^file:\/{3}[^\/]/i.test(window.location.href) 
-    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);		
+    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
 	}
 	
 	$scope.handleAJAXError = function(err) {
@@ -165,11 +164,26 @@ angular.module('starter.controllers', [])
 						latitude: lat,
 						longitude: long
 					};
+					console.log($scope.currentUser.location);
+					var locationData = {
+						latitude: lat,
+						longitude: long,
+						fbID: $scope.currentUser.facebook_id
+					}
+					$http.post(API.location, locationData)
+						.success(function(data, status){
+							console.log(data);
+						})
+						.error(function(error) {
+							$scope.handleAJAXError(error);
+						});						
 				});
 			}			
 		});
 	};
-
+	
+	$scope.pollLocation(5000);
+	
 	$scope.clearLocation = function() {
 		$ionicPlatform.ready(function(){
 			$cordovaGeolocation.clearWatch($scope.LOCATION_WATCHER)
@@ -242,11 +256,42 @@ angular.module('starter.controllers', [])
 	}	
 })
 
-.controller('HomeScreenController', function($scope){
+.controller('HomeScreenController', function($scope, API, $http, $cordovaGeolocation){
+	$scope.updateLocation = function() {
+		$cordovaGeolocation
+			.getCurrentPosition({timeout: 15000, enableHighAccuracy:false})
+			.then(function(position) {
+				$scope.filter.latitude = position.coords.latitude;
+				$scope.filter.longitude = position.coords.longitude;
+				$scope.filter.done = true;			
+				$scope.refresh($scope.filter);
+			
+			}, function(err) {
+				$scope.handleAJAXError(err);
+				$scope.refresh($scope.filter);
+				
+			});
+	}
+
+	$scope.filter = {
+		latitude: null,
+		longitude: null,
+		subjects: []
+	};
+		
 	$scope.refresh = function() {
 		// Would grab from API here...
+		$http.get(API.feed)
+			.success(function(data, status){
+				$scope.feed = data;
+			})
+			.error(function(error){
+				$scope.handleAJAXError(error);
+			});
+		
 		$scope.$broadcast('scroll.refreshComplete');
-	}
+	};
+	
 	$scope.mockNewsfeed = {
 		profiles: [
 			{
@@ -305,6 +350,7 @@ angular.module('starter.controllers', [])
 			}
 		]
 	};
+	$scope.feed = $scope.mockNewsfeed;
 })
 
 .controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state) {
