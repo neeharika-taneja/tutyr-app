@@ -63,35 +63,70 @@ class TutyrSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-class TutorRequestSerializer(serializers.Serializer):
-    request_id = serializers.IntegerField()
-    requesting_user = serializers.IntegerField()
-    requested_user = serializers.IntegerField()
-    comments = serializers.CharField(max_length=250)
+class TutorRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TutorRequest
+        fields = ('id', 'status', 'tutor_from', 'tutor_to', 'comments',
+            'location_latitude', 'location_longitude', 'location_comments',
+            'timestamp', 'session_start', 'session_end')
+
+class TutorRequestSerializer2(serializers.Serializer):
+    id = serializers.IntegerField()
     status = serializers.IntegerField()
-    request_time = serializers.DateTimeField()
-    session_start_time = serializers.DateTimeField()
-    session_end_time = serializers.DateTimeField()
-    session_rating = serializers.IntegerField()
+    tutor_from = serializers.CharField(max_length=250)
+    tutor_to = serializers.CharField(max_length=250)
+    comments = serializers.CharField(max_length=250)
+    location_latitude = serializers.DecimalField(max_digits=10, decimal_places=10, required=False)
+    location_longitude = serializers.DecimalField(max_digits=10, decimal_places=10, required=False)
+    location_comments = serializers.CharField(max_length=250, required=False)
+    timestamp = serializers.DateTimeField()
+    session_start = serializers.DateTimeField(required=False)
+    session_end = serializers.DateTimeField(required=False)
 
     def create(self, validated_data):
         """
-        Create and return a new `Snippet` instance, given the validated data.
+        Create and return a new `TutorRequest` instance, given the validated data.
         """
         return TutorRequest.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         """
-        Update and return an existing `Snippet` instance, given the validated data.
+        Update and return an existing `TutorRequest` instance, given the validated data.
         """
-        instance.facebook_id = validated_data.get('facebook_id', instance.facebook_id)
-        instance.request_id = validated_data.get('request_id', instance.request_id)
-        instance.requesting_user = validated_data.get('requesting_user', instance.requesting_user)
-        instance.requested_user = validated_data.get('requested_user', instance.requested_user)
-        instance.comments = validated_data.get('comments', instance.comments)
+        instance.id = validated_data.get('id', instance.id)
         instance.status = validated_data.get('status', instance.status)
-        instance.request_time = validated_data.get('request_time', instance.request_time)
-        instance.session_start_time = validated_data.get('session_start_time', instance.session_start_time)
-        instance.session_end_time = validated_data.get('session_end_time', instance.session_end_time)
-        instance.session_rating = validated_data.get('session_rating', instance.session_rating)
+        instance.tutor_from = validated_data.get('tutor_from', instance.tutor_from)
+        instance.tutor_to = validated_data.get('tutor_to', instance.tutor_to)
+        instance.comments = validated_data.get('comments', instance.comments)
+        instance.location_latitude = validated_data.get('location_latitude', location_latitude.status)
+        instance.location_longitude = validated_data.get('location_longitude', instance.location_longitude)
+        instance.location_comments = validated_data.get('location_comments', instance.location_comments)
+        instance.timestamp = validated_data.get('timestamp', instance.timestamp)
+        instance.session_start = validated_data.get('session_start', instance.session_start)
+        instance.session_end = validated_data.get('session_end', instance.session_end)
         return instance
+
+class RatingSerializer(models.Model):
+    rating = serializers.IntegerField()
+    comments = serializers.CharField(max_length=250)
+    fbID_from = serializers.CharField(max_length=250)
+    fbID_to = serializers.CharField(max_length=250)
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Rating` instance, given the validated data.
+        """
+        return Rating.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Rating` instance, given the validated data.
+        """
+        instance.rating = validated_data.get('rating', instance.rating)
+        instance.comments = validated_data.get('comments', instance.comments)
+        instance.fbID_from = validated_data.get('fbID_from', instance.fbID_from)
+        instance.fbID_to = validated_data.get('fbID_to', instance.fbID_to)
+        instance.save()
+        return instance
+
+

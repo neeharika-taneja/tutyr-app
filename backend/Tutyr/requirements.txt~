@@ -6,6 +6,6 @@ django-toolbelt==0.0.1
 djangorestframework==3.1.1
 gunicorn==19.3.0
 Markdown==2.6.1
-Pillow==2.8.1
 psycopg2==2.6
 static3==0.5.1
+geopy==

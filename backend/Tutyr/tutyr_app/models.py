@@ -23,15 +23,21 @@ class Tutyr(models.Model):
     tutor_mode = models.BooleanField(default=False)
 
 class TutorRequest(models.Model):
-    request_id = models.IntegerField()
-    requesting_user = models.IntegerField()
-    requested_user = models.IntegerField()
-    comments = models.CharField(max_length=250)
     status = models.IntegerField()
-    request_time = models.DateTimeField()
-    session_start_time = models.DateTimeField()
-    session_end_time = models.DateTimeField()
-    session_rating = models.IntegerField()
+    tutor_from = models.CharField(max_length=250, null=True)
+    tutor_to = models.CharField(max_length=250, null=True)
+    comments = models.CharField(max_length=250, null=True)
+    location_latitude = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    location_longitude = models.DecimalField(max_digits=10, decimal_places=10, blank=True, null=True)
+    location_comments = models.CharField(max_length=250, blank=True)
+    timestamp = models.DateTimeField(null=True)
+    session_start = models.DateTimeField(blank=True, null=True)
+    session_end = models.DateTimeField(blank=True, null=True)
 
+class Rating(models.Model):
+    rating = models.IntegerField()
+    comments = models.CharField(max_length=250)
+    fbID_from = models.CharField(max_length=250)
+    fbID_to = models.CharField(max_length=250)
 
 
