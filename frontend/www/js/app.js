@@ -134,15 +134,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     views: {
       'menuContent': {
         templateUrl: "templates/session_pending.html",
-				controller: "TutorSessionPendingController",
+        controller: 'TutorSessionController',
 				resolve: {
-					SessionObject: function($stateParams, SessionService) {
-						return SessionService.getSession($stateParams.id);
+					Session: function($stateParams, TutorSessionService) {
+						return $stateParams.id;
 					}
 				}
       }
-    }
+    },
   })
+	
+	/* Session in progress state */
 	
   .state('app.session', {
     url: "/session/:id",
@@ -159,36 +161,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     },
   })
 	
-	// /* In progress state */
-	// .state('app.session', {
-	// 	url: "/session/:id",
-	// 	views: {
-	// 		'menuContent': {
-	// 			templateUrl: "templates/session_inprog.html",
-	// 			controller: "TutorSessionController",
-	// 			resolve: {
-	// 				SessionObject: function($stateParams, SessionService) {
-	// 					return SessionService.getSession($stateParams.id);
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// })
 	
 	/* Session over state (includes ratings) */
 	.state('app.session_over', {
-		url: "/session_over/:id",
-		views: {
-			'menuContent': {
-				templateUrl: "templates/session_over.html",
-				controller: "TutorSessionOverController",
+    url: "/session_over/:id",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/session_over.html",
+        controller: 'TutorSessionController',
 				resolve: {
-					SessionObject: function($stateParams, SessionService) {
-						return SessionService.getSession($stateParams.id);
+					Session: function($stateParams, TutorSessionService) {
+						return $stateParams.id;
 					}
 				}
-			}
-		}
+      }
+    },
 	})
 	
 	/* Tutor requests screen */
