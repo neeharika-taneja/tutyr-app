@@ -2,7 +2,6 @@ from rest_framework import serializers
 from tutyr_app.models import *
 
 class SubjectSerializer(serializers.Serializer):
-    subject_id = serializers.IntegerField()
     name = serializers.CharField(max_length=250)
     description = serializers.CharField(max_length=250)
 
@@ -16,7 +15,6 @@ class SubjectSerializer(serializers.Serializer):
         """
         Update and return an existing `Snippet` instance, given the validated data.
         """
-        instance.subject_id = validated_data.get('subject_id', instance.subject_id)
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get('description', instance.description)
         instance.save()
@@ -36,6 +34,7 @@ class TutyrSerializer(serializers.Serializer):
     hourly_rate = serializers.DecimalField(max_digits=10, decimal_places=2)
     subjects = SubjectSerializer(many=True, required=False)
     email = serializers.CharField(max_length=250)
+    tutor_mode = serializers.BooleanField()
 
     def create(self, validated_data):
         """
@@ -60,6 +59,7 @@ class TutyrSerializer(serializers.Serializer):
         instance.hourly_rate = validated_data.get('hourly_rate', instance.hourly_rate)
         instance.subjects = validated_data.get('subjects', instance.subjects)
         instance.email = validated_data.get('email', instance.email)
+        instance.tutor_mode = validated_data.get('tutor_mode', instance.tutor_mode)
         instance.save()
         return instance
 

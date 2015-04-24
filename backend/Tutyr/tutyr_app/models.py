@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Subject(models.Model):
-    subject_id = models.IntegerField()
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=250)
 

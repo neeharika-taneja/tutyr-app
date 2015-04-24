@@ -31,14 +31,35 @@ def tutyr_list(request):
         return JSONResponse(serializer.errors, status=400)
 
 @csrf_exempt
-def tutyr_profile(request, username):
+def tutyr_profile(request):
+    data = JSONParser().parse(request)
     try:
-        tutyr = Tutyr.objects.get(facebook_id=username)
+        tutyr = Tutyr.objects.get(facebook_id=data['facebook_id'])
     except:
         return HttpResponse(status=404)
-    if request.method == 'GET':
-        serializer = TutyrSerializer(tutyr)
-        return JSONResponse(serializer.data)
+    if request.method == 'OPTIONS':
+        response = HttpResponse("")
+        response['Access-Control-Allow-Origin'] = "*"
+        response['Access-Control-Allow-Methods'] = "POST, OPTIONS"
+        response['Access-Control-Allow-Headers'] = "X-Requested-With"
+        response['Access-Control-Max-Age'] = "1800"
+        return response
+    
+    #elif request.method == 'POST':
+    #    tutyr.bio1 = data['bio1']
+    #    tutyr.bio2 = data['bio2']
+    #    tutyr.rating = data['rating']
+    #    current_subjects = tutyr.subjects
+    #    for subject in data['subjects']:
+    #        Subject.objects.filter(subjects__name=subject)
+    #        target_subject = Subject.objects.get(name=subject)
+    #        tutyr.subjects.
+
+    #    tutyr.hourly_rate = data['hourly_rate']
+        
+    #    tutyr.save()
+    #    serializer = TutyrSerializer(tutyr)
+    #    return JSONResponse(serializer.data)
     else:
         return HttpResponse(status=400)
 
@@ -102,7 +123,14 @@ def subjects(request):
 
 @csrf_exempt
 def tutyr_register(request):
-    if request.method == 'POST':
+    if request.method == 'OPTIONS:
+        response = HttpResponse("")
+        response['Access-Control-Allow-Origin'] = "*"
+        response['Access-Control-Allow-Methods'] = "POST, OPTIONS"
+        response['Access-Control-Allow-Headers'] = "X-Requested-With"
+        response['Access-Control-Max-Age'] = "1800"
+        return response
+    elif request.method == 'POST':
         data = JSONParser().parse(request)
         fb_id = data['fbID']
         tutyr_list = Tutyr.objects.filter(facebook_id=fb_id)
@@ -125,4 +153,26 @@ def tutyr_register(request):
             tutyr = tutyr_list[0]
             serializer = TutyrSerializer(tutyr)
             return JSONResponse(serializer.data)
+    return HttpResponse(status=400)
+
+@csrf_exempt
+def toggle_tutor_mode(request):
+    if request.method == 'OPTIONS':
+        response = HttpResponse("")
+        response['Access-Control-Allow-Origin'] = "*"
+        response['Access-Control-Allow-Methods'] = "POST, OPTIONS"
+        response['Access-Control-Allow-Headers'] = "X-Requested-With"
+        response['Access-Control-Max-Age'] = "1800"
+        return response
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        new_tutor_mode = data['tutor_mode']
+        tutyr = Tutyr.objects.get(facebook_id=data['facebook_id'])
+        if new_tutor_mode:
+            tutyr.tutor_mode = True
+        else:
+            tutyr.tutor_mode = False
+        tutyr.save()
+        serializer = TutyrSerializer(tutyr)
+        return JSONResponse(serializer.data)
     return HttpResponse(status=400)
