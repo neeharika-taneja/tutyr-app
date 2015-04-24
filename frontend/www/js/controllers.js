@@ -1,21 +1,39 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs) {
 	
-	// DEBUG
-	window.dumpUser = function() { console.log($scope.currentUser); }
+	$scope.onDevice = function() {
+		var hasCdv = typeof(cordova) === 'undefined' ? false: true;
+    return hasCdv
+    && /^file:\/{3}[^\/]/i.test(window.location.href) 
+    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);		
+	}
 	
 	$scope.handleAJAXError = function(err) {
 		if ( err ) { 
 			if (err.hasOwnProperty('message') ) {
 				alert("There was a server error: " + err.message);			
+				$scope.dialog("Server error", err.message);
 			} else {
-				alert(err);
+				$scope.dialog(err);
 			}
 		} else {
-			alert("Error");
+			$scope.dialog("Error.");
 		}	
 	}	
+	
+	$scope.dialog = function(message, title) {
+		var title = typeof(title) === "undefined" ? "" : title;
+		if ( $scope.onDevice() ) {
+			$cordovaDialogs.alert(message, title);
+		} else {
+			if ( title == "") {
+				alert(message);
+			} else {				
+				alert(title + ": " + message);
+			}
+		}
+	}
 	
 	$scope.fbLogin = function() {
 		/**
@@ -60,7 +78,7 @@ angular.module('starter.controllers', [])
 				$scope.login($scope.fbUser, false);								
 	    },
 	    error: function(error) {
-	      alert('Facebook error: ' + error.error_description);
+				$scope.dialog(error.error_description, "Facebook error");
 	    }
 	  });		
 	}
