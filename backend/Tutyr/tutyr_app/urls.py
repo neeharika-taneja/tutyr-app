@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'^api/account/location', views.location),
     url(r'^api/session/(?P<id>[0-9]+)$', views.get_session),
     url(r'^api/session', views.create_session),
-    #url(r'^api/rate', views.rating),
+    url(r'^api/rate', views.rate),
 ]

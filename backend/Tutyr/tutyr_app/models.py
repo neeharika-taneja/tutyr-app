@@ -16,6 +16,7 @@ class Tutyr(models.Model):
     bio2 = models.CharField(max_length=250)
     bio3 = models.CharField(max_length=250)
     rating = models.DecimalField(max_digits=10, decimal_places=2)
+    num_ratings = models.IntegerField(default=0)
     latitude = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True)
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2)
@@ -35,6 +36,7 @@ class TutorRequest(models.Model):
     session_end = models.DateTimeField(blank=True, null=True)
 
 class Rating(models.Model):
+    session_id = models.IntegerField()
     rating = models.IntegerField()
     comments = models.CharField(max_length=250)
     fbID_from = models.CharField(max_length=250)
