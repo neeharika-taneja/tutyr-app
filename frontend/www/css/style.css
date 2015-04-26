@@ -342,3 +342,13 @@ p.comments {
 	font-size: 1.5em;
 	margin-bottom: 1em;
 }
+#profile span.subject {
+  background: #00B197;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 3px;
+  text-align: center;
+  font-size: 0.85em;
+  font-weight: 600;
+}

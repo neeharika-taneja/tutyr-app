@@ -305,12 +305,12 @@ angular.module('starter.controllers', [])
 
 .controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state) {
 	$scope.profile = ProfileObject;
-	$scope.sessionTemplate = {
-		fbID_from: $scope.currentUser.fbID,
-		fbID_to: $scope.profile.fbID,
-		comments: null
-	};
 	$scope.generateSession = function(profile) {
+		$scope.sessionTemplate = {
+			fbID_from: $scope.currentUser.fbID,
+			fbID_to: $scope.profile.facebook_id,
+			comments: null
+		};
 		$http.post(API.session, $scope.sessionTemplate)
 			.success(function(data, status) {
 				$state.go("app.session_pending", {id: data.id} )
@@ -337,7 +337,7 @@ angular.module('starter.controllers', [])
 	$scope.request = TutorRequest;
 })
 
-.controller('EditProfileController', function($scope, $http, API, $state, $ionicLoading) {
+.controller('EditProfileController', function($scope, $http, API, $state, $ionicLoading, $ionicHistory) {
 	$scope.updateProfile = function() {
 		var updatedProfile = $scope.currentUser;
 		$ionicLoading.show({
@@ -345,15 +345,14 @@ angular.module('starter.controllers', [])
 		});
 		$http.post(API.profile, $scope.currentUser)
 			.success(function(data, status){
-				if ( $scope.currentUser == data ) {
-					console.log("Profile updated successfully!");
-					// Navigate to requests inbox
-					$ionicHistory.nextViewOptions({
-						disableBack: true
-					});					
-			    $ionicLoading.hide();					
-					$state.go('app.tutor_requests');				
-				}
+				console.log("Profile updated successfully!");
+				$scope.currentUser = data;
+				// Navigate to requests inbox
+				$ionicHistory.nextViewOptions({
+					disableBack: true
+				});					
+		    $ionicLoading.hide();					
+				$state.go('app.tutor_requests.index');				
 			})
 			.error(function(err){
 		    $ionicLoading.hide();				

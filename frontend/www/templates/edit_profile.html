@@ -4,7 +4,7 @@
 			<div class="profile-image">
 				<img src="{{currentUser.profile_pic}}" s/>
 			</div>			
-			<h1>{{currentUser.realname}}</h1>
+			<h1>{{currentUser.real_name}}</h1>
 			<h3 class="user user-status">
 				<span ng-show="currentUser.tutor_mode">Tutor</span>
 				<span ng-show="!currentUser.tutor_mode">Student</span>
@@ -36,14 +36,14 @@
 		  <label class="item item-input item-select">
 		    <span class="input-label">My Hourly Rate</span>
 		    <select ng-model="currentUser.hourly_rate" required>
-		      <option selected value="0">$0 (free!)</option>
-		      <option value="5">$5</option>
-		      <option value"10">$10</option>
-		      <option value="15">$15</option>
-		      <option value="20">$20</option>
-		      <option value="25">$25</option>
-		      <option value="30">$30</option>
-		      <option value="35">$35</option>
+		      <option selected value="0.00">$0 (free!)</option>
+		      <option value="5.00">$5</option>
+		      <option value="10.00">$10</option>
+		      <option value="15.00">$15</option>
+		      <option value="20.00">$20</option>
+		      <option value="25.00">$25</option>
+		      <option value="30.00">$30</option>
+		      <option value="35.00">$35</option>
 		    </select>
 		  </label>
 		  <label class="item item-input item-stacked-label" ng-if="currentUser.hourly_rate > 0">
