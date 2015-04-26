@@ -1,7 +1,7 @@
 <ion-view view-title="{{title}}" id="session-pending">
   <ion-content>
 		<!-- Tutee view - waiting on request -->
-		<div id="tutee-waiting" ng-if="session.status==1">
+		<div id="tutee-waiting" ng-if="session.status==0">
 			<ion-item class="item grey">
 				<p>Waiting For Tutyr...</p>
 				<p><ion-spinner icon="dots" style="fill:#fff;stroke:#fff;"></ion-spinner></p>
@@ -30,7 +30,7 @@
 			<ui-gmap-google-map center='map.center' zoom='map.zoom' options='map.options'></ui-gmap-google-map>			
 			<ion-item class="item directions item-text-wrap">
 				<h2>Your Tutyr</h2>
-				<p>{{sessoin.tutor_to.realname}}</p>
+				<p>{{session.tutor_to.realname}}</p>
 				<h2>Special Instructions</h2>
 				<p>{{session.location_comments}}</p>
 				<button class="button button-block button-tutyr">Get Directions</button>

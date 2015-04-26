@@ -110,7 +110,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         controller: 'ViewProfileController',
 				resolve: {
 					ProfileObject: function($stateParams, ProfileService) {
-						return ProfileService.getProfile($stateParams.id);
+						var p = ProfileService;
+						p.getProfile($stateParams.id);
+						return p;
 					}
 				}
       }

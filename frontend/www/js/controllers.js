@@ -309,22 +309,27 @@ angular.module('starter.controllers', [])
 	});
 })
 
-.controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state) {
+.controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state, $ionicLoading) {
 	$scope.profile = ProfileObject;
+	$scope.sessionTemplate = {
+		comments: null
+	};
 	$scope.generateSession = function(profile) {
-		$scope.sessionTemplate = {
-			fbID_from: $scope.currentUser.fbID,
+		var sessionData = {
+			fbID_from: $scope.currentUser.facebook_id,
 			fbID_to: $scope.profile.facebook_id,
-			comments: null
-		};
-		$http.post(API.session, $scope.sessionTemplate)
+			comments: $scope.sessionTemplate.comments
+		}
+		$ionicLoading.show({template: "Requesting session..."});
+		$http.post(API.session, sessionData)
 			.success(function(data, status) {
-				$state.go("app.session_pending", {id: data.id} )
+				$ionicLoading.hide();
+				$state.go("app.session_pending", {id: data.id} );
 			})
 			.error(function(err) {
+				$ionicLoading.hide();
 				$scope.handleAJAXError(err);
 			});
-		// $state.go('app.session_pending', {id: 1});
 	};
 })
 

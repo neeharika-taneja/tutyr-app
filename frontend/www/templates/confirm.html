@@ -2,16 +2,13 @@
   <ion-content>
 		<div class="card">
 			<ion-item class="item-text-wrap item-dark profile-main"> 
-					<div class="profile-image" style="margin: 0 auto;"><img src="img/{{profile.profile_pic}}" class="profile-image"/></div>
+					<div class="profile-image" style="margin: 0 auto;"><img src="{{profile.profile_pic}}" class="profile-image"/></div>
 					<br />
-					<p>Request a tutoring session with <span class="profile-name">{{profile.realname}}</span></p>
+					<p>Request a tutoring session with <span class="profile-name">{{profile.real_name}}</span></p>
 			</ion-item>	
-			<ion-item class="item-divider">Additional Info</ion-item>
-			<ion-item class="item-text-wrap">
-				<p>Please enter any additional information you want your tutor to know about your tutoring request.</p>
-			</ion-item>
+			<ion-item class="item-divider">Additional Info (optional)</ion-item>
 			<ion-item class="item-input">
-				<textarea placeholder="Is there anything you want your tutor to know?" ng-model="sessionTemplate.comments"></textarea>
+				<textarea placeholder="Is there anything you want your tutor to know about this request?" ng-model="sessionTemplate.comments"></textarea>
 			</ion-item>	
 			<ion-item>
 				<a class="button button-block button-tutyr" ng-click="generateSession()">Submit Request</a>
