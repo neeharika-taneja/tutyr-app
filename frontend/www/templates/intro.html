@@ -1,6 +1,6 @@
 <ion-view view-title="Tutyr">
   <ion-content id="intro">
-		<div ng-if="!currentUser.loggedIn" class="login">
+		<div ng-if="!currentUser.loggedIn&&!$storage.currentUser.loggedIn" class="login">
 			<p><img src="img/logo-text.svg" alt="Tutyr logo" class="logo" /></p>
 			<h2>Log in for an easy to use, on-demand tutoring service.</h2>
 			<br />
@@ -13,7 +13,7 @@
 			</button>						
 		</div>
 		
-		<div ng-if="currentUser.loggedIn" class="newsfeed">	
+		<div ng-if="currentUser.loggedIn||$storage.currentUser.loggedIn" class="newsfeed">	
 			<ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>			
 			<div class="header">
 				<div class="list list-inset">

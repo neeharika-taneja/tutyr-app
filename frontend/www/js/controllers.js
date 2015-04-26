@@ -1,7 +1,9 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs) {
-	
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs, $localStorage) {
+
+	$scope.$storage = $localStorage;
+
 	$scope.onDevice = function() {
     return (window.cordova || window.PhoneGap || window.phonegap) 
     && /^file:\/{3}[^\/]/i.test(window.location.href) 
@@ -99,6 +101,11 @@ angular.module('starter.controllers', [])
 			.success(function(data, status) {
 				$scope.currentUser = data;
 				$scope.currentUser.loggedIn = true;
+				$scope.$storage.currentUser = data;
+				$scope.$watch($scope.currentUser, function(){
+					// Mirror current user to local storage.
+					$scope.$storage.currentUser = $scope.currentUser;
+				}); 				
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
@@ -112,6 +119,7 @@ angular.module('starter.controllers', [])
 	}
 
 	$scope.logout = function() {
+		delete $scope.$storage.currentUser;
 		if ( $scope.currentUser.loggedIn == true ) {
 			openFB.logout(function(){
 				$scope.currentUser.loggedIn = false;
@@ -132,17 +140,6 @@ angular.module('starter.controllers', [])
 		$scope.currentUser.loggedIn = true;
 	}
 
-	$scope.currentUser = {
-		loggedIn: false,
-		realname: 'Andrea Smith',
-		email: 'test.person@example.com',
-		profile_pic: 'img/test-person.jpg',
-		bio1: "",
-		bio2: "",
-		bio3: "",
-		subjects: [],
-		tutor_mode: false
-	};	
 	
 	$scope.localToggleStatus = {
 		hasTapped: false
@@ -249,6 +246,15 @@ angular.module('starter.controllers', [])
 			});					
 		}
 	}
+	
+	$scope.currentUser = {
+		loggedIn: false
+	}
+
+	if ( !$scope.currentUser.loggedIn && $scope.$storage.currentUser ) {
+		// Restore session
+		$scope.currentUser = $scope.$storage.currentUser;
+	} 	
 
 })
 

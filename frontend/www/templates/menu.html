@@ -19,7 +19,7 @@
     </ion-header-bar>
 		
     <ion-content>			
-			<div ng-if="!currentUser.loggedIn">
+			<div ng-if="!(currentUser.loggedIn||$storage.currentUser.loggedIn)">
 				<!-- Menu for logged out users -->
 				<ion-list>
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/intro">
@@ -31,7 +31,7 @@
 				</ion-list>
 			</div>	
 			
-			<div ng-if="currentUser.loggedIn">
+			<div ng-if="currentUser.loggedIn||$storage.currentUser.loggedIn">
 				<!-- Menu for logged in users -->
 				<div class="user user-image">
 					<img src="{{currentUser.profile_pic}}" />
