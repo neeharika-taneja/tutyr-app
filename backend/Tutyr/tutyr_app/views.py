@@ -53,15 +53,6 @@ def tutyr_list(request):
         return JSONResponse(serializer.data)
     return HttpResponse(status=400)
 
-
-#    elif request.method == 'POST':
-#        data = JSONParser().parse(request)
-#        serializer = TutyrSerializer(data=data)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return JSONResponse(serializer.data, status=201)
-#        return JSONResponse(serializer.errors, status=400)
-
 @csrf_exempt
 def edit_tutyr_profile(request):
     data = JSONParser().parse(request)
@@ -72,21 +63,15 @@ def edit_tutyr_profile(request):
     if request.method == 'OPTIONS':
         return options_response()
     
-    #elif request.method == 'POST':
-    #    tutyr.bio1 = data['bio1']
-    #    tutyr.bio2 = data['bio2']
-    #    tutyr.rating = data['rating']
-    #    current_subjects = tutyr.subjects
-    #    for subject in data['subjects']:
-    #        Subject.objects.filter(subjects__name=subject)
-    #        target_subject = Subject.objects.get(name=subject)
-    #        tutyr.subjects.
-
-    #    tutyr.hourly_rate = data['hourly_rate']
-        
-    #    tutyr.save()
-    #    serializer = TutyrSerializer(tutyr)
-    #    return JSONResponse(serializer.data)
+    elif request.method == 'POST':
+        tutyr.bio1 = data['bio1']
+        tutyr.bio2 = data['bio2']
+        new_subjects = data['subjects'].split(',')
+        tutyr.subjects = Subject.objects.filter(name__in=new_subjects)
+        tutyr.hourly_rate = data['hourly_rate']
+        tutyr.save()
+        serializer = TutyrSerializer(tutyr)
+        return JSONResponse(serializer.data)
     else:
         return HttpResponse(status=400)
 
