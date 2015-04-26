@@ -41,7 +41,9 @@
 					</div>	
 					<hr />
 					<div class="row profile-meta">
-						<i class="icon ion-location"></i> {{profile.latitude}}, {{profile.longitude}}
+						<i class="icon ion-location"></i> 
+						<span class="location" ng-show="profile.latitude && profile.longitude">{{profile.latitude}}, {{profile.longitude}}</span>
+						<span class="location" ng-show="!(profile.latitude && profile.longitude)">No location shared</span>
 					</div>
 			</div> <!-- /profile -->						
 			<div ng-if="feed.length == 0" class="inactive-session">
