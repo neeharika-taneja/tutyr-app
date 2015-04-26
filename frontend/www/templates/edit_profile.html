@@ -12,6 +12,7 @@
 		</div>			
 
 		<div class="list">
+			<form ng-submit="updateProfile()">
 			<!-- list of strings -->
 			<ion-item>
 				<span class="input-label">Subjects</span>			
@@ -28,9 +29,13 @@
 		    <span class="input-label">Subject specifics</span>
 		    <input type="text" placeholder="Calculus, matrix algebra, Python..." name="subjects" ng-model="currentUser.bio1">
 		  </label>
+		  <label class="item item-input item-stacked-label">
+		    <span class="input-label">About Me</span>
+		    <textarea placeholder="Why would you be a good tutor? Tell us a little about yourself!" ng-model="currentUser.bio2" required></textarea>
+		  </label>
 		  <label class="item item-input item-select">
 		    <span class="input-label">My Hourly Rate</span>
-		    <select ng-model="currentUser.hourly_rate">
+		    <select ng-model="currentUser.hourly_rate" required>
 		      <option selected value="0">$0 (free!)</option>
 		      <option value="5">$5</option>
 		      <option value"10">$10</option>
@@ -41,13 +46,14 @@
 		      <option value="35">$35</option>
 		    </select>
 		  </label>
-		  <label class="item item-input item-stacked-label">
-		    <span class="input-label">About Me</span>
-		    <textarea placeholder="Why would you be a good tutor? Tell us a little about yourself!" ng-model="currentUser.bio2"></textarea>
+		  <label class="item item-input item-stacked-label" ng-if="currentUser.hourly_rate > 0">
+		    <span class="input-label">Venmo ID <span style="font-weight: 300">(optional)</span></span>
+		    <input type="text" placeholder="Make payments easier with Venmo." name="payment" ng-model="currentUser.bio3">
 		  </label>
 			<ion-item>
-				<button class="button button-block button-tutyr">Update Profile</button>
+				<input type="submit" class="button button-block button-tutyr" value="Update Profile" ng-click="updateProfile()"/>
 			</ion-item>	
+			</form>
 		</div>		
   </ion-content>
 </ion-view>

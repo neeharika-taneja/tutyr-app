@@ -310,17 +310,17 @@ p.comments {
 .tutor-view-header p {
 	overflow:visible;
 }
-#session .inactive-session {
+.inactive-session {
 	color: #777;
 	text-align: center;
 	margin-top: 15%;
 	font-size: 1.5em;	
 }
-#session .inactive-session .icon {
+ .inactive-session .icon {
 	font-size: 4em;
 	color: #999;
 }
-#session .inactive-session p {
+.inactive-session p {
 	margin-top: 1em;
 }
 

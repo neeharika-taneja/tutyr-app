@@ -25,24 +25,33 @@
 			</div>	
 			
 			<div class="newsfeed-profiles">
-				<div ng-repeat="profile in feed.profiles | filter:searchFilter" class="profile card">
+				<div ng-repeat="profile in feed | filter:searchFilter" class="profile card" ng-if="feed">
 					<div class="row profile-main">
 						<div class="col col-25">
 							<div class="profile-image">
-								<a href="#/app/view_profile/{{profile.id}}"><img src="img/{{profile.profile_pic}}" /></a>
+								<a href="#/app/view_profile/{{profile.facebook_id}}"><img src="{{profile.profile_pic}}" /></a>
 							</div>					
 						</div>
 						<div class="col col-75">	
-							<p class="profile-name">{{profile.realname}}</p>
-							<p class="profile-bio">{{profile.bio1}}</p>
-							<rating ng-model="profile.rating" readonly="true">
+							<p class="profile-name">{{profile.real_name}}</p> 
+							<p class="profile-bio">{{profile.bio1}}</p> <!-- subject details -->
+							<rating ng-model="profile.rating" readonly="true" ng-show="profile.num_ratings > 0"></rating>
+							<p class="profile-no-rating"><em>No ratings</em></p>
 						</div>	
 					</div>	
 					<hr />
 					<div class="row profile-meta">
-						<i class="icon ion-location"></i> {{profile.customlocation}}
+						<i class="icon ion-location"></i> {{profile.latitude}}, {{profile.longitude}}
 					</div>
 			</div> <!-- /profile -->						
+			<div ng-if="feed.length == 0" class="inactive-session">
+				<i class="icon ion-help-circled"></i>
+				<p>There are no Tutyrs in the area.</p>				
+			</div>	
+			<div ng-if="!feed" class="inactive-session">
+				<i class="icon ion-help-circled"></i>
+				<p>There was an error loading Tutyrs from the server.</p>				
+			</div>	
 		</div>	<!-- /profiles -->
   </ion-content>
 </ion-view>

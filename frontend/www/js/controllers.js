@@ -296,65 +296,11 @@ angular.module('starter.controllers', [])
 		$scope.$broadcast('scroll.refreshComplete');
 	};
 	
-	$scope.mockNewsfeed = {
-		profiles: [
-			{
-				realname: 'Firstname Lastname',
-				profile_pic: 'test-person.jpg',
-				bio1: 'Python, Java',
-				rating: 4,
-				customlocation: 'Carnegie Mellon University',
-				id: 1
-			},
-			{
-				realname: 'Firstname Lastname',
-				profile_pic: 'test-person.jpg',
-				bio1: 'English, Math',
-				rating: 4,
-				customlocation: 'Carnegie Mellon University',
-				id: 2
-			},
-			{
-				realname: 'Firstname Lastname',
-				profile_pic: 'test-person.jpg',
-				bio1: 'Hi, I am a piece of testing data.',
-				rating: 4,
-				customlocation: 'Carnegie Mellon University',
-				id: 3
-			},
-			{
-				realname: 'Firstname Lastname',
-				profile_pic: 'test-person.jpg',
-				bio1: 'Hi, I am a piece of testing data.',
-				rating: 4,
-				customlocation: 'Carnegie Mellon University',
-				id: 4
-			}
-		],
-		subjectlist: [
-			{
-				subjectname: 'English',
-				subjectid: 1
-			},
-			{
-				subjectname: 'Math',
-				subjectid: 2
-			},
-			{
-				subjectname: 'History',
-				subjectid: 3
-			},
-			{
-				subjectname: 'Computer Science',
-				subjectid: 4
-			},
-			{
-				subjectname: 'Design',
-				subjectid: 5
-			}
-		]
-	};
-	$scope.feed = $scope.mockNewsfeed;
+	$scope.$watch("currentUser.loggedIn", function(){
+		if ( $scope.currentUser.loggedIn == true ) {
+			$scope.refresh();					
+		}
+	});
 })
 
 .controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state) {
@@ -391,11 +337,12 @@ angular.module('starter.controllers', [])
 	$scope.request = TutorRequest;
 })
 
-.controller('EditProfileController', function($scope, $http, API, $state) {
+.controller('EditProfileController', function($scope, $http, API, $state, $ionicLoading) {
 	$scope.updateProfile = function() {
 		var updatedProfile = $scope.currentUser;
-		// DEBUGGING ONLY
-		updatedProfile.subjects = ["Math", "English", "History"];
+		$ionicLoading.show({
+			template: "Saving your profile..."
+		});
 		$http.post(API.profile, $scope.currentUser)
 			.success(function(data, status){
 				if ( $scope.currentUser == data ) {
@@ -403,11 +350,13 @@ angular.module('starter.controllers', [])
 					// Navigate to requests inbox
 					$ionicHistory.nextViewOptions({
 						disableBack: true
-					});
+					});					
+			    $ionicLoading.hide();					
 					$state.go('app.tutor_requests');				
 				}
 			})
 			.error(function(err){
+		    $ionicLoading.hide();				
 				$scope.handleAJAXError(err);
 			});
 	};	
@@ -461,25 +410,7 @@ angular.module('starter.controllers', [])
 	};
 	
 	$scope.session = Session;
-	// $scope.debug = Session;
-	// $scope.session = {
-	// 	started: "2015-04-14 10:30:00",
-	// 	active: true,
-	// 	tutee: {
-	// 		realname: "Henry Kip",
-	// 		profile_pic: "img/test-person.jpg"
-	// 	},
-	// 	tutor: {
-	// 		realname: "Andrea Smith",
-	// 		profile_pic: "http://placekitten.com/512/512",
-	// 		bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-	// 		bio2: 10,
-	// 		bio3: "",
-	// 		location: [null, null],
-	// 		customLocation: "Hunt Library, 3rd floor"
-	// 	}
-	// };
-	//
+
 	$scope.completeSession = function() {
 		alert("Session completed");
 	};

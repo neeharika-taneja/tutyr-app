@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('API', function() {
-	// var base = "http://tutyr.herokuapp.com/api/";
-	var base = "http://localhost:8000/api/";
+	var base = "http://tutyr.herokuapp.com/api/";
+	// var base = "http://localhost:8000/api/";
 	return {
 		login: base + "account/register", // POST login
 		tutor_mode: base + "account/tutor_mode", // POST toggle
