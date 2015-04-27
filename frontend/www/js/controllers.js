@@ -429,45 +429,13 @@ angular.module('starter.controllers', [])
 
 /* ------ Tutoring session controllers ------ */
 
-.controller('TutorSessionPendingController', function($scope) {
-	$scope.title = "Tutyr Confirmed";
-	$scope.map = {
-		center: {latitude: 40.4414, longitude: -79.9419},
-		zoom: 10,
-		options: {
-			disableDefaultUI: true
-		}
-	};
-	
-	$scope.session = {
-		started: "2015-04-14 10:30:00",
-		active: true,
-		status: 2,
-		tutee: {
-			realname: "Henry Kip",
-			profile_pic: "img/test-person.jpg"
-		},
-		tutor: {
-			realname: "Andrea Smith",
-			profile_pic: "http://placekitten.com/512/512",
-			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-			bio2: 10,
-			bio3: "",
-			location: [null, null],
-			customLocation: "Hunt Library, 3rd floor"
-		}
-	};
-	
-	$scope.fakeAccept = function() {
-		$scope.session.status = 3;
-	};
-	
-})
-
 .controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state) {
 	var refreshTimer;
 	$scope.map = {
-		center: {latitude: 40.4414, longitude: -79.9419},
+		center: {
+			latitude: $scope.session.location_latitude,
+			longitude: $scope.session.location_longitude
+		},
 		zoom: 10,
 		options: {
 			disableDefaultUI: true
@@ -499,14 +467,21 @@ angular.module('starter.controllers', [])
 		refreshTimer = $interval($scope.reloadSession);
 		
 		$scope.$watch('session.status', function() {
-			if ( $scope.session.status == 3 ) {
-				$state.go('app.session_over', {id: $scope.session.id});
-			} else if ( $scope.session.status == 2) {
-				return;
-			} else {
-				alert("Error: unexpected session status " + $scope.session.status);
-				$state.go('app.intro');
-			}
+			switch ( $scope.session.status ) {
+				case 1:
+					$state.go('app.session_pending', {id: $scope.session.id});
+					break;
+				case 2:
+					$state.go('app.session_inprog', {id: $scope.session.id});
+					break;
+				case 3:
+					$state.go('app.session_over', {id: $scope.session.id});
+					break;
+				default:
+					alert("Error: unexpected session status " + $scope.session.status);
+					$state.go('app.intro');
+					break;
+			}	
 		});	
 	}
 	
@@ -526,25 +501,4 @@ angular.module('starter.controllers', [])
 		// Send status change 3 to server
 	}
 	
-})	
-
-.controller('TutorSessionOverController', function($scope){
-	$scope.session = {
-		started: "2015-04-14 10:30:00",
-		active: true,
-		rating: null,
-		tutee: {
-			realname: "Henry Kip",
-			profile_pic: "img/test-person.jpg"
-		},
-		tutor: {
-			realname: "Andrea Smith",
-			profile_pic: "http://placekitten.com/512/512",
-			bio1: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-			bio2: 10,
-			bio3: "",
-			location: [null, null],
-			customLocation: "Hunt Library, 3rd floor"
-		}
-	};
 });
