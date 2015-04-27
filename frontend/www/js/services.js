@@ -10,35 +10,29 @@ angular.module('starter.services', [])
 		feed: base + "feed", // GET newsfeed
 		location: base + "account/location", // POST update location
 		session: base + "session", // POST new session | GET session/:id
- 		rating: base + "rate" // POST rate a user 
+ 		rating: base + "rate", // POST rate a user 
+		subjects: base + "subjects",
+		requests: base + "sessions_for"
 	};
 	
 })
 
-.factory('TutorRequestService', function(){
-	var requests = {
-		1: {
-			from: 'Bob',
-			comments: 'I want help understanding mitochondria',
-			profile_pic: 'img/test-person.jpg',
-			status: 0,
-			request_time: '2015-04-07T19:43:37-0500',
-			requestid: 1
-		},
-		2: {
-			from: 'Mary',
-			comments: "Need help with my HCI project",
-			profile_pic: 'img/test-person.jpg',
-			status: 0,
-			request_time: '2015-04-07T19:43:37-0500',
-			requestid: 2
-		}
-	};
+.factory('TutorRequestService', function(API, $http, $ionicLoading){
 	
-	return {
-		requests: requests,
+	return {		
+		requests: null,
 		getRequest: function(id) {
-			return requests[id];
+			$ionicLoading.show();
+			var self = this;
+			$http.get(API.requests + "/" + facebook_id)
+				.success(function(data, status) {
+					self.requests = data;
+					$ionicLoading.hide();					
+				})
+				.error(function(err) {
+					$ionicLoading.hide();					
+					alert(err);
+				});
 		}
 	}
 })
@@ -90,8 +84,23 @@ angular.module('starter.services', [])
 					})
 					.error(function(err) {
 						$ionicLoading.hide();
-						$scope.handleAJAXError(err);
 					})
 			}
 		}
+})
+
+.factory('SubjectService', function($http, API) {
+	return {
+		getSubjects: function() {
+			var self = this;
+			$http.get(API.subjects)
+				.success(function(data, status){
+					self.list = data;
+				})
+				.error(function(err){
+					return;
+				})
+		},
+		list: null
+	};
 });

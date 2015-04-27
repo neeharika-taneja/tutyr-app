@@ -17,11 +17,11 @@
 			<ion-item>
 				<span class="input-label">Subjects</span>			
 				 <ul class="list">
-				   <li class="item item-checkbox" ng-repeat="subject in ['Math', 'History', 'English', 'Biology']">
+				   <li class="item item-checkbox" ng-repeat="subject in subjects.list">
 				      <label class="checkbox">
 				        <input type="checkbox" checklist-model="currentUser.subjects" checklist-value="subject">
 				      </label>
-							{{subject}}							
+							{{subject.name}}							
 				   </li>
 				 </ul>
 			</ion-item>	

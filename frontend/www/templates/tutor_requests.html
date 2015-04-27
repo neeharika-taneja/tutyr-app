@@ -1,20 +1,24 @@
 <ion-view view-title="Incoming Requests">
   <ion-content>
-		<div ng-if="nRequests.total == 0" id="request-list-empty">
+		<ion-refresher pulling-text="Check for new requests..." on-refresh="refresh(true)"></ion-refresher>			
+		<div ng-if="requests.length == 0" id="request-list-empty">
 			<p><i class="icon ion-email"></i></p>
 			<p>No requests at the moment.</p>
 		</div>
-		<div ng-if="nRequests.total > 0" id="request-list">
-			<div class="card" ng-repeat="(id, request) in requests">
-				<ion-item class="item-text-wrap">
+		<div ng-if="requests.length > 0" id="request-list">
+			<div class="card" ng-repeat="request in requests">
+				<ion-item class="item-divider">
+					{{request.timestamp | amCalendar }}
+				</ion-item>	
+				<ion-item class="item-text-wrap" class="request-type-{{request.status}}">
 					<div class="profile-image">
-						<img src="{{request.profile_pic}}">
+						<img src="{{request.tutor_from.profile_pic}}">
 					</div>
-					<p class="profile-name">{{request.from}}</p>
+					<p class="profile-name">{{request.tutor_from.real_name}}</p>
 					<p ng-show="request.comments">Comment: "{{request.comments}}"</p>
 				</ion-item>
 			  <ion-item class="tabs tabs-secondary tabs-icon-left">
-			    <a class="tab-item accept" href="#/app/tutor_requests/{{request.requestid}}">
+			    <a class="tab-item accept" href="#/app/tutor_requests/{{request.id}}">
 			      <i class="icon ion-thumbsup"></i> Accept
 			    </a>
 			    <a class="tab-item decline" ng-click="decline(request.requestid)">

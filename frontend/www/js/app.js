@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.utils', 'ui.bootstrap.rating', 'ui.bootstrap.tpls', 'uiGmapgoogle-maps', 'ngCordova', 'checklist-model', 'ngStorage'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.utils', 'ui.bootstrap.rating', 'ui.bootstrap.tpls', 'uiGmapgoogle-maps', 'ngCordova', 'checklist-model', 'ngStorage', 'angularMoment'])
 
 .run(function($rootScope, $ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -125,8 +125,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 		views: {
 			'menuContent': {
 				templateUrl: "templates/edit_profile.html",
-				controller: "EditProfileController"
-			}
+				controller: "EditProfileController",
+				resolve: {
+					Subjects: function(SubjectService) {
+						var s = SubjectService;
+						s.getSubjects();
+						return s;
+					}
+				}
+			},
 		}
 	})
 	
@@ -205,7 +212,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   .state('app.tutor_requests.index', {
     url: "",		
 		templateUrl: "templates/tutor_requests.html",
-		controller: 'TutorRequestsController'
+		controller: 'TutorRequestsController',
   })
 
 	
@@ -214,8 +221,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 		templateUrl: "templates/tutor_request.html",
 		controller: 'TutorRequestController',
 		resolve: {
-			TutorRequest: function($stateParams, TutorRequestService) {
-				return TutorRequestService.getRequest($stateParams.tutor_request);
+			Session: function($stateParams, TutorSessionService) {
+				var s = TutorSessionService;
+				s.getSession($stateParams.tutor_request);
+				return s;
 			}
 		}
   })

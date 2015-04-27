@@ -30,9 +30,16 @@
 						{{subject.name}}
 				</span>
 			</ion-item>	
+			
+			<ion-item class="item-divider item-tutyr">Expertise</ion-item>
+			<ion-item class="item-text-wrap">
+
+						{{profile.bio1}}
+
+			</ion-item>
 		</div>
 		
-		<div class="card">
+		<div class="card" ng-if="profile.num_ratings > 0">
 			<ion-item class="item-divider item-dark">Reviews</ion-item>			
 			<ion-item class="item-text-wrap">
 				<div class="profile-summary">

@@ -2,24 +2,33 @@
   <ion-content>
 		
 		<!-- ====== Tutor-side in progress view ====== -->
-		<ion-item class="item item-divider item-tutyr" ng-if="session.session_start">
+		<ion-item class="item item-divider item-tutyr" ng-if="session.session_start&&session.status==2">
 			<i class="icon ion-clock"></i> &nbsp; Session in progress debug{{debug}}
 		</ion-item>	
 		
 		<div ng-if="currentUser.tutor_mode" class="tutor">
-			<div ng-if="session.session-start" class="active-session">
+			<div ng-if="session.status==2" class="active-session">
 				<ion-item class="tutor-view-header">
 					<div class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}" />
 					</div>
 					<p class="profile-name">You are tutoring {{session.tutor_to.realname}}</p>
 				</ion-item>	
-				<ion-item class="tutor-view-timer">
-					<div timer start="session.started"></div>
-				</ion-item>	
-				<ion-item>
-					<button class="button button-block button-tutyr">End Session</button>
-				</ion-item>
+							
+				<div ng-if="session.status==2&&!session.session_start">
+					<ion-item>
+						<button class="button button-block button-tutyr" ng-click="startSession()">Start The Session</button>
+					</ion-item>
+				</div>
+				
+				<div ng-if="session.status==2&&session.session_start">
+					<ion-item class="tutor-view-timer">
+						<div timer start="session.session_start"></div>
+					</ion-item>	
+					<ion-item>
+						<button class="button button-block button-tutyr" ng-click="endSession()">End Session</button>
+					</ion-item>
+				</div>
 			</div>
 			<div ng-if="!session.active" class="inactive-session">				
 				<i class="icon ion-help-circled"></i>
@@ -31,7 +40,8 @@
 		
 		<!-- ====== Student-side in progress view ====== -->
 		<div ng-if="!currentUser.tutor_mode">
-			<div ng-if="session.active" class="active-session">
+			
+			<div ng-if="session.status==2" class="active-session">
 				<ion-item class="tutee-view-header">
 					<p class="profile-image">
 						<img src="{{session.tutor_from.profile_pic}}">
@@ -43,6 +53,10 @@
 						<span class="location">At {{session.location_comments}}</span>
 					</p>
 				</ion-item>					
+				<ion-item ng-if="!session.session_start" class="item-text-wrap">
+					Waiting for your tutor to start the session...
+				</ion-item>
+				</div>
 				<ion-item class="tutee-view-timer" ng-if="session.session_start">
 					<div timer start="session.session_start"></div>
 				</ion-item>				

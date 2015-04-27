@@ -1,12 +1,11 @@
 <ion-view view-title="Tutoring Request">
   <ion-content>
-		<div id="request" class="item">
+		<div id="request" class="item item-text-wrap">
 			<div class="profile-image">
-				<img src="{{request.profile_pic}}" />
+				<img src="{{request.tutor_from.profile_pic}}" />
 			</div>
-			<p class="profile-name">{{request.from}} is requesting a session</p>
+			<p class="profile-name">{{request.tutor_from.real_name}} is requesting a session</p>
 			<p class="comments">&#8220;{{request.comments}}&#8221;</p>
-			<p>Debug: you viewed request with index {{request.requestid}}</p>
 			<br />
 		</div>
 		
@@ -22,8 +21,8 @@
 		</ion-item>	
 		
 		<ion-item>				
-			<button class="button button-block button-tutyr" href="#">
-				Start Session
+			<button class="button button-block button-tutyr" ng-click="acceptSession()">
+				Accept Session
 			</button>
 		</ion-item>
 						

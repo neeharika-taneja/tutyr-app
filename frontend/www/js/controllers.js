@@ -182,9 +182,8 @@ angular.module('starter.controllers', [])
 			}			
 		});
 	};
-	
-	// $scope.pollLocation(5000);
-	
+		
+	// Stop polling for location
 	$scope.clearLocation = function() {
 		$ionicPlatform.ready(function(){
 			$cordovaGeolocation.clearWatch($scope.LOCATION_WATCHER)
@@ -194,6 +193,19 @@ angular.module('starter.controllers', [])
 					alert("Could not turn off location refreshing: " + err);
 				});			
 			});
+	};
+	
+	// Onetime location ping
+	$scope.pingLocation = function() {
+		$ionicPlatform.ready(function() {
+			$cordovaGeolocation.getCurrentPosition({timeout: 10000, maximumAge: 30000, enableHighAccuracy: false})
+				.then(function(position) {
+		      var lat  = position.coords.latitude
+		      var long = position.coords.longitude
+					$scope.currentUser.latitude = lat;
+					$scope.currentUser.longitude = long;
+				});
+		});
 	};
 
 	// Monitor status of Tutor toggle
@@ -333,22 +345,65 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('TutorRequestsController', function($scope, $ionicModal, TutorRequestService) {
-	$scope.requests = TutorRequestService.requests;
-	$scope.nRequests = {
-		total: Object.keys($scope.requests).length
-	};
+.controller('TutorRequestsController', function($scope, $ionicLoading, API, $http) {
+	$scope.requests = {};
+	$scope.refresh = function(pulled) {
+		if ( !pulled ) $ionicLoading.show();
+		$http.get(API.requests + "/" + $scope.currentUser.facebook_id)
+			.success(function(data, status) {
+				$scope.requests = data;
+			})
+			.error(function(error) {
+				$scope.handleAJAXError(error);
+			})
+			.finally(function(){
+				if (!pulled) $ionicLoading.hide();				
+				$scope.$broadcast('scroll.refreshComplete');
+			});
+	}
+	$scope.decline = function(id) {
+		/* Decline request with id `id` */
+		var data = {
+			id: id, 
+			status: 2
+		};
+		
+		$http.post(API.sessionStatus, data)
+			.success(function(data, status) {
+				if ( data.status == true ) {
+					$scope.refresh();
+				}
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			})
+	}
+	
+	$scope.refresh();
+})
 
-	$scope.decline = function(requestid) {
-		alert("You declined request #" + requestid);
+.controller('TutorRequestController', function($scope, $state, Session) {
+	$scope.request = Session;
+	$scope.acceptRequest = function() {
+		console.log($scope.request);
+
+		if ( $scope.currentUser.latitude ) {
+			$scope.request.location_latitude = $scope.currentUser.latitude;
+			$scope.request.location_longitude = $scope.currentUser.longitude;
+		} else {
+			if ( $scope.request.location_comments == "") {
+				alert("Since you don't have location enabled, please enter a custom location.")
+			} 
+		}		
+		// push stuff to server here that changes ID to 2
+		
+		$state.go('app.session_inprog', {id: $scope.request.id});
 	}
 })
 
-.controller('TutorRequestController', function($scope, TutorRequest) {
-	$scope.request = TutorRequest;
-})
-
-.controller('EditProfileController', function($scope, $http, API, $state, $ionicLoading, $ionicHistory) {
+.controller('EditProfileController', function($scope, $http, API, $state, $ionicLoading, $ionicHistory, Subjects) {
+	$scope.subjects = Subjects;
+	
 	$scope.updateProfile = function() {
 		var updatedProfile = $scope.currentUser;
 		$ionicLoading.show({
@@ -409,7 +464,7 @@ angular.module('starter.controllers', [])
 	
 })
 
-.controller('TutorSessionController', function($scope, $http, API, $interval, Session) {
+.controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state) {
 	var refreshTimer;
 	$scope.map = {
 		center: {latitude: 40.4414, longitude: -79.9419},
@@ -422,7 +477,11 @@ angular.module('starter.controllers', [])
 	$scope.session = Session;
 
 	$scope.completeSession = function() {
-		alert("Session completed");
+		//TODO
+		// Send status change 4 to server
+		// Send ratings/comments to server
+		$state.go('app.intro');
+		
 	};
 	
 	$scope.reloadSession = function() {
@@ -438,9 +497,16 @@ angular.module('starter.controllers', [])
 	$scope.startWatch = function() {
 		if ( angular.isDefined(refreshTimer)) { return; }
 		refreshTimer = $interval($scope.reloadSession);
+		
 		$scope.$watch('session.status', function() {
-			// redirect based on status change
-			return;
+			if ( $scope.session.status == 3 ) {
+				$state.go('app.session_over', {id: $scope.session.id});
+			} else if ( $scope.session.status == 2) {
+				return;
+			} else {
+				alert("Error: unexpected session status " + $scope.session.status);
+				$state.go('app.intro');
+			}
 		});	
 	}
 	
@@ -449,6 +515,15 @@ angular.module('starter.controllers', [])
 			$interval.cancel(refreshTimer);
 			refreshTimer = undefined;
 		}
+	}
+	
+	$scope.startSession = function() {
+		//TODO
+		// Change session_start timestamp to Date.now()
+	};
+	$scope.endSession = function() {
+		//TODO
+		// Send status change 3 to server
 	}
 	
 })	

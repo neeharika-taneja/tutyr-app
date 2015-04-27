@@ -12,7 +12,8 @@
 				</ion-item>	
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
-					<strong>0 minute</strong> tutoring session for <strong>{{session.tutor_to.rate}}</strong>
+					<strong>{{session.session_end | amDifference : session_start : 'minutes' }}m</strong> 
+					tutoring session for <strong>{{session.tutor_to.rate}}</strong>
 				</ion-item>
 				<ion-item class="item-divider">How Was Your Student?</ion-item>
 				<ion-item class="rating">
