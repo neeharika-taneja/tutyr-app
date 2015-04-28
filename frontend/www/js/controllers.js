@@ -119,6 +119,9 @@ angular.module('starter.controllers', [])
 	}
 
 	$scope.logout = function() {
+		if ( $scope.currentUser.tutor_mode == true ) {
+			$scope.currentUser.tutor_mode = false;
+		}
 		delete $scope.$storage.currentUser;
 		if ( $scope.currentUser.loggedIn == true ) {
 			openFB.logout(function(){
@@ -321,8 +324,9 @@ angular.module('starter.controllers', [])
 	});
 })
 
-.controller('ViewProfileController', function($scope, ProfileObject, API, $http, $state, $ionicLoading) {
+.controller('ViewProfileController', function($scope, ProfileObject, ReviewsObject, API, $http, $state, $ionicLoading) {
 	$scope.profile = ProfileObject;
+	$scope.ratings = ReviewsObject;
 	$scope.sessionTemplate = {
 		comments: null
 	};
@@ -437,7 +441,7 @@ angular.module('starter.controllers', [])
 
 /* ------ Tutoring session controllers ------ */
 
-.controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state) {
+.controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state, $ionicHistory, $rootScope) {
 	var refreshTimer;	
 	$scope.session = Session;
 	$scope.map = {
@@ -459,6 +463,7 @@ angular.module('starter.controllers', [])
 		return $http.post(API.status.status, data);
 	}
 	$scope.rating = {};
+
 	$scope.completeSession = function() {
 		//TODO
 		// Send status change 4 to server
@@ -475,7 +480,8 @@ angular.module('starter.controllers', [])
 				rating: $scope.rating.rating,
 				comments: $scope.rating.comments,
 				fbID_from: null,
-				fbID_to: null
+				fbID_to: null,
+				session_id: $scope.session.id
 			};
 			
 			if ( $scope.currentUser.tutor_mode ) {
@@ -506,27 +512,12 @@ angular.module('starter.controllers', [])
 			});
 	}
 	
-	$scope.startWatch = function() {
+	$scope.startWatch = function(interval) {
 		if ( angular.isDefined(refreshTimer)) { return; }
-		refreshTimer = $interval($scope.reloadSession);
-		
-		$scope.$watch('session.status', function() {
-			switch ( $scope.session.status ) {
-				case 1:
-					$state.go('app.session_pending', {id: $scope.session.id});
-					break;
-				case 2:
-					$state.go('app.session_inprog', {id: $scope.session.id});
-					break;
-				case 3:
-					$state.go('app.session_over', {id: $scope.session.id});
-					break;
-				default:
-					alert("Error: unexpected session status " + $scope.session.status);
-					$state.go('app.intro');
-					break;
-			}	
-		});	
+		refreshTimer = $interval(function() {
+			$scope.reloadSession();
+			$scope.statusWatch();
+		}, interval);
 	}
 	
 	$scope.stopWatch = function() {
@@ -534,6 +525,41 @@ angular.module('starter.controllers', [])
 			$interval.cancel(refreshTimer);
 			refreshTimer = undefined;
 		}
+	}
+	
+	$scope.statusWatch = function() {
+		if ( angular.isDefined($scope.session.status) ) {
+			var status_map = {
+				1: "app.session_pending",
+				2: "app.session",
+				3: "app.session_over",
+				4: "app.session_over"
+			};
+	
+			if ( status_map[$scope.session.status] == $ionicHistory.currentStateName() ) {
+				return;
+			} else {
+				switch ( $scope.session.status ) {
+					case 1:
+						$state.go('app.session_pending', {id: $scope.session.id});
+						break;
+					case 2:
+						$state.go('app.session', {id: $scope.session.id});
+						break;
+					case 3:
+						$state.go('app.session_over', {id: $scope.session.id});
+						break;
+					case 4:
+						$state.go('app.session_over', {id: $scope.session.id});
+						break;
+					default:
+						alert("Error: unexpected session status " + $scope.session.status);
+						$state.go('app.intro');
+						break;
+				} // end switch					
+				$rootScope.redirectStarted = true;							
+			} // endif correct state
+		} // endif status defined
 	}
 	
 	$scope.startSession = function() {	
@@ -576,4 +602,5 @@ angular.module('starter.controllers', [])
 			});
 	}
 	
+	$scope.startWatch(10000);
 });

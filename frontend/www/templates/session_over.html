@@ -3,7 +3,23 @@
 		
 		<!-- ====== Tutor-side rating view ====== -->		
 		<div ng-if="currentUser.tutor_mode" class="tutor">
-			<div ng-if="session.status > 2" class="active-session">
+			<div ng-if="session.status == 4" class="over-session">
+				<ion-item class="item-divider item-text-wrap item-assertive">
+					This session is over, but you can view its summary.
+				</ion-item>	
+				<ion-item class="tutor-view-header item-text-wrap">
+					<div class="profile-image">
+						<img src="{{session.tutor_from.profile_pic}}" />
+					</div>
+					<p class="profile-name">You tutored {{session.tutor_from.real_name}}</p>
+				</ion-item>				
+				<ion-item class="item-text-wrap">
+					<strong>{{session.session_end | amDifference : session.session_start : 'minutes' }}m</strong> 
+					session @ <strong>${{session.tutor_to.hourly_rate}}/hr</strong>
+				</ion-item>
+				
+			</div>	
+			<div ng-if="session.status == 3" class="active-session">
 				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">
 						<img src="{{session.tutor_from.profile_pic}}" />
@@ -13,7 +29,7 @@
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
 					<strong>{{session.session_end | amDifference : session.session_start : 'minutes' }}m</strong> 
-					tutoring session at <strong>${{session.tutor_to.hourly_rate}}/hr</strong>
+					session @ <strong>${{session.tutor_to.hourly_rate}}/hr</strong>
 				</ion-item>
 				<ion-item class="item-divider">How Was Your Student?</ion-item>
 				<ion-item class="rating">
@@ -36,7 +52,7 @@
 		
 		<!-- ====== Student-side rating view ====== -->
 		<div ng-if="!currentUser.tutor_mode">
-			<div ng-if="session.status > 2" class="active-session">
+			<div ng-if="session.status == 3" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}">

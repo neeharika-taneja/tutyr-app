@@ -17,13 +17,13 @@ angular.module('starter.services', [])
 			status: base + 'session_status',
 			start: base + 'session_start',
 			end: base + 'session_end'
-		}
+		},
+		reviews_for: base + "ratings_for"
 	};
 	
 })
 
-.factory('TutorRequestService', function(API, $http, $ionicLoading){
-	
+.factory('TutorRequestService', function(API, $http, $ionicLoading){	
 	return {		
 		requests: null,
 		getRequest: function(id) {
@@ -42,28 +42,8 @@ angular.module('starter.services', [])
 	}
 })
 
-.factory('TutorSessionService', function($rootScope, $http, API) {
-	var sessions = {
-		1: {
-			from: 'Bob',
-			comments: 'I want help understanding mitochondria',
-			profile_pic: 'img/test-person.jpg',
-			status: 0,
-			request_time: '2015-04-07T19:43:37-0500',
-			requestid: 1
-		},
-		2: {
-			from: 'Mary',
-			comments: "Need help with my HCI project",
-			profile_pic: 'img/test-person.jpg',
-			status: 0,
-			request_time: '2015-04-07T19:43:37-0500',
-			requestid: 2
-		}
-	};
-	
+.factory('TutorSessionService', function($rootScope, $http, API) {	
 	return {
-		sessions: sessions,
 		getSession: function(id) {
 			var self = this;
 			$http.get(API.session + "/" + id)
@@ -89,6 +69,22 @@ angular.module('starter.services', [])
 					})
 					.error(function(err) {
 						$ionicLoading.hide();
+					})
+			}
+		}
+})
+
+.factory('ProfileReviewsService', function($http, API){
+		return {
+			list: null,
+			getReviews: function(id) {
+				var self = this;				
+				$http.get(API.reviews_for + "/" + id)
+					.success(function(data, status) {
+						self.list = data;
+					})
+					.error(function(err) {
+						alert("There was an error loading reviews for this user.");
 					})
 			}
 		}

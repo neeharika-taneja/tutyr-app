@@ -36,7 +36,7 @@
 							<p class="profile-name">{{profile.real_name}}</p> 
 							<p class="profile-bio">{{profile.bio1}}</p> <!-- subject details -->
 							<rating ng-model="profile.rating" readonly="true" ng-show="profile.num_ratings > 0"></rating>
-							<p class="profile-no-rating"><em>No ratings</em></p>
+							<p class="profile-no-rating" ng-if="profile.num_ratings == 0"><em>No ratings</em></p>
 						</div>	
 					</div>	
 					<hr />

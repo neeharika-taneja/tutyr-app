@@ -95,6 +95,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 						var p = ProfileService;
 						p.getProfile($stateParams.id);
 						return p;
+					},
+					ReviewsObject: function($stateParams, ProfileReviewsService) {
+						var r = ProfileReviewsService;
+						r.getReviews($stateParams.id);
+						return r;
 					}
 				}
       }
