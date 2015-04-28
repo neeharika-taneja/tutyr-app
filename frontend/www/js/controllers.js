@@ -374,7 +374,7 @@ angular.module('starter.controllers', [])
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
-			})
+			});
 	}
 	
 	$scope.refresh();
@@ -450,12 +450,50 @@ angular.module('starter.controllers', [])
 			disableDefaultUI: true
 		}
 	};
+	
+	$scope.changeStatus = function(id, status) { 
+		var data = {
+			id: id,
+			status: status
+		}
+		return $http.post(API.status.status, data);
+	}
+	$scope.rating = {};
 	$scope.completeSession = function() {
 		//TODO
 		// Send status change 4 to server
 		// Send ratings/comments to server
-		$state.go('app.intro');
+		$scope.changeStatus($scope.session.id, 4)
+			.success(function(data, status){
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
 		
+			var rating = {
+				rating: $scope.rating.rating,
+				comments: $scope.rating.comments,
+				fbID_from: null,
+				fbID_to: null
+			};
+			
+			if ( $scope.currentUser.tutor_mode ) {
+				rating.fbID_from = $scope.session.tutor_to.facebook_id
+				rating.fbID_to = $scope.session.tutor_from.facebook_id
+			} else {
+				rating.fbID_from = $scope.session.tutor_from.facebook_id
+				rating.fbID_to = $scope.session.tutor_to.facebook_id				
+			}			
+		$http.post(API.rating, rating)
+			.success(function(data, status) {
+				if ( data.status == true ) {
+					$state.go('app.intro');									
+				}
+			})
+			.error(function(error) {
+				$scope.handleAJAXError(error);
+			});
 	};
 	
 	$scope.reloadSession = function() {
@@ -498,13 +536,44 @@ angular.module('starter.controllers', [])
 		}
 	}
 	
-	$scope.startSession = function() {
-		//TODO
-		// Change session_start timestamp to Date.now()
+	$scope.startSession = function() {	
+		// Mark session_start timestamp 
+		$http.post(API.status.start, {id: $scope.session.id})
+			.success(function(data, status) {
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
+			
+		// Change session status
+		$scope.changeStatus($scope.session.id, 2)
+			.success(function(data, status) {
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
 	};
+	
 	$scope.endSession = function() {
-		//TODO
+		// Mark session_end timestamp
+		$http.post(API.status.end, {id: $scope.session.id})
+			.success(function(data, status) {
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
+
 		// Send status change 3 to server
+		$scope.changeStatus($scope.session.id, 3)
+			.success(function(data, status) {
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
 	}
 	
 });

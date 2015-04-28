@@ -3,30 +3,30 @@
 		
 		<!-- ====== Tutor-side rating view ====== -->		
 		<div ng-if="currentUser.tutor_mode" class="tutor">
-			<div ng-if="session.active" class="active-session">
-				<ion-item class="tutor-view-header">
+			<div ng-if="session.status > 2" class="active-session">
+				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">
 						<img src="{{session.tutor_from.profile_pic}}" />
 					</div>
-					<p class="profile-name">You tutored {{session.tutor_from.realname}}</p>
+					<p class="profile-name">You tutored {{session.tutor_from.real_name}}</p>
 				</ion-item>	
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
-					<strong>{{session.session_end | amDifference : session_start : 'minutes' }}m</strong> 
-					tutoring session for <strong>{{session.tutor_to.rate}}</strong>
+					<strong>{{session.session_end | amDifference : session.session_start : 'minutes' }}m</strong> 
+					tutoring session at <strong>${{session.tutor_to.hourly_rate}}/hr</strong>
 				</ion-item>
 				<ion-item class="item-divider">How Was Your Student?</ion-item>
 				<ion-item class="rating">
-					<span ng-show="session.rating">[{{session.rating}}/5]</span> <rating ng-model="session.rating" readonly="false" /> 
+					<span ng-show="rating.rating">[{{rating.rating}}/5]</span> <rating ng-model="rating.rating" readonly="false" /> 
 				</ion-item>
 				<ion-item class="item-input">
-					<textarea placeholder="Any comments?"></textarea>
+					<textarea placeholder="Any comments?" ng-model="rating.comments"></textarea>
 				</ion-item>
 				<ion-item>
 					<a class="button button-block button-tutyr" ng-click="completeSession()">Complete Session</a>
 				</ion-item>
 			</div>
-			<div ng-if="!session.active" class="inactive-session">				
+			<div ng-if="session.status < 1" class="inactive-session">				
 				<i class="icon ion-help-circled"></i>
 				<p>Oops! You don't have an active tutoring session right now.</p>
 			</div>					
@@ -36,21 +36,21 @@
 		
 		<!-- ====== Student-side rating view ====== -->
 		<div ng-if="!currentUser.tutor_mode">
-			<div ng-if="session.active" class="active-session">
+			<div ng-if="session.status > 2" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}">
 					</p>
-					<p class="profile-name">Your tutor was {{session.tutor)to.realname}}</p>
+					<p class="profile-name">Your tutor was {{session.tutor_to.realname}}</p>
 					<p class="profile-meta">
-						<span class="rate">${{session.tutor_to.rate}}/hour</span> 
+						<span class="rate">${{session.tutor_to.hourly_rate}}/hour</span> 
 						&bull; 
-						<span class="location">At {{session.locationComments}}</span>
+						<span class="location">At {{session.location_comments}}</span>
 					</p>
 				</ion-item>					
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
-					<strong>0 minute</strong> tutoring session costing <strong>$0</strong>
+					<strong>{{session.session_end | amDifference : session_start : 'minutes' }}m</strong> tutoring session costing <strong>$0</strong>
 				</ion-item>
 				<ion-item class="item-divider">How Was Your Tutor?</ion-item>
 				<ion-item class="rating">
@@ -60,11 +60,11 @@
 					<textarea placeholder="Any comments?"></textarea>
 				</ion-item>
 				<ion-item>
-					<button class="button button-block button-tutyr">Complete Session</button>
+					<button class="button button-block button-tutyr" ng-click="completeSession()">Complete Session</button>
 				</ion-item>
 			</div>	
 						
-			<div ng-if="!session.active" class="inactive-session">				
+			<div ng-if="session.status < 1" class="inactive-session">				
 				<i class="icon ion-help-circled"></i>
 				<p>You don't have an active tutoring session right now.</p>
 			</div>								
