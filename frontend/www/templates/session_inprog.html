@@ -7,15 +7,15 @@
 		</ion-item>	
 		
 		<div ng-if="currentUser.tutor_mode" class="tutor">
-			<div ng-if="session.status==2" class="active-session">
-				<ion-item class="tutor-view-header">
+			<div ng-if="session.status==1||session.status==2" class="active-session">
+				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}" />
 					</div>
-					<p class="profile-name">You are tutoring {{session.tutor_to.realname}}</p>
+					<p class="profile-name">You are tutoring {{session.tutor_to.real_name}}</p>
 				</ion-item>	
 							
-				<div ng-if="session.status==2&&!session.session_start">
+				<div ng-if="session.status==1&&!session.session_start">
 					<ion-item>
 						<button class="button button-block button-tutyr" ng-click="startSession()">Start The Session</button>
 					</ion-item>
@@ -30,7 +30,7 @@
 					</ion-item>
 				</div>
 			</div>
-			<div ng-if="!session.active" class="inactive-session">				
+			<div ng-if="session.status < 1" class="inactive-session">				
 				<i class="icon ion-help-circled"></i>
 				<p>Oops! You don't have an active tutoring session right now.</p>
 			</div>					
@@ -41,12 +41,12 @@
 		<!-- ====== Student-side in progress view ====== -->
 		<div ng-if="!currentUser.tutor_mode">
 			
-			<div ng-if="session.status==2" class="active-session">
-				<ion-item class="tutee-view-header">
+			<div ng-if="session.status==1|session.status==2" class="active-session">
+				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
 						<img src="{{session.tutor_from.profile_pic}}">
 					</p>
-					<p class="profile-name">Your tutor is {{session.tutor_from.realname}}</p>
+					<p class="profile-name">Your tutor is {{session.tutor_from.real_name}}</p>
 					<p class="profile-meta">
 						<span class="rate">${{session.tutor_from.rate}}/hour</span> 
 						&bull; 
@@ -62,7 +62,7 @@
 				</ion-item>				
 			</div>	
 						
-			<div ng-if="!session.active" class="inactive-session">				
+			<div ng-if="session.status < 1" class="inactive-session">				
 				<i class="icon ion-help-circled"></i>
 				<p>You don't have an active tutoring session right now.</p>
 			</div>								

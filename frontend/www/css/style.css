@@ -225,8 +225,8 @@
 	font-weight: bold;
 }
 
-p.comments {
-	font-style: italic;
+.comments {
+	text-align: center;
 }
 #request {
 	text-align: center;
@@ -237,6 +237,10 @@ p.comments {
 #request .profile-name {
 	font-size: 1.2em;
 	margin: 2em 0 1em 0;
+}
+
+.request-type-99 {
+	color: #777;
 }
 
 /* Session pending screen */

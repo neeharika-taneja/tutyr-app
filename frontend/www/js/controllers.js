@@ -365,14 +365,12 @@ angular.module('starter.controllers', [])
 		/* Decline request with id `id` */
 		var data = {
 			id: id, 
-			status: 2
+			status: 99
 		};
 		
-		$http.post(API.sessionStatus, data)
+		$http.post(API.status.status, data)
 			.success(function(data, status) {
-				if ( data.status == true ) {
-					$scope.refresh();
-				}
+				$scope.refresh();
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
@@ -382,7 +380,7 @@ angular.module('starter.controllers', [])
 	$scope.refresh();
 })
 
-.controller('TutorRequestController', function($scope, $state, Session) {
+.controller('TutorRequestController', function($scope, $state, Session, $http, API) {
 	$scope.request = Session;
 	$scope.acceptRequest = function() {
 		console.log($scope.request);
@@ -395,9 +393,19 @@ angular.module('starter.controllers', [])
 				alert("Since you don't have location enabled, please enter a custom location.")
 			} 
 		}		
-		// push stuff to server here that changes ID to 2
+
+		var accept = {
+			id: $scope.request.id,
+			status: 1
+		};
 		
-		$state.go('app.session_inprog', {id: $scope.request.id});
+		$http.post(API.status.status, accept)
+			.success(function(data, status) {
+				$state.go('app.session', {id: $scope.request.id});				
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});		
 	}
 })
 
@@ -430,7 +438,8 @@ angular.module('starter.controllers', [])
 /* ------ Tutoring session controllers ------ */
 
 .controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state) {
-	var refreshTimer;
+	var refreshTimer;	
+	$scope.session = Session;
 	$scope.map = {
 		center: {
 			latitude: $scope.session.location_latitude,
@@ -441,9 +450,6 @@ angular.module('starter.controllers', [])
 			disableDefaultUI: true
 		}
 	};
-	
-	$scope.session = Session;
-
 	$scope.completeSession = function() {
 		//TODO
 		// Send status change 4 to server

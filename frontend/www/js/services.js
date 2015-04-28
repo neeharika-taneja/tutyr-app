@@ -12,7 +12,12 @@ angular.module('starter.services', [])
 		session: base + "session", // POST new session | GET session/:id
  		rating: base + "rate", // POST rate a user 
 		subjects: base + "subjects",
-		requests: base + "sessions_for"
+		requests: base + "sessions_for",
+		status: {
+			status: base + 'session_status',
+			start: base + 'session_start',
+			end: base + 'session_end'
+		}
 	};
 	
 })
