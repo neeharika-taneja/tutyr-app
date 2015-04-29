@@ -49,6 +49,10 @@ angular.module('starter.services', [])
 			$http.get(API.session + "/" + id)
 				.success(function(data, status) {
 					angular.extend(self, data);
+					if ( data.session_end ) {
+						self.session_length = moment.duration(moment(data.session_end) - moment(data.session_start));
+						self.session_cost = Math.round(self.session_length.asHours() * self.tutor_to.hourly_rate * 100, 3)/100;
+					}
 				})
 				.error(function(error) {
 					$rootScope.$broadcast('Loading.error', {error: error});

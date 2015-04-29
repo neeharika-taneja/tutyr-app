@@ -447,7 +447,8 @@ angular.module('starter.controllers', [])
 			$scope.request.location_longitude = $scope.currentUser.longitude;
 		} else {
 			if ( $scope.request.location_comments == "") {
-				alert("Since you don't have location enabled, please enter a custom location.")
+				alert("Since you don't have location enabled, please enter a location.");
+				return;
 			} 
 		}		
 
@@ -583,14 +584,19 @@ angular.module('starter.controllers', [])
 	}
 	
 	$scope.startWatch = function(interval) {
-		if ( angular.isDefined(window.refreshTimer)) { return; }
-		window.refreshTimer = $interval(function() {
-			$scope.reloadSession();
-			$scope.statusWatch();
-		}, interval);
+		// Start statusWatch() to redirect to pages based on status
+		if ( angular.isDefined(window.refreshTimer)) { 
+			return;
+		} else {
+			window.refreshTimer = $interval(function() {
+				$scope.reloadSession();
+				$scope.statusWatch();
+			}, interval);
+		}
 	}
 	
 	$scope.stopWatch = function() {
+		// Kill statusWatch refresh timer
 		if ( angular.isDefined(window.refreshTimer) ){
 			$interval.cancel(window.refreshTimer);
 			refreshTimer = undefined;
@@ -598,6 +604,7 @@ angular.module('starter.controllers', [])
 	}
 	
 	$scope.sessionOver = function() {
+		// Shortcut to end timer and go back to homescreen
 		$ionicHistory.nextViewOptions({
 			disableBack: true
 		});				
@@ -606,6 +613,7 @@ angular.module('starter.controllers', [])
 	}
 	
 	$scope.statusWatch = function() {
+		// Watch for changes in session status and redirect to appropriate page
 		if ( angular.isDefined($scope.session.status) ) {
 			var status_map = {
 				0: "app.session_pending",
