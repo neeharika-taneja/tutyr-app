@@ -29,23 +29,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"EmailComposer\"><param name=\"android-package\" value=\"de.appplant.cordova.emailcomposer.EmailComposer\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"LocalNotification\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.localnotification.LocalNotification\" /></feature>",
                             "count": 1
                         },
                         {
@@ -65,44 +53,7 @@
             },
             "AndroidManifest.xml": {
                 "parents": {
-                    "/manifest/application": [
-                        {
-                            "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.badge.LaunchActivity\" android:theme=\"@android:style/Theme.Black.NoTitleBar\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<activity android:label=\"@string/multi_app_name\" android:name=\"com.synconset.MultiImageChooserActivity\" android:theme=\"@android:style/Theme.Holo.Light\"></activity>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.localnotification.TriggerReceiver\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.localnotification.ClearReceiver\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.localnotification.ClickActivity\" android:theme=\"@android:style/Theme.NoDisplay\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.notification.TriggerReceiver\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.notification.ClearReceiver\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.localnotification.RestoreReceiver\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /></intent-filter></receiver>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.notification.ClickActivity\" android:theme=\"@android:style/Theme.NoDisplay\" />",
-                            "count": 1
-                        }
-                    ],
+                    "/manifest/application": [],
                     "/*": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
@@ -117,16 +68,7 @@
                             "count": 1
                         }
                     ],
-                    "/manifest": [
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\" />",
-                            "count": 1
-                        }
-                    ]
+                    "/manifest": []
                 }
             }
         }
@@ -150,19 +92,10 @@
         "uk.co.whiteoctober.cordova.appversion": {
             "PACKAGE_NAME": "com.ionicframework.tutyr782568"
         },
-        "de.appplant.cordova.plugin.badge": {
-            "PACKAGE_NAME": "com.ionicframework.tutyr782568"
-        },
         "org.apache.cordova.camera": {
             "PACKAGE_NAME": "com.ionicframework.tutyr782568"
         },
         "de.appplant.cordova.plugin.email-composer": {
-            "PACKAGE_NAME": "com.ionicframework.tutyr782568"
-        },
-        "com.synconset.imagepicker": {
-            "PACKAGE_NAME": "com.ionicframework.tutyr782568"
-        },
-        "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "com.ionicframework.tutyr782568"
         },
         "nl.x-services.plugins.socialsharing": {

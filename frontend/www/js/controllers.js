@@ -282,11 +282,14 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('AboutController', function($scope) {
+.controller('AboutController', function($scope, $cordovaInAppBrowser) {
 	$scope.emailFeedback = function() {		
 		var link = "mailto:tutyrapp@gmail.com?subject=Tutyr";
 		window.location = link;
 	}	
+	$scope.visitWebsite = function() {
+		$cordovaInAppBrowser.open('http://tutyr.me', '_blank', {toolbar: 'yes'});
+	}
 })
 
 .controller('HomeScreenController', function($scope, API, $http, $cordovaGeolocation){
@@ -543,6 +546,7 @@ angular.module('starter.controllers', [])
 	$scope.statusWatch = function() {
 		if ( angular.isDefined($scope.session.status) ) {
 			var status_map = {
+				0: "app.session_pending",
 				1: "app.session_pending",
 				2: "app.session",
 				3: "app.session_over",
@@ -552,7 +556,13 @@ angular.module('starter.controllers', [])
 			if ( status_map[$scope.session.status] == $ionicHistory.currentStateName() ) {
 				return;
 			} else {
+				$ionicHistory.nextViewOptions({
+					disableBack: true
+				});				
 				switch ( $scope.session.status ) {
+					case 0: 
+						$state.go('app.session_pending', {id: $scope.session.id});
+						break;						
 					case 1:
 						$state.go('app.session_pending', {id: $scope.session.id});
 						break;
@@ -566,8 +576,7 @@ angular.module('starter.controllers', [])
 						$state.go('app.session_over', {id: $scope.session.id});
 						break;
 					default:
-						alert("Error: unexpected session status " + $scope.session.status);
-						$state.go('app.intro');
+						console.log("Unexpected state.");
 						break;
 				} // end switch					
 				$rootScope.redirectStarted = true;							
