@@ -3,16 +3,16 @@
 		
 		<!-- ====== Tutor-side in progress view ====== -->
 		<ion-item class="item item-divider item-tutyr" ng-if="session.session_start&&session.status==2">
-			<i class="icon ion-clock"></i> &nbsp; Session in progress debug{{debug}}
+			<i class="icon ion-clock"></i> &nbsp; Session in progress
 		</ion-item>	
 		
-		<div ng-if="currentUser.tutor_mode" class="tutor">
-			<div ng-if="session.status==1||session.status==2" class="active-session">
+		<div ng-if="thisSessionRoles.userIsTutor" class="tutor">
+			<div ng-if="session.status==2||session.status==3" class="active-session">
 				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">
-						<img src="{{session.tutor_to.profile_pic}}" />
+						<img src="{{session.tutor_from.profile_pic}}" />
 					</div>
-					<p class="profile-name">You are tutoring {{session.tutor_to.real_name}}</p>
+					<p class="profile-name">You are tutoring {{session.tutor_from.real_name}}</p>
 				</ion-item>	
 							
 				<div ng-if="session.status==1&&!session.session_start">
@@ -39,18 +39,19 @@
 		<!-- =========================================== -->
 		
 		<!-- ====== Student-side in progress view ====== -->
-		<div ng-if="!currentUser.tutor_mode">
-			
-			<div ng-if="session.status==1|session.status==2" class="active-session">
+		<div ng-if="thisSessionRoles.userIsTutee">			
+			<div ng-if="session.status==1||session.status==2" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
-						<img src="{{session.tutor_from.profile_pic}}">
+						<img src="{{session.tutor_to.profile_pic}}">
 					</p>
-					<p class="profile-name">Your tutor is {{session.tutor_from.real_name}}</p>
+					<p class="profile-name">Your tutor is {{session.tutor_to.real_name}}</p>
 					<p class="profile-meta">
-						<span class="rate">${{session.tutor_from.rate}}/hour</span> 
-						&bull; 
-						<span class="location">At {{session.location_comments}}</span>
+						<span class="rate">${{session.tutor_to.rate}}/hour</span> 
+						<span class="location" ng-if="session.location_latitude">
+							&bull; 
+							<reverse-geocode lat="{{session.location_latitude}}" lng="{{session.location_longitude}}"></reverse-geocode>
+						</span>	
 					</p>
 				</ion-item>					
 				<ion-item ng-if="!session.session_start" class="item-text-wrap">

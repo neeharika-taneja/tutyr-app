@@ -23,15 +23,14 @@
 			</div>			
 			<ion-item class="item grey">		
 				<button class="button button-block button-tutyr" ng-click="fakeAccept()">Debug: Request Confirm</button>
-				<button class="button button-block button-tutyr" >Cancel Request</button>
+				<button class="button button-block button-tutyr" ng-click="tuteeCancel()">Cancel Request</button>
 			</ion-item>
 		</div>
 		<div id="tutee-directions" ng-if="session.status==1">
 			<ui-gmap-google-map 
 				center='map.center' 
 				zoom='map.zoom' 
-				options='map.options' 
-				ng-if="!session.location_comments">
+				options='map.options'>
 			</ui-gmap-google-map>			
 			<ion-item ng-if="session.location_comments" class="item-divider">
 				Custom location
@@ -48,7 +47,9 @@
 			</ion-item>			
 		</div>		
 		<div ng-if="session.status==99">
-			<ion-item>{{session.tutor_from.real_name}} has declined your tutoring request.</ion-item>
+			<ion-item>{{session.tutor_to.real_name}} has declined your tutoring request.</ion-item>
+			<ion-item>
+				<button class="button button-block button-tutyr" ng-click="$state.go('app.intro')">Okay</button>
 		</div>
   </ion-content>
 </ion-view>

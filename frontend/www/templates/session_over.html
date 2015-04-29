@@ -16,9 +16,9 @@
 				<ion-item class="item-text-wrap">
 					<strong>{{session.session_end | amDifference : session.session_start : 'minutes' }}m</strong> 
 					session @ <strong>${{session.tutor_to.hourly_rate}}/hr</strong>
-				</ion-item>
-				
+				</ion-item>				
 			</div>	
+			
 			<div ng-if="session.status == 3" class="active-session">
 				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">

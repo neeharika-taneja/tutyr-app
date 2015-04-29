@@ -1,10 +1,6 @@
 <ion-view view-title="Tutoring Requests">
   <ion-content>
 		<ion-refresher pulling-text="Check for new requests..." on-refresh="refresh(true)"></ion-refresher>			
-		<div ng-if="requests.length == 0" id="request-list-empty">
-			<p><i class="icon ion-email"></i></p>
-			<p>No requests at the moment.</p>
-		</div>
 		<div ng-if="requests.length > 0" id="request-list">
 		  <label class="item item-input item-select">
 		    <div class="input-label">
@@ -14,21 +10,22 @@
 		      <option value="0">New</option>
 		      <option value="4">Completed</option>
 		      <option value="99">Declined</option>
-					<option value="">All</option>
+					<option value="!1">All</option>
 		    </select>
 		  </label>
-			<div class="card request-type-{{request.status}}" ng-repeat="request in requests | filter:{status:requestFilter}">
+			<div class="card request-type-{{request.status}}" 
+				ng-repeat="request in filteredRequests = (requests | filter:{status:requestFilter})">
 				<ion-item class="item-divider">
 					{{request.timestamp | amCalendar }}
 				</ion-item>	
 				<ion-item class="item-divider item-assertive"  ng-if="request.status > 90" class="declined">
 					You declined this request.
 				</ion-item>
-				<ion-item class="item-divider item-tutyr"  ng-if="request.status > 3 && request.status < 90" class="completed">
+				<ion-item class="item-divider item-tutyr"  ng-if="request.status >= 3 && request.status < 90" class="completed">
 					This session is completed.
 				</ion-item>
 				<ion-item class="item-text-wrap comments request-type-{{request.status}}">
-					<div class="profile-image"  ng-if="request.status < 4">
+					<div class="profile-image"  ng-if="request.status < 3">
 						<img src="{{request.tutor_from.profile_pic}}">
 					</div>
 					<p class="profile-name">{{request.tutor_from.real_name}}</p>					
@@ -48,9 +45,17 @@
 			    <a class="tab-item decline" ng-click="decline(request.id)">
 			      <i class="icon ion-thumbsdown"></i> Decline
 			    </a>
-			  </ion-item>
-				
+			  </ion-item>				
 			</div>	
+			<div ng-if="filteredRequests.length < 1" id="request-list-empty">
+				<p><i class="icon ion-email"></i></p>
+				<p>No requests at the moment.</p>
+			</div>
+
 		</div>	
+		<div ng-if="requests.length == 0||filteredRequests.length < 1" id="request-list-empty">
+			<p><i class="icon ion-email"></i></p>
+			<p>No requests at the moment.</p>
+		</div>
   </ion-content>
 </ion-view>
