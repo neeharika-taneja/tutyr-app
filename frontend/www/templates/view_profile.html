@@ -1,5 +1,8 @@
 <ion-view view-title="Tutyr Profile" id="profile">
   <ion-content>	
+		<ion-item class="item-divider item-assertive" ng-if="profile.busy">
+			Currently in a tutoring session
+		</ion-item>	
 		<div class="header">
 			<div class="profile-image">
 				<img src="{{profile.profile_pic}}"> 
@@ -41,7 +44,7 @@
 			<ion-item class="item-divider item-dark">Reviews ({{profile.num_ratings}})</ion-item>			
 			<ion-item class="item-text-wrap">
 				<div class="profile-summary" ng-repeat="review in ratings.list">
-						<h3>{{review.fbID_from}} &mdash; <rating ng-model="review.rating" readonly="true"></h3>
+						<h3>{{review.name_to}} &mdash; <rating ng-model="review.rating" readonly="true"></h3>
 						<p style="margin-bottom: 5px">{{review.comments}}</p>
 				</div>
 			</ion-item>	

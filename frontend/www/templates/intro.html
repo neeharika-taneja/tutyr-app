@@ -15,15 +15,28 @@
 		
 		<div ng-if="currentUser.loggedIn||$storage.currentUser.loggedIn" class="newsfeed">	
 			<ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>			
-			<div class="header">
-				<div class="list list-inset">
+			<div class="header" ng-show="showSearch">
+			  <label class="item item-dark item-input item-select">
+			    <div class="input-label">
+						Filter Subjects
+			    </div>
+			    <select ng-model="subjectFilter">
+			      <option value="1">New</option>
+			      <option value="4">Completed</option>
+			      <option value="99">Declined</option>
+						<option value="">All</option>
+			    </select>
+			  </label>
+				<div class="item item-dark item-list">
 				  <label class="item item-input">
 				    <i class="icon ion-search placeholder-icon"></i>
 				    <input type="text" placeholder="Search" ng-model="searchFilter">
 				  </label>
 				</div>
 			</div>	
-			
+			<ion-item class="item-dark" ng-show="true">
+				<button class="button button-block button-tutyr" ng-click="toggleSearch()">Search and Filter</button>
+			</ion-item>
 			<div class="newsfeed-profiles">
 				<div ng-repeat="profile in feed | filter:searchFilter" class="profile card" ng-if="feed">
 					<div class="row profile-main">
@@ -42,12 +55,14 @@
 					<hr />
 					<div class="row profile-meta">
 						<i class="icon ion-location"></i> 
-						<span class="location" ng-show="profile.latitude && profile.longitude">{{profile.latitude}}, {{profile.longitude}}</span>
+						<span class="location" ng-show="profile.latitude && profile.longitude">
+							<reverse-geocode lat="{{profile.latitude}}" lng="{{profile.longitude}}"></reverse-geocode>
+						</span>
 						<span class="location" ng-show="!(profile.latitude && profile.longitude)">No location shared</span>
 					</div>
 			</div> <!-- /profile -->						
 			<div ng-if="feed.length == 0" class="inactive-session">
-				<i class="icon ion-help-circled"></i>
+				<i class="icon ion-person-stalker"></i>
 				<p>There are no Tutyrs in the area.</p>				
 			</div>	
 			<div ng-if="!feed" class="inactive-session">

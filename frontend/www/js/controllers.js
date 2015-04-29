@@ -235,7 +235,7 @@ angular.module('starter.controllers', [])
 						.success(function(data, status) {
 							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
 								$scope.currentUser.tutor_mode = true;
-								// $scope.pollLocation();
+								$scope.pollLocation(7.5*60*1000);
 							}
 						})
 						.error(function(err) {
@@ -266,10 +266,18 @@ angular.module('starter.controllers', [])
 		loggedIn: false
 	}
 
+	// Restore session from local cache on app re-open
 	if ( !$scope.currentUser.loggedIn && $scope.$storage.currentUser ) {
 		// Restore session
 		$scope.currentUser = $scope.$storage.currentUser;
-	} 	
+		$scope.$watch($scope.currentUser, function(){
+			// Mirror current user to local storage.
+			$scope.$storage.currentUser = $scope.currentUser;
+		}); 						
+	};	
+	
+	// Location ping on load
+	$scope.pingLocation();
 
 })
 
@@ -305,7 +313,6 @@ angular.module('starter.controllers', [])
 	};
 		
 	$scope.refresh = function() {
-		// Would grab from API here...
 		$http.get(API.feed)
 			.success(function(data, status){
 				$scope.feed = data;
@@ -316,6 +323,11 @@ angular.module('starter.controllers', [])
 		
 		$scope.$broadcast('scroll.refreshComplete');
 	};
+	
+	$scope.toggleSearch = function() {
+		$scope.showSearch = !$scope.showSearch;
+	}
+	$scope.showSearch = false;
 	
 	$scope.$watch("currentUser.loggedIn", function(){
 		if ( $scope.currentUser.loggedIn == true ) {
@@ -351,6 +363,7 @@ angular.module('starter.controllers', [])
 
 .controller('TutorRequestsController', function($scope, $ionicLoading, API, $http) {
 	$scope.requests = {};
+	$scope.requestFilter = 0;
 	$scope.refresh = function(pulled) {
 		if ( !pulled ) $ionicLoading.show();
 		$http.get(API.requests + "/" + $scope.currentUser.facebook_id)

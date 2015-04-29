@@ -118,7 +118,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 						var p = ProfileService;
 						p.getProfile($stateParams.id);
 						return p;
+					},
+					ReviewsObject: function($stateParams, ProfileReviewsService) {
+						var r = ProfileReviewsService;
+						r.getReviews($stateParams.id);
+						return r;
 					}
+					
 				}
       }
     },
@@ -217,9 +223,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   .state('app.tutor_requests.index', {
     url: "",		
 		templateUrl: "templates/tutor_requests.html",
-		controller: 'TutorRequestsController',
+		controller: 'TutorRequestsController'
   })
-
 	
   .state('app.tutor_requests.detail', {
     url: "/:tutor_request",
@@ -230,7 +235,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 				var s = TutorSessionService;
 				s.getSession($stateParams.tutor_request);
 				return s;
-			}
+			}			
 		}
   })
 	

@@ -1,4 +1,4 @@
-<ion-view view-title="Incoming Requests">
+<ion-view view-title="Tutoring Requests">
   <ion-content>
 		<ion-refresher pulling-text="Check for new requests..." on-refresh="refresh(true)"></ion-refresher>			
 		<div ng-if="requests.length == 0" id="request-list-empty">
@@ -6,23 +6,42 @@
 			<p>No requests at the moment.</p>
 		</div>
 		<div ng-if="requests.length > 0" id="request-list">
-			<div class="card" ng-repeat="request in requests">
-				<ion-item class="item-divider" ng-if="request.status < 90">
+		  <label class="item item-input item-select">
+		    <div class="input-label">
+					Filter Requests
+		    </div>
+		    <select ng-model="requestFilter">
+		      <option value="0">New</option>
+		      <option value="4">Completed</option>
+		      <option value="99">Declined</option>
+					<option value="">All</option>
+		    </select>
+		  </label>
+			<div class="card request-type-{{request.status}}" ng-repeat="request in requests | filter:{status:requestFilter}">
+				<ion-item class="item-divider">
 					{{request.timestamp | amCalendar }}
 				</ion-item>	
-				<ion-item class="item-divider"  ng-if="request.status > 90" class="declined">
+				<ion-item class="item-divider item-assertive"  ng-if="request.status > 90" class="declined">
 					You declined this request.
 				</ion-item>
+				<ion-item class="item-divider item-tutyr"  ng-if="request.status > 3 && request.status < 90" class="completed">
+					This session is completed.
+				</ion-item>
 				<ion-item class="item-text-wrap comments request-type-{{request.status}}">
-					<div class="profile-image"  ng-if="request.status < 90">
+					<div class="profile-image"  ng-if="request.status < 4">
 						<img src="{{request.tutor_from.profile_pic}}">
 					</div>
 					<p class="profile-name">{{request.tutor_from.real_name}}</p>					
+					<p class="profile-meta">
+						<rating 
+							ng-model="request.tutor_from.rating" 
+							readonly="true" 
+							ng-if="request.tutor_from.num_ratings > 0"
+							class="rating"></rating>					
+					</p>	
 					<p ng-show="request.comments" ng-if="request.status < 90">Comment: "{{request.comments}}"</p>
-					<p ng-if="request.status > 90">	{{request.timestamp | amCalendar }}</p>
-
 				</ion-item>
-			  <ion-item class="tabs tabs-secondary tabs-icon-left" ng-if="request.status < 90">
+			  <ion-item class="tabs tabs-secondary tabs-icon-left" ng-if="request.status < 2">
 			    <a class="tab-item accept" href="#/app/tutor_requests/{{request.id}}">
 			      <i class="icon ion-thumbsup"></i> Accept
 			    </a>

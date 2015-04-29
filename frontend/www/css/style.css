@@ -114,6 +114,9 @@
 	color: #111;
 	height: 75vh;
 }
+.header .item.item-dark {
+	border: none;
+}
 .newsfeed p {
 	margin-bottom: 5px;
 }
@@ -239,10 +242,12 @@
 	margin: 2em 0 1em 0;
 }
 
-.request-type-99 {
-	color: #777;
+.card.request-type-99 {
+	background: repeating-linear-gradient( -55deg, #fee, #fee 10px, #fafafa 10px, #fafafa 20px );
 }
-
+.card.request-type-3, .card.request-type-4 {
+	background: repeating-linear-gradient( -55deg, #eee, #eee 10px, #fafafa 10px, #fafafa 20px );
+}
 /* Session pending screen */
 #session-pending ion-content {
 	background: #5A5A5A;
@@ -329,7 +334,7 @@
 	margin-top: 1em;
 }
 
-#session .rating {
+.rating {
 	text-align: center;
 	color: #00B197;	
 	font-size: 1.5em;
