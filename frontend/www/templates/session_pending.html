@@ -22,7 +22,6 @@
 				</div>	
 			</div>			
 			<ion-item class="item grey">		
-				<button class="button button-block button-tutyr" ng-click="fakeAccept()">Debug: Request Confirm</button>
 				<button class="button button-block button-tutyr" ng-click="tuteeCancel()">Cancel Request</button>
 			</ion-item>
 		</div>
@@ -30,26 +29,22 @@
 			<ui-gmap-google-map 
 				center='map.center' 
 				zoom='map.zoom' 
-				options='map.options'>
+				options='map.options'
+				ng-if='session.location_latitude'>
 			</ui-gmap-google-map>			
-			<ion-item ng-if="session.location_comments" class="item-divider">
-				Custom location
-			</ion-item>
-			<ion-item ng-if="session.location_comments" class="item-text-wrap">
-				Your tutor says: "{{session.location_comments}}"
-			</ion-item>
 			<ion-item class="item directions item-text-wrap">
+				<p>Please meet up with your Tutyr to begin your session.</p>
 				<h2>Your Tutyr</h2>
-				<p>{{session.tutor_to.realname}}</p>
+				<p>{{session.tutor_to.real_name}}</p>
 				<h2>Special Instructions</h2>
-				<p>{{session.location_comments}}</p>
-				<button class="button button-block button-tutyr">Get Directions</button>
+				<p>{{session.location_comments||"None given."}}</p>
+				<button class="button button-block button-tutyr" ng-show="session.location_latitude" ng-click="getDirections()">Get Directions</button>
 			</ion-item>			
 		</div>		
 		<div ng-if="session.status==99">
-			<ion-item>{{session.tutor_to.real_name}} has declined your tutoring request.</ion-item>
+			<ion-item class="item-text-wrap">{{session.tutor_to.real_name}} has declined your tutoring request.</ion-item>
 			<ion-item>
-				<button class="button button-block button-tutyr" ng-click="$state.go('app.intro')">Okay</button>
+				<button class="button button-block button-tutyr" ng-click="sessionOver()">Okay</button>
 		</div>
   </ion-content>
 </ion-view>

@@ -29,9 +29,10 @@
 				</ion-item>	
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
-					<strong>{{session.session_end | amDifference : session.session_start : 'minutes' }}m</strong> 
-					session @ <strong>${{session.tutor_to.hourly_rate}}/hr</strong>
-				</ion-item>
+					Your session was <strong>{{session.session_length.humanize()}}</strong> 
+					 @ <strong>${{session.tutor_to.hourly_rate}}/hr = {{session.session_cost | currency}}
+</strong>
+				</ion-item>				
 				<ion-item class="item-divider">How Was Your Student?</ion-item>
 				<ion-item class="rating">
 					<span ng-show="rating.rating">[{{rating.rating}}/5]</span> <rating ng-model="rating.rating" readonly="false" /> 
@@ -67,8 +68,10 @@
 				</ion-item>					
 				<ion-item class="item-divider">Summary</ion-item>
 				<ion-item class="item-text-wrap">
-					<strong>{{session.session_end | amDifference : session_start : 'minutes' }}m</strong> tutoring session costing <strong>$0</strong>
-				</ion-item>
+					Your session was <strong>{{session.session_length.humanize()}}</strong> 
+					 @ <strong>${{session.tutor_to.hourly_rate}}/hr = {{session.session_cost | currency}}
+</strong>
+				</ion-item>				
 				<ion-item class="item-divider">How Was Your Tutor?</ion-item>
 				<ion-item class="rating">
 					<span ng-show="session.rating">[{{session.rating}}/5]</span> <rating ng-model="session.rating" readonly="false" /> 

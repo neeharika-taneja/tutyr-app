@@ -9,6 +9,7 @@
 		    <select ng-model="requestFilter">
 		      <option value="0">New</option>
 		      <option value="4">Completed</option>
+		      <option value="98">Cancelled</option>
 		      <option value="99">Declined</option>
 					<option value="!1">All</option>
 		    </select>
@@ -38,7 +39,7 @@
 					</p>	
 					<p ng-show="request.comments" ng-if="request.status < 90">Comment: "{{request.comments}}"</p>
 				</ion-item>
-			  <ion-item class="tabs tabs-secondary tabs-icon-left" ng-if="request.status < 2">
+			  <ion-item class="tabs tabs-secondary tabs-icon-left" ng-if="request.status < 2&&!currentUser.busy">
 			    <a class="tab-item accept" href="#/app/tutor_requests/{{request.id}}">
 			      <i class="icon ion-thumbsup"></i> Accept
 			    </a>

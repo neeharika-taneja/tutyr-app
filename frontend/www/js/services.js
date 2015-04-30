@@ -16,7 +16,8 @@ angular.module('starter.services', [])
 		status: {
 			status: base + 'session_status',
 			start: base + 'session_start',
-			end: base + 'session_end'
+			end: base + 'session_end',
+			location: base + 'session/location'
 		},
 		reviews_for: base + "ratings_for"
 	};

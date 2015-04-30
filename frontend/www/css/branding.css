@@ -7,10 +7,9 @@ body, div, button, input, h1, h2, h3, h4, p, em {
 	font-family: 'Open Sans', 'Helvetica', 'Roboto', sans-serif;
 }
 .logo {
-	margin-right: 1em;
-	max-width: 800px;
-	max-height: 200px;
 	margin-top: 6em;
+	max-width: 85vw;
+	margin-left: -5vw;
 }
 .logo-small {
   height: 4.5vh;

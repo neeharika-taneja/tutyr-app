@@ -7,7 +7,7 @@
 		</ion-item>	
 		
 		<div ng-if="thisSessionRoles.userIsTutor" class="tutor">
-			<div ng-if="session.status==2||session.status==3" class="active-session">
+			<div ng-if="session.status==1||session.status==2||session.status==3" class="active-session">
 				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">
 						<img src="{{session.tutor_from.profile_pic}}" />
@@ -21,7 +21,7 @@
 					</ion-item>
 				</div>
 				
-				<div ng-if="session.status==2&&session.session_start">
+				<div ng-if="session.status==2||session.session_start">
 					<ion-item class="tutor-view-timer">
 						<div timer start="session.session_start"></div>
 					</ion-item>	

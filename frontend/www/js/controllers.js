@@ -27,10 +27,22 @@ angular.module('starter.controllers', [])
 		$scope.handleAJAXError(args.error);
 	})
 	
-	$scope.dialog = function(message, title) {
+	$scope.dialog = function(message, title, tryNotify) {
 		var title = typeof(title) === "undefined" ? "" : title;
 		if ( $scope.onDevice() == true || angular.isDefined($scope.onDevice()) ) {
-			$cordovaDialogs.alert(message, title);
+			if ( tryNotify == true ) {
+				try {
+					cordova.plugins.notification.local.schedule({
+				    id: 1,
+				    text: message,
+						badge: 1
+					});
+				} catch (e) {
+					$cordovaDialogs.alert(message, title);					
+				}
+			} else {
+				$cordovaDialogs.alert(message, title);				
+			}
 		} else {
 			if ( title == "") {
 				alert(message);
@@ -123,7 +135,10 @@ angular.module('starter.controllers', [])
 			$scope.currentUser.tutor_mode = false;
 		}
 		$scope.stopRequests();
-		$scope.stopWatch();
+		if ( angular.isDefined(window.refreshTimer) ){
+			$interval.cancel(window.refreshTimer);
+			refreshTimer = undefined;
+		}
 		delete $scope.$storage.currentUser;
 		if ( $scope.currentUser.loggedIn == true ) {
 			openFB.logout(function(){
@@ -155,12 +170,20 @@ angular.module('starter.controllers', [])
 			if ( typeof(window.LOCATION_WATCHER) === 'undefined' ) {
 				$scope.LOCATION_WATCHER = $cordovaGeolocation.watchPosition({
 					frequency: frequency,
-					timeout: 10000,
+					timeout: 20000,
 					enableHighAccuracy: false
 				});
 				$scope.LOCATION_WATCHER.then(null,
 				function(err){
-					alert("Geolocation error: " + err);
+					if ( err.code == err.TIMEOUT ) {
+						// Let's try once more.
+						console.log("Location services. out.");
+						$scope.pingLocation();
+					} 
+					if ( err.code == err.PERMISSION_DENIED ) {
+						var msg = "You can use Tutyr without enabling location services, but certain location-enabled features may not work.";
+						$scope.dialog(msg, "Location");
+					}
 				},
 				function(position){
 					// Here is where you send the current location to the server
@@ -217,16 +240,18 @@ angular.module('starter.controllers', [])
 			// }
 			window.requestTimer = $interval(function() {
 				console.log("Checking for new Tutyr requests...");
-				$http.get(API.requests + "/" + $scope.currentUser.facebook_id + "?filt=0")
-					.success(function(data, status){
-						if ( data.length > $scope.currentUser.nrequests )   {
-							$scope.currentUser.nrequests = data.length;
-							$scope.dialog("You have a new tutoring request!", "Tutyr");
-						}
-					})
-					.error(function(err) {
-						$scope.handleAJAXError(err);
-					})
+				if ( !$scope.currentUser.busy ) {
+					$http.get(API.requests + "/" + $scope.currentUser.facebook_id + "?filt=0")
+						.success(function(data, status){
+							if ( data.length > $scope.currentUser.nrequests )   {
+								$scope.currentUser.nrequests = data.length;								
+								$scope.dialog("You have a new tutoring request!", "Tutyr", true);
+							}
+						})
+						.error(function(err) {
+							$scope.handleAJAXError(err);
+						});
+				}	
 			},frequency);			
 		}
 	};
@@ -302,7 +327,12 @@ angular.module('starter.controllers', [])
 		$scope.$watch($scope.currentUser, function(){
 			// Mirror current user to local storage.
 			$scope.$storage.currentUser = $scope.currentUser;
-		}); 						
+		}); 		
+		if ( $localStorage.inProgress != false)	{
+			$state.go('app.session', {id: $localStorage.inProgress})
+			$scope.dialog("You had a session in progress.", "Tutyr");
+			// $localStorage.inProgress = false;
+		}
 	};	
 	
 	// Location ping on load
@@ -440,8 +470,8 @@ angular.module('starter.controllers', [])
 	$scope.request = Session;
 	$scope.acceptRequest = function() {
 		console.log($scope.request);
-
-		// Generate
+		
+		// Generate location information
 		if ( $scope.currentUser.latitude ) {
 			$scope.request.location_latitude = $scope.currentUser.latitude;
 			$scope.request.location_longitude = $scope.currentUser.longitude;
@@ -452,18 +482,35 @@ angular.module('starter.controllers', [])
 			} 
 		}		
 
+		var tutorLocation = {
+			latitude: $scope.currentUser.latitude ? $scope.currentUser.latitude : null,
+			longitude: $scope.currentUser.longitude ? $scope.currentUser.longitude : null,
+			comments: $scope.request.location_comments,
+			id: $scope.request.id
+		};
+		
+		// Update session status		
 		var accept = {
 			id: $scope.request.id,
 			status: 1
-		};
+		};				
 		
-		$http.post(API.status.status, accept)
+		$http.post(API.status.location, tutorLocation) // Update location
 			.success(function(data, status) {
-				$state.go('app.session', {id: $scope.request.id});				
+				console.log("Successfully pushed location.");
+				
+				$http.post(API.status.status, accept)			// Update status on success
+					.success(function(data, status) {
+						console.log("Successfully changed status from 0 to 1.");
+						$state.go('app.session', {id: $scope.request.id});				
+					})
+					.error(function(err) {
+						$scope.handleAJAXError(err);
+					});						
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
-			});		
+			});
 	}
 })
 
@@ -495,8 +542,7 @@ angular.module('starter.controllers', [])
 
 /* ------ Tutoring session controllers ------ */
 
-.controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state, $ionicHistory, $rootScope) {
-
+.controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state, $ionicHistory, $rootScope, $localStorage, $cordovaInAppBrowser) {
 	$scope.session = Session;
 	$scope.map = {
 		center: {
@@ -515,6 +561,12 @@ angular.module('starter.controllers', [])
 			$scope.thisSessionRoles.userIsTutee = $scope.session.tutor_from.facebook_id == $scope.currentUser.facebook_id;			
 		}
 	});
+	
+	$scope.getDirections = function() {
+		var latLng = $scope.session.location_latitude + ", " + $scope.location_longitude
+		var url = "https://maps.google.com/?daddr=" + latlng; 
+		$cordovaInAppBrowser.open(url, '_system');
+	}	
 	
 	$scope.changeStatus = function(id, status) { 
 		var data = {
@@ -538,6 +590,11 @@ angular.module('starter.controllers', [])
 	$scope.completeSession = function() {
 		// Send status change 4 to server
 		// Send ratings/comments to server
+		if ( !$scope.rating.rating ) {
+			$scope.dialog("Please rate this tutoring session.", 'Tutyr');
+			return;
+		}
+		
 		$scope.changeStatus($scope.session.id, 4)
 			.success(function(data, status){
 				$scope.session = data;
@@ -585,6 +642,7 @@ angular.module('starter.controllers', [])
 	
 	$scope.startWatch = function(interval) {
 		// Start statusWatch() to redirect to pages based on status
+		console.log("Starting statusWatch");
 		if ( angular.isDefined(window.refreshTimer)) { 
 			return;
 		} else {
@@ -597,6 +655,8 @@ angular.module('starter.controllers', [])
 	
 	$scope.stopWatch = function() {
 		// Kill statusWatch refresh timer
+		console.log("Stopping statusWatch");
+		$localStorage.inProgress = false;		
 		if ( angular.isDefined(window.refreshTimer) ){
 			$interval.cancel(window.refreshTimer);
 			refreshTimer = undefined;
@@ -609,11 +669,67 @@ angular.module('starter.controllers', [])
 			disableBack: true
 		});				
 		$state.go('app.intro');
+		$localStorage.inProgress = false;		
 		$scope.stopWatch();		
 	}
 	
+	$scope.switchStatus = function() {
+		$ionicHistory.nextViewOptions({
+			disableBack: true
+		});				
+		if ( $scope.session.status > 0  && $scope.session.status < 90 )  {
+			$localStorage.inProgress = $scope.session.id;
+		} 
+		switch ( $scope.session.status ) {
+			case 0: 
+				if ( $scope.thisSessionRoles.userIsTutor ) {
+					$state.go('app.tutor_requests.index', {id: $scope.session.id});							
+				} else {
+					$state.go('app.session_pending', {id: $scope.session.id});							
+				}
+				break;						
+			case 1:
+				if ( $scope.thisSessionRoles.userIsTutor ) {
+					$state.go('app.session', {id: $scope.session.id});							
+				} else {
+					$state.go('app.session_pending', {id: $scope.session.id});							
+				}
+				break;
+			case 2:
+				$state.go('app.session', {id: $scope.session.id});
+				break;
+			case 3:
+				$state.go('app.session_over', {id: $scope.session.id});
+				$scope.stopWatch();
+				break;
+			case 4:
+				$state.go('app.session_over', {id: $scope.session.id});
+				$scope.stopWatch();
+				break;
+			case 98:
+				if ( $scope.thisSessionRoles.userIsTutor ) {
+					// You are the tutor
+					$scope.dialog("Your tutee cancelled the request.", "Request cancelled")
+					$state.go('app.intro');
+				} else { 
+					$state.go('app.intro');
+				}
+				$scope.stopWatch();						
+				break;
+			case 99:
+				$state.go('app.intro');
+				$localStorage.inProgress = false;				
+				break;	
+			default:
+				console.log("Unexpected state.", $scope.session);
+				break;
+		} // end switch				
+	}
+	
+	
 	$scope.statusWatch = function() {
 		// Watch for changes in session status and redirect to appropriate page
+		console.log("Called statusWatch");
 		if ( angular.isDefined($scope.session.status) ) {
 			var status_map = {
 				0: "app.session_pending",
@@ -629,52 +745,7 @@ angular.module('starter.controllers', [])
 				}
 				return;
 			} else {
-				$ionicHistory.nextViewOptions({
-					disableBack: true
-				});				
-				
-							
-				switch ( $scope.session.status ) {
-					case 0: 
-						if ( $scope.thisSessionRoles.userIsTutor ) {
-							$state.go('app.tutor_requests.index', {id: $scope.session.id});							
-						} else {
-							$state.go('app.session_pending', {id: $scope.session.id});							
-						}
-						break;						
-					case 1:
-						if ( $scope.thisSessionRoles.userIsTutor ) {
-							$state.go('app.session', {id: $scope.session.id});							
-						} else {
-							$state.go('app.session_pending', {id: $scope.session.id});							
-						}
-						break;
-					case 2:
-						$state.go('app.session', {id: $scope.session.id});
-						break;
-					case 3:
-						$scope.sessionOver();
-						$state.go('app.session_over', {id: $scope.session.id});
-						$scope.stopWatch();
-						break;
-					case 4:
-						$state.go('app.session_over', {id: $scope.session.id});
-						$scope.stopWatch();
-						break;
-					case 98:
-						if ( userIsTutor ) {
-							// You are the tutor
-							$scope.dialog("Your tutee cancelled the request.", "Request cancelled")
-							$state.go('app.intro');
-						} else { 
-							$state.go('app.intro');
-						}
-						$scope.stopWatch();						
-						break;
-					default:
-						console.log("Unexpected state.");
-						break;
-				} // end switch					
+				$scope.switchStatus();
 				$rootScope.redirectStarted = true;							
 			} // endif correct state
 		} // endif status defined
@@ -684,7 +755,7 @@ angular.module('starter.controllers', [])
 		// Mark session_start timestamp 
 		$http.post(API.status.start, {id: $scope.session.id})
 			.success(function(data, status) {
-				$scope.session = data;
+				console.log("Successfully marked session start.");
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
@@ -693,6 +764,7 @@ angular.module('starter.controllers', [])
 		// Change session status
 		$scope.changeStatus($scope.session.id, 2)
 			.success(function(data, status) {
+				console.log("Changed status to 2.");
 				$scope.session = data;
 			})
 			.error(function(err) {
@@ -704,7 +776,7 @@ angular.module('starter.controllers', [])
 		// Mark session_end timestamp
 		$http.post(API.status.end, {id: $scope.session.id})
 			.success(function(data, status) {
-				$scope.session = data;
+				console.log("Session successfully ended");
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
@@ -724,5 +796,8 @@ angular.module('starter.controllers', [])
 			});
 	}
 	
-	$scope.startWatch(10000);
+	if ( $ionicHistory.currentStateName() != 'app.session_over' ) {		
+		$scope.startWatch(10000);
+	} 
+	$scope.switchStatus();
 });
