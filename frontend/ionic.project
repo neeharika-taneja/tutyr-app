@@ -1,4 +1,11 @@
 {
   "name": "tutyr",
-  "app_id": "c8dbc8ee"
+  "app_id": "c8dbc8ee",
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
+  ]
 }
