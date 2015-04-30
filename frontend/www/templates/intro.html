@@ -35,7 +35,10 @@
 				<button class="button button-block button-tutyr" ng-click="toggleSearch()">Search and Filter</button>
 			</ion-item>
 			<div class="newsfeed-profiles">
-				<div ng-repeat="profile in feed | filter:searchFilter" class="profile card" ng-if="feed">
+				<div ng-repeat="profile in feed | filter:searchFilter" 
+					class="profile card" 
+					ng-if="feed"
+					ng-click="gotoProfile(profile.facebook_id)">
 					<div class="row profile-main">
 						<div class="col col-25">
 							<div class="profile-image">
@@ -63,8 +66,8 @@
 				<p>There are no Tutyrs in the area.</p>				
 			</div>	
 			<div ng-if="!feed" class="inactive-session">
-				<i class="icon ion-help-circled"></i>
-				<p>There was an error loading Tutyrs from the server.</p>				
+				<ion-spinner></ion-spinner>
+				<p>Loading Tutyrs from the server...</p>				
 			</div>	
 		</div>	<!-- /profiles -->
   </ion-content>

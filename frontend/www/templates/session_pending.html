@@ -1,4 +1,4 @@
-<ion-view view-title="{{title}}" id="session-pending">
+<ion-view view-title="Your Tutyr Session" id="session-pending">
   <ion-content>
 		<!-- Tutee view - waiting on request -->
 		<div id="tutee-waiting" ng-if="session.status==0">
@@ -29,7 +29,8 @@
 			<ui-gmap-google-map 
 				center='session.mapData.center' 
 				zoom='session.mapData.zoom' 
-				options='session.mapData.options'>
+				options='session.mapData.options'
+				ng-show="session.location_latitude&&session.location_longitude">
 			</ui-gmap-google-map>			
 			<ion-item class="item directions item-text-wrap">
 				<p>Please meet up with your Tutyr to begin your session.</p>

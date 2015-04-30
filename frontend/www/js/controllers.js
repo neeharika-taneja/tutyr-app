@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs, $localStorage, $cordovaLocalNotification) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs, $localStorage, $cordovaLocalNotification, $ionicSideMenuDelegate) {
 
 	$scope.$storage = $localStorage;
 
@@ -19,13 +19,14 @@ angular.module('starter.controllers', [])
 				$scope.dialog(err);
 			}
 		} else {
-			$scope.dialog("Error.");
+			$scope.dialog("There was a problem loading data from the server.", "Error");
 		}	
 	}	
 	
 	$scope.$on('Loading.error', function(event, args) {
 		$scope.handleAJAXError(args.error);
 	})
+	
 	
 	$scope.dialog = function(message, title, tryNotify) {
 		var title = typeof(title) === "undefined" ? "" : title;
@@ -155,11 +156,6 @@ angular.module('starter.controllers', [])
 			alert("You attempted to log out, but you're not logged in.");
 		}
 	};
-
-	$scope.fakeLogin = function() {
-		$scope.currentUser.loggedIn = true;
-	}
-
 	
 	$scope.localToggleStatus = {
 		hasTapped: false
@@ -277,11 +273,12 @@ angular.module('starter.controllers', [])
 				if ( $scope.currentUser.tutor_mode == true ) {
 					console.log("Tutor mode on");
 					if ( $scope.currentUser.bio1 == "" ) {
-						// toast("Let's fill out your Tutyr profile!")
+						$scope.dialog("Let's fill out your profile!", "New Tutyr")
 						$ionicHistory.nextViewOptions({
 							disableBack: true
 						});
 						$state.go('app.edit_profile');
+						$ionicSideMenuDelegate.toggleLeft();
 					}
 					$http.post(API.tutor_mode, tutorToggleMessage)
 						.success(function(data, status) {
@@ -344,8 +341,7 @@ angular.module('starter.controllers', [])
 	
 	if ( $scope.currentUser.tutor_mode ) {
 		$scope.pollRequests(20*1000);		
-	}
-	
+	}	
 })
 
 
@@ -359,7 +355,7 @@ angular.module('starter.controllers', [])
 	}
 })
 
-.controller('HomeScreenController', function($scope, API, $http, $cordovaGeolocation){
+.controller('HomeScreenController', function($scope, API, $http, $cordovaGeolocation, $state){
 	$scope.updateLocation = function() {
 		$cordovaGeolocation
 			.getCurrentPosition({timeout: 15000, enableHighAccuracy:false})
@@ -394,9 +390,14 @@ angular.module('starter.controllers', [])
 		$scope.$broadcast('scroll.refreshComplete');
 	};
 	
+	$scope.gotoProfile = function(id) {
+		$state.go('app.view_profile', {id: id});
+	};
+	
 	$scope.toggleSearch = function() {
 		$scope.showSearch = !$scope.showSearch;
 	}
+	
 	$scope.showSearch = false;
 	
 	$scope.$watch("currentUser.loggedIn", function(){
@@ -404,6 +405,15 @@ angular.module('starter.controllers', [])
 			$scope.refresh();					
 		}
 	});
+
+	$scope.$on('$ionicView.enter', function() {
+		if ( $scope.currentUser.loggedIn == true ) {
+			console.log("Logged in home screen.");
+			$scope.refresh();					
+		}
+	});
+	
+	
 })
 
 .controller('ViewProfileController', function($scope, ProfileObject, ReviewsObject, API, $http, $state, $ionicLoading, $ionicHistory) {
@@ -434,7 +444,7 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('TutorRequestsController', function($scope, $ionicLoading, API, $http) {
+.controller('TutorRequestsController', function($scope, $ionicLoading, API, $http, $interval) {
 	$scope.requests = {};
 	$scope.requestFilter = 0;
 	$scope.refresh = function(pulled) {
@@ -467,7 +477,11 @@ angular.module('starter.controllers', [])
 			});
 	}
 	
-	$scope.refresh();
+	
+	$scope.$on('$ionicView.enter', function() {
+		console.log("Tutor request inbox");
+		$scope.refresh();
+	});	
 })
 
 .controller('TutorRequestController', function($scope, $state, Session, $http, API) {

@@ -48,6 +48,7 @@
 	      <ion-list>
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/tutor_requests" ng-if="currentUser.tutor_mode">
 						<i class="icon ion-email"></i> Requests
+				    <span class="badge badge-assertive">{{currentUser.nrequests}}</span>						
 	        </ion-item>
 	        <ion-item class="item-icon-left" nav-clear menu-close href="#/app/edit_profile" ng-if="currentUser.tutor_mode">
 						<i class="icon ion-edit"></i> Profile
