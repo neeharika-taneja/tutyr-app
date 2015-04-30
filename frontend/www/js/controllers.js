@@ -33,10 +33,11 @@ angular.module('starter.controllers', [])
 		if ( $scope.onDevice() == true || angular.isDefined($scope.onDevice()) ) {
 			if ( tryNotify == true ) {
 				try {
-					cordova.plugins.notification.local.schedule({
+					window.plugin.notification.local.promptForPermission();
+					window.plugin.notification.local.add({
 				    id: 1,
 				    text: message,
-						badge: 1
+						badge: 1						
 					});
 				} catch (e) {
 					$cordovaDialogs.alert(message, title);					
