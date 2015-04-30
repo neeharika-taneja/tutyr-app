@@ -54,6 +54,21 @@ angular.module('starter.services', [])
 						self.session_length = moment.duration(moment(data.session_end) - moment(data.session_start));
 						self.session_cost = Math.round(self.session_length.asHours() * self.tutor_to.hourly_rate * 100, 3)/100;
 					}
+					
+					if ( data.location_latitude && data.location_longitude ) {
+						self.mapData = {
+							center: {
+								latitude: data.location_latitude,
+								longitude: data.location_longitude
+							},
+							zoom: 10,
+							options: {
+								disableDefaultUI: true
+							}
+						};
+						
+					}
+					
 				})
 				.error(function(error) {
 					$rootScope.$broadcast('Loading.error', {error: error});

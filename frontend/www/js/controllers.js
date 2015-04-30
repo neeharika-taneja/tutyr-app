@@ -328,12 +328,16 @@ angular.module('starter.controllers', [])
 			// Mirror current user to local storage.
 			$scope.$storage.currentUser = $scope.currentUser;
 		}); 		
-		if ( $localStorage.inProgress != false)	{
-			$state.go('app.session', {id: $localStorage.inProgress})
+		if ( angular.isDefined($localStorage.inProgress) && $localStorage.inProgress != false)	{
 			$scope.dialog("You had a session in progress.", "Tutyr");
-			// $localStorage.inProgress = false;
 		}
 	};	
+	
+	$scope.restoreSession = function() {
+		var id = $localStorage.inProgress;
+		$localStorage.inProgress = false;		
+		$state.go('app.session', {id: id});
+	}
 	
 	// Location ping on load
 	$scope.pingLocation();
@@ -544,16 +548,6 @@ angular.module('starter.controllers', [])
 
 .controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state, $ionicHistory, $rootScope, $localStorage, $cordovaInAppBrowser) {
 	$scope.session = Session;
-	$scope.map = {
-		center: {
-			latitude: $scope.session.location_latitude,
-			longitude: $scope.session.location_longitude
-		},
-		zoom: 10,
-		options: {
-			disableDefaultUI: true
-		}
-	};
 	$scope.thisSessionRoles = {}
 	$scope.$watch("session.tutor_from", function(){
 		if ( $scope.session.tutor_to ) {
@@ -563,8 +557,9 @@ angular.module('starter.controllers', [])
 	});
 	
 	$scope.getDirections = function() {
-		var latLng = $scope.session.location_latitude + ", " + $scope.location_longitude
-		var url = "https://maps.google.com/?daddr=" + latlng; 
+		console.log($scope.session);
+		var latLng = $scope.session.location_latitude + ", " + $scope.session.location_longitude
+		var url = "https://maps.google.com/?daddr=" + latLng; 
 		$cordovaInAppBrowser.open(url, '_system');
 	}	
 	

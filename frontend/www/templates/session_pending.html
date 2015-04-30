@@ -27,10 +27,9 @@
 		</div>
 		<div id="tutee-directions" ng-if="session.status==1">
 			<ui-gmap-google-map 
-				center='map.center' 
-				zoom='map.zoom' 
-				options='map.options'
-				ng-if='session.location_latitude'>
+				center='session.mapData.center' 
+				zoom='session.mapData.zoom' 
+				options='session.mapData.options'>
 			</ui-gmap-google-map>			
 			<ion-item class="item directions item-text-wrap">
 				<p>Please meet up with your Tutyr to begin your session.</p>
