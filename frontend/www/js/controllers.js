@@ -66,7 +66,13 @@ angular.module('starter.controllers', [])
 					$cordovaDialogs.alert(message, title);					
 				}
 			} else {
-				$cordovaDialogs.alert(message, title);				
+				if ( !$scope.dialogUp ) { // Prevent dialog spam
+					$scope.dialogUp = true;
+					$cordovaDialogs.alert(message, title)
+						.then(function(){
+							$scope.dialogUp = false;
+						});
+				}
 			}
 		} else {
 			if ( title == "") {
@@ -76,6 +82,8 @@ angular.module('starter.controllers', [])
 			}
 		}
 	}
+	window.dialog = $scope.dialog;
+	
 	
 	$scope.fbLogin = function() {
 		/**
@@ -858,6 +866,6 @@ angular.module('starter.controllers', [])
 		$scope.switchStatus();
 	});
 	$scope.$on('$ionicView.leave', function() {
-		$scope.$stopWatch();
+		$scope.stopWatch();
 	})
 });

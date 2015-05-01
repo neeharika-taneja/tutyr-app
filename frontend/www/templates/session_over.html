@@ -59,11 +59,13 @@
 					<p class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}">
 					</p>
-					<p class="profile-name">Your tutor was {{session.tutor_to.realname}}</p>
+					<p class="profile-name">Your tutor was {{session.tutor_to.real_name}}</p>
 					<p class="profile-meta">
 						<span class="rate">${{session.tutor_to.hourly_rate}}/hour</span> 
+						<span class="location" ng-if="session.location_latitude && session.location_longitude">							
 						&bull; 
-						<span class="location">At {{session.location_comments}}</span>
+						At <reverse-geocode lat="{{session.location_latitude}}" lng="{{session.location_longitude}}"></reverse-geocode>
+						</span>
 					</p>
 				</ion-item>					
 				<ion-item class="item-divider">Summary</ion-item>
@@ -74,7 +76,7 @@
 				</ion-item>				
 				<ion-item class="item-divider">How Was Your Tutor?</ion-item>
 				<ion-item class="rating">
-					<span ng-show="session.rating">[{{session.rating}}/5]</span> <rating ng-model="session.rating" readonly="false" /> 
+					<span ng-show="session.rating">[{{session.rating}}/5]</span> <rating ng-model="rating.rating" readonly="false" /> 
 				</ion-item>
 				<ion-item class="item-input">
 					<textarea placeholder="Any comments?"></textarea>
