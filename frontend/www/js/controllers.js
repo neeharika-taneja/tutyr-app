@@ -25,8 +25,31 @@ angular.module('starter.controllers', [])
 	
 	$scope.$on('Loading.error', function(event, args) {
 		$scope.handleAJAXError(args.error);
-	})
+	});
 	
+	// Toggle tutor mode when necessary on server side when app suspends / resumes
+	
+	$scope.$on('Device.pause', function() {
+		if ( $scope.currentUser.tutor_mode == true ) {
+			$localStorage.suspendWithTutorMode = true;
+			var tutorToggleMessage = {
+				facebook_id: $scope.currentUser.facebook_id,
+				tutor_mode: false
+			};
+			$http.post(API.tutor_mode, tutorToggleMessage);			
+		}
+	});
+	
+	$scope.$on('Device.resume', function() {
+		if ( $localStorage.suspendWithTutorMode == true ) {
+			delete $localStorage.suspendWithTutorMode;
+			var tutorToggleMessage = {
+				facebook_id: $scope.currentUser.facebook_id,
+				tutor_mode: true
+			};
+			$http.post(API.tutor_mode, tutorToggleMessage);
+		}
+	});
 	
 	$scope.dialog = function(message, title, tryNotify) {
 		var title = typeof(title) === "undefined" ? "" : title;
@@ -260,6 +283,49 @@ angular.module('starter.controllers', [])
 		}
 	};
 
+
+	$scope.tutorOn = function() {
+		var tutorToggleMessage = {
+			facebook_id: $scope.currentUser.facebook_id,
+			tutor_mode: true
+		};
+		
+		$http.post(API.tutor_mode, tutorToggleMessage)
+			.success(function(data, status) {
+				if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
+					$scope.currentUser.tutor_mode = true;
+					$scope.pollLocation(7.5*60*1000);
+					$scope.pollRequests(20*1000);
+				}
+			})
+			.error(function(err) {
+				// it failed, so toggle back to whatever the old state was
+				// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
+				$scope.handleAJAXError(err);
+			});
+	};
+	
+	$scope.tutorOff = function() {
+		var tutorToggleMessage = {
+			facebook_id: $scope.currentUser.facebook_id,
+			tutor_mode: false
+		};
+			
+		$http.post(API.tutor_mode, tutorToggleMessage)
+			.success(function(data, status) {
+				if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
+					$scope.currentUser.tutor_mode = false;
+					$scope.clearLocation();
+					$scope.stopRequests();
+				}
+			})
+			.error(function(err) {
+				// it failed, so toggle back to whatever the old state was
+				// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
+				$scope.handleAJAXError(err);
+			});
+	}
+
 	// Monitor status of Tutor toggle
 	$scope.monitorTutorToggle = function() {
 		if ( $scope.localToggleStatus.hasTapped == false ) {
@@ -281,34 +347,11 @@ angular.module('starter.controllers', [])
 						$state.go('app.edit_profile');
 						$ionicSideMenuDelegate.toggleLeft();
 					}
-					$http.post(API.tutor_mode, tutorToggleMessage)
-						.success(function(data, status) {
-							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
-								$scope.currentUser.tutor_mode = true;
-								$scope.pollLocation(7.5*60*1000);
-								$scope.pollRequests(20*1000);
-							}
-						})
-						.error(function(err) {
-							// it failed, so toggle back to whatever the old state was
-							// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
-							$scope.handleAJAXError(err);
-						});
+					$scope.tutorOn();
+
 				} else {
 					console.log("Tutor mode off");
-					$http.post(API.tutor_mode, tutorToggleMessage)
-						.success(function(data, status) {
-							if ( data.tutor_mode == $scope.currentUser.tutor_mode ) {								
-								$scope.currentUser.tutor_mode = false;
-								$scope.clearLocation();
-								$scope.stopRequests();
-							}
-						})
-						.error(function(err) {
-							// it failed, so toggle back to whatever the old state was
-							// $scope.currentUser.tutor_mode = !$scope.currentUser.tutor_mode;
-							$scope.handleAJAXError(err);
-						});
+					$scope.tutorOff();
 				}
 			});					
 		}
@@ -806,8 +849,15 @@ angular.module('starter.controllers', [])
 			});
 	}
 	
+	
 	if ( $ionicHistory.currentStateName() != 'app.session_over' ) {		
 		$scope.startWatch(10000);
 	} 
-	$scope.switchStatus();
+	
+	$scope.$on('$ionicView.enter', function() {
+		$scope.switchStatus();
+	});
+	$scope.$on('$ionicView.leave', function() {
+		$scope.$stopWatch();
+	})
 });
