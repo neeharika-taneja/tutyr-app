@@ -640,7 +640,7 @@ angular.module('starter.controllers', [])
 	$scope.session = Session;
 	$scope.thisSessionRoles = {}
 	$scope.$watch("session.tutor_from", function(){
-		if ( $scope.session.tutor_to ) {
+		if ( angular.isDefined($scope.session) && $scope.session.tutor_to ) {
 			$scope.thisSessionRoles.userIsTutor = $scope.session.tutor_to.facebook_id == $scope.currentUser.facebook_id;
 			$scope.thisSessionRoles.userIsTutee = $scope.session.tutor_from.facebook_id == $scope.currentUser.facebook_id;			
 		}
@@ -667,7 +667,7 @@ angular.module('starter.controllers', [])
 			.success(function(data, status) {
 				$scope.session = data;				
 			})
-			.err(function(error) {
+			.error(function(error) {
 				$scope.handleAJAXError(error);
 			});
 	}
@@ -762,12 +762,13 @@ angular.module('starter.controllers', [])
 	$scope.sessionOver = function() {
 		// Shortcut to end timer and go back to homescreen
 		console.log("Called sessionOver, stopping.");
+		$localStorage.inProgress = false;		
+		$scope.stopWatch();		
+		delete $scope.session;						
 		$ionicHistory.nextViewOptions({
 			disableBack: true
 		});				
-		$state.go('app.intro');
-		$localStorage.inProgress = false;		
-		$scope.stopWatch();		
+		$state.go('app.intro');		
 	}
 	
 	$scope.switchStatus = function() {
@@ -808,13 +809,15 @@ angular.module('starter.controllers', [])
 				if ( $scope.thisSessionRoles.userIsTutor ) {
 					// You are the tutor
 					$scope.dialog("Your tutee cancelled the request.", "Request cancelled")
+					delete $scope.session;
 					$state.go('app.intro');
 				} else { 
+					delete $scope.session;
 					$state.go('app.intro');
 				}
 				break;
 			case 99:
-				$scope.stopWatch();				
+				$scope.stopWatch();		
 				$localStorage.inProgress = false;				
 				break;	
 			default:
@@ -840,13 +843,13 @@ angular.module('starter.controllers', [])
 				console.log("Current state is correct, no redirect.");
 				if ( $scope.session.status > 2 ) {
 					console.log("State greater than 2, switching and stopping.")
-					$scope.switchStatus();
+					// $scope.switchStatus();
 					$scope.stopWatch();
 				}
 				return;
 			} else {
 				console.log("Incorrect state, switching.");
-				$scope.switchStatus();
+				// $scope.switchStatus();
 				$rootScope.redirectStarted = true;							
 			} // endif correct state
 		} // endif status defined
@@ -886,7 +889,7 @@ angular.module('starter.controllers', [])
 		// Send status change 3 to server
 		$scope.changeStatus($scope.session.id, 3)
 			.success(function(data, status) {
-				$scope.session = data;
+				delete $scope.session;
 				$ionicHistory.nextViewOptions({
 					disableBack: true
 				});				
@@ -898,12 +901,19 @@ angular.module('starter.controllers', [])
 	}
 		
 	if ( $ionicHistory.currentStateName() != 'app.session_over' ) {		
+		console.log("Automatic startwatch");
 		$scope.startWatch(10000);
 	} 
 	
-	$scope.$on('$ionicView.enter', function() {
-		$scope.switchStatus();
+	$scope.$watch('session.status', function(newStatus, oldStatus) {
+		if ( angular.isDefined($scope.session) && angular.isDefined($scope.session.status) && newStatus != oldStatus) {
+			$scope.switchStatus();
+		};
 	});
+
+	// $scope.$on('$ionicView.enter', function() {
+	// 	$scope.switchStatus();
+	// });
 	// $scope.$on('$ionicView.leave', function() {
 	// 	$scope.stopWatch();
 	// })

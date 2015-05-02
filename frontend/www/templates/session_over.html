@@ -54,7 +54,7 @@
 		
 		<!-- ====== Student-side rating view ====== -->
 		<div ng-if="!currentUser.tutor_mode">
-			<div ng-if="session.status == 3" class="active-session">
+			<div ng-if="session.status == 3||session.status==4" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}">
@@ -81,10 +81,8 @@
 				<ion-item class="item-input">
 					<textarea placeholder="Any comments?"></textarea>
 				</ion-item>
-				<ion-item class="venmo-button" ng-show="session.tutor_to.bio3">
-					<button class="button button-block button-tutyr" ng-click="venmoSession()">Pay Using Venmo</button>
-				</ion-item>
 				<ion-item>
+					<button class="button button-block button-calm" ng-click="venmoSession()" ng-show="session.tutor_to.bio3">Pay Using Venmo</button>
 					<button class="button button-block button-tutyr" ng-click="completeSession()">Complete Session</button>
 				</ion-item>
 			</div>	

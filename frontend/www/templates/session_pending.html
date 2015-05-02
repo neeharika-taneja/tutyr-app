@@ -1,7 +1,7 @@
 <ion-view view-title="Your Tutyr Session" id="session-pending">
   <ion-content>
 		<!-- Tutee view - waiting on request -->
-		<div id="tutee-waiting" ng-if="session.status==0">
+		<div id="tutee-waiting" ng-show="session.status==0">
 			<ion-item class="item grey">
 				<p>Waiting For Tutyr...</p>
 				<p><ion-spinner icon="dots" style="fill:#fff;stroke:#fff;"></ion-spinner></p>
@@ -25,7 +25,7 @@
 				<button class="button button-block button-tutyr" ng-click="tuteeCancel()">Cancel Request</button>
 			</ion-item>
 		</div>
-		<div id="tutee-directions" ng-if="session.status==1">
+		<div id="tutee-directions" ng-show="session.status==1">
 			<ui-gmap-google-map 
 				center='session.mapData.center' 
 				zoom='session.mapData.zoom' 

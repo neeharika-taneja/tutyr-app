@@ -19,8 +19,11 @@
 				<ion-item class="item-divider">
 					{{request.timestamp | amCalendar }}
 				</ion-item>	
-				<ion-item class="item-divider item-assertive"  ng-if="request.status > 90" class="declined">
+				<ion-item class="item-divider item-assertive"  ng-if="request.status == 99" class="declined">
 					You declined this request.
+				</ion-item>
+				<ion-item class="item-divider item-assertive"  ng-if="request.status == 98" class="declined">
+					The user cancelled their request.
 				</ion-item>
 				<ion-item class="item-divider item-tutyr"  ng-if="request.status >= 3 && request.status < 90" class="completed">
 					This session is completed.
