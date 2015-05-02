@@ -838,9 +838,7 @@ angular.module('starter.controllers', [])
 
 		$http.post(API.rating, rating)
 			.success(function(data, status) {
-				if ( data.status == true ) {
-					$scope.sessionOver();
-				}
+				$scope.sessionOver();
 			})
 			.error(function(error) {
 				$scope.dialog("There was an error rating this user. Please try again", "Rating error");
@@ -934,7 +932,7 @@ angular.module('starter.controllers', [])
 	
 	if ( $ionicHistory.currentStateName() != 'app.session_over' ) {		
 		console.log("Automatic startwatch");
-		$scope.startWatch(10000);
+		$scope.startWatch(5000);
 	} 
 	
 	$scope.$watch('session.status', function(newStatus, oldStatus) {

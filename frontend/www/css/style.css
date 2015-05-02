@@ -1,4 +1,4 @@
-.ng-enter {
+/*.ng-enter {
   transition:0.55s ease-in all;
   opacity:0;
 }
@@ -16,7 +16,7 @@
 
 .ng-hide.angular-google-map-container {
 	transition: 0.01s ease-out all;
-}
+}*/
 
 .header {
   transition:0.2s linear all;
