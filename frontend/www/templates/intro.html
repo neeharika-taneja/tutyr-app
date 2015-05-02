@@ -46,10 +46,12 @@
 							</div>					
 						</div>
 						<div class="col col-75">	
-							<p class="profile-name">{{profile.real_name}}</p> 
-							<p class="profile-bio">{{profile.bio1}}</p> <!-- subject details -->
-							<rating ng-model="profile.rating" readonly="true" ng-show="profile.num_ratings > 0"></rating>
-							<p class="profile-no-rating" ng-if="profile.num_ratings == 0"><em>No ratings</em></p>
+							<div class="profile-block">
+								<p class="profile-name">{{profile.real_name}}</p> 
+								<p class="profile-bio">{{profile.bio1}}</p> <!-- subject details -->
+								<rating ng-model="profile.rating" readonly="true" ng-show="profile.num_ratings > 0"></rating>
+								<p class="profile-no-rating" ng-if="profile.num_ratings == 0"><em>No ratings</em></p>
+							</div>	
 						</div>	
 					</div>	
 					<hr />
@@ -58,6 +60,9 @@
 						<span class="location" ng-show="profile.latitude && profile.longitude">
 							<reverse-geocode lat="{{profile.latitude}}" lng="{{profile.longitude}}"></reverse-geocode>
 						</span>
+						<span class="location distance" ng-show="profile.distance">
+							&nbsp;&bull;&nbsp;{{profile.distance|number:1}} mi
+						</span>	
 						<span class="location" ng-show="!(profile.latitude && profile.longitude)">No location shared</span>
 					</div>
 			</div> <!-- /profile -->						

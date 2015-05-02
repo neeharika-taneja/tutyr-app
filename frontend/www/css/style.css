@@ -1,17 +1,24 @@
 .ng-enter {
-  transition:0.75s ease-in all;
+  transition:0.55s ease-in all;
   opacity:0;
 }
 .ng-enter.ng-enter-active {
   opacity:1;
 }
 
-.ng-leave {
+.ng-leave, .ng-hide {
   transition:0.55s ease-out all;
   opacity:1;
 }
 .ng-leave.ng-leave-active {
   opacity:0;
+}
+
+.header {
+  transition:0.2s linear all;
+}
+.header.ng-hide {
+	opacity: 0;
 }
 
 .sr-only {
@@ -68,7 +75,6 @@
 	font-weight: 300;
 	padding-bottom: 1em;
 	font-size: 1em;
-	
 }
 
 .user.user-image {
@@ -156,17 +162,19 @@
 .profile-image img {
   width: 5em;
   border-radius: 2.5em;
-  margin-top: 10%;
+
 }}
 #tutor .profile-image img {
 	width: 3.85em;
 	margin:auto;
-
+}
+.profile-block {
+	margin-top: 1rem;
+	margin-left: 10px;
 }
 
 #request-tutor {
 	margin: 20px;
-	margin-top: 40px;
 }
 
 .profile-rating {
@@ -174,7 +182,6 @@
 }
 #profile .profile-meta {
 	color: #fff;
-	margin-top: -10px;
 }
 .profile-meta { 
 	color: #444;
@@ -359,6 +366,9 @@
 }
 
 /* View profile */
+#profile .profile-wrap {
+	margin-top: 10px;
+}
 #profile .header {
 	text-align: center;
 }
@@ -368,7 +378,6 @@
 #profile .header .profile-name {
 	color: #fff;
 	font-size: 1.5em;
-	margin-bottom: 1em;
 }
 #profile span.subject {
   background: #00B197;
@@ -379,4 +388,10 @@
   text-align: center;
   font-size: 0.85em;
   font-weight: 600;
+}
+#profile .item-divider.item-tutyr { 
+	background: #fff;
+}
+#profile .item.item-text-wrap {
+	border-top: none;
 }

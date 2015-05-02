@@ -275,6 +275,7 @@ angular.module('starter.controllers', [])
 		});
 	};
 
+	window.$ih = $ionicHistory;
 	// Poll for new tutor requests
 	$scope.pollRequests = function(frequency) {
 		console.log("Set request checking timer.")
@@ -287,7 +288,9 @@ angular.module('starter.controllers', [])
 				if ( !$scope.currentUser.busy ) {
 					$http.get(API.requests + "/" + $scope.currentUser.facebook_id + "?filt=0")
 						.success(function(data, status){
-							if ( data.length > $scope.currentUser.nrequests )   {
+							var newRequests = data.length > $scope.currentUser.nrequests;
+							var notInbox = ($ionicHistory.currentStateName().indexOf("tutor_request") == -1);
+							if ( newRequests && notInbox ) {
 								$scope.currentUser.nrequests = data.length;								
 								$scope.dialog("You have a new tutoring request!", "Tutyr", true);
 							}

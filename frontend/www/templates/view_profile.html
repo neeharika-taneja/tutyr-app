@@ -4,16 +4,18 @@
 			Currently in a tutoring session
 		</ion-item>	
 		<div class="header">
-			<div class="profile-image">
-				<img src="{{profile.profile_pic}}"> 
-			</div>			
-			<p class="profile-name">{{profile.real_name}}</p>
-			<p class="profile-meta">
-				<span class="rate">${{profile.hourly_rate}}/hour</span> 
-				&bull; 
-				<rating ng-model="profile.rating" readonly="true" ng-if="profile.num_ratings > 0"></rating>
-				<span class="ratings" ng-if="profile.num_ratings==0"><em>No ratings</em></span>
-			</p>
+			<div class="profile-wrap">
+				<div class="profile-image">
+					<img src="{{profile.profile_pic}}"> 
+				</div>			
+				<p class="profile-name">{{profile.real_name}}</p>
+				<p class="profile-meta">
+					<span class="rate">${{profile.hourly_rate}}/hour</span> 
+					&bull; 
+					<rating ng-model="profile.rating" readonly="true" ng-if="profile.num_ratings > 0"></rating>
+					<span class="ratings" ng-if="profile.num_ratings==0"><em>No ratings</em></span>
+				</p>
+			</div>
 			
 			<a href="#/app/confirm/{{profile.facebook_id}}"
 				 class="button button-block button-tutyr" 
