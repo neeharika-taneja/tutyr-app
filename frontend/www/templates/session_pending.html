@@ -27,10 +27,13 @@
 		</div>
 		<div id="tutee-directions" ng-show="session.status==1">
 			<ui-gmap-google-map 
-				center='session.mapData.center' 
-				zoom='session.mapData.zoom' 
-				options='session.mapData.options'
+				center='mapData.center' 
+				zoom='13' 
+				options='mapData.options'
 				ng-show="session.location_latitude&&session.location_longitude">
+				<ui-gmap-marker
+					idkey="0"
+					coords="mapData.center"></ui-gmap-marker>
 			</ui-gmap-google-map>			
 			<ion-item class="item directions item-text-wrap">
 				<p>Please meet up with your Tutyr to begin your session.</p>

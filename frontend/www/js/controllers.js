@@ -517,7 +517,7 @@ angular.module('starter.controllers', [])
 	};
 })
 
-.controller('TutorRequestsController', function($scope, $ionicLoading, API, $http, $interval) {
+.controller('TutorRequestsController', function($scope, $ionicLoading, API, $http, $interval, $filter) {
 	$scope.requests = {};
 	$scope.requestFilter = 0;
 	$scope.refresh = function(pulled) {
@@ -525,6 +525,7 @@ angular.module('starter.controllers', [])
 		$http.get(API.requests + "/" + $scope.currentUser.facebook_id)
 			.success(function(data, status) {
 				$scope.requests = data;
+				$scope.currentUser.nrequests = $filter('filter')(data, {status: 0}).length;
 			})
 			.error(function(error) {
 				$scope.handleAJAXError(error);
@@ -559,6 +560,11 @@ angular.module('starter.controllers', [])
 
 .controller('TutorRequestController', function($scope, $state, Session, $http, API, $ionicHistory) {
 	$scope.request = Session;
+	if ( $scope.request.status == 98 ) {
+		$state.$go("app.tutor_requests.index");
+		$scope.dialog("Your tutee cancelled the request.", "Request cancelled")		
+	};
+	
 	$scope.acceptRequest = function() {
 		console.log($scope.request);
 		
@@ -583,7 +589,7 @@ angular.module('starter.controllers', [])
 		// Update session status		
 		var accept = {
 			id: $scope.request.id,
-			status: 2
+			status: 1
 		};				
 		
 		$http.post(API.status.location, tutorLocation) // Update location
@@ -592,7 +598,7 @@ angular.module('starter.controllers', [])
 				
 				$http.post(API.status.status, accept)			// Update status on success
 					.success(function(data, status) {
-						console.log("Successfully changed status from 1 to 2.");
+						console.log("Successfully changed status from 0 to 1");
 						$ionicHistory.nextViewOptions({
 							disableBack: true
 						});											
@@ -636,9 +642,14 @@ angular.module('starter.controllers', [])
 
 /* ------ Tutoring session controllers ------ */
 
+
 .controller('TutorSessionController', function($scope, $http, API, $interval, Session, $state, $ionicHistory, $rootScope, $localStorage, $cordovaInAppBrowser) {
+	/* Session objects */
 	$scope.session = Session;
 	$scope.thisSessionRoles = {}
+	$scope.rating = {};
+	
+	/* Define user roles */
 	$scope.$watch("session.tutor_from", function(){
 		if ( angular.isDefined($scope.session) && $scope.session.tutor_to ) {
 			$scope.thisSessionRoles.userIsTutor = $scope.session.tutor_to.facebook_id == $scope.currentUser.facebook_id;
@@ -646,73 +657,24 @@ angular.module('starter.controllers', [])
 		}
 	});
 	
+	/* Session state helper functions */
+	$scope.reloadSession = function() {
+		$http.get(API.session + "/" + $scope.session.id)
+			.success(function(data, status) {
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
+	};
+	
+	/* Button click functions */
+	
 	$scope.getDirections = function() {
 		console.log($scope.session);
 		var latLng = $scope.session.location_latitude + ", " + $scope.session.location_longitude
 		var url = "https://maps.google.com/?daddr=" + latLng; 
 		$cordovaInAppBrowser.open(url, '_system');
-	}	
-	
-	$scope.changeStatus = function(id, status) { 
-		var data = {
-			id: id,
-			status: status
-		}
-		return $http.post(API.status.status, data);
-	}
-	$scope.rating = {};
-
-	$scope.tuteeCancel = function() {
-		$scope.changeStatus($scope.session.id, 98)
-			.success(function(data, status) {
-				$scope.session = data;				
-			})
-			.error(function(error) {
-				$scope.handleAJAXError(error);
-			});
-	}
-
-	$scope.completeSession = function() {
-		// Send status change 4 to server
-		// Send ratings/comments to server
-		if ( !$scope.rating.rating ) {
-			$scope.dialog("Please rate this tutoring session.", 'Tutyr');
-			return;
-		}
-		
-		$scope.changeStatus($scope.session.id, 4)
-			.success(function(data, status){
-				$scope.session = data;
-				$scope.sessionOver();
-			})
-			.error(function(err) {
-				$scope.handleAJAXError(err);
-			});
-		
-			var rating = {
-				rating: $scope.rating.rating,
-				comments: $scope.rating.comments,
-				fbID_from: null,
-				fbID_to: null,
-				session_id: $scope.session.id
-			};
-			
-			if ( $scope.currentUser.tutor_mode ) {
-				rating.fbID_from = $scope.session.tutor_to.facebook_id
-				rating.fbID_to = $scope.session.tutor_from.facebook_id
-			} else {
-				rating.fbID_from = $scope.session.tutor_from.facebook_id
-				rating.fbID_to = $scope.session.tutor_to.facebook_id				
-			}			
-		$http.post(API.rating, rating)
-			.success(function(data, status) {
-				if ( data.status == true ) {
-					$state.go('app.intro');									
-				}
-			})
-			.error(function(error) {
-				$scope.handleAJAXError(error);
-			});
 	};
 	
 	$scope.venmoSession = function() {
@@ -726,15 +688,24 @@ angular.module('starter.controllers', [])
 		$cordovaInAppBrowser.open(url, '_system');		
 	}
 	
-	$scope.reloadSession = function() {
-		$http.get(API.session + "/" + $scope.session.id)
-			.success(function(data, status) {
-				$scope.session = data;
-			})
-			.error(function(err) {
-				$scope.handleAJAXError(err);
-			});
-	}
+	/* FSM helper functions */
+	$scope.$watch('session.location_latitude', function() {
+		if ( angular.isDefined($scope.session) &&
+				angular.isDefined($scope.session.location_latitude) && 
+				angular.isDefined($scope.session.location_longitude) ) {
+			console.log("Setting map object");
+			$scope.mapData = {
+				options: {
+					disableDefaultUI: true			
+				},
+				zoom: 12,
+				center: {
+					latitude: $scope.session.location_latitude,
+					longitude: $scope.session.location_longitude			
+				}
+			}
+		}
+	});
 	
 	$scope.startWatch = function(interval) {
 		// Start statusWatch() to redirect to pages based on status
@@ -759,17 +730,6 @@ angular.module('starter.controllers', [])
 		}
 	}
 	
-	$scope.sessionOver = function() {
-		// Shortcut to end timer and go back to homescreen
-		console.log("Called sessionOver, stopping.");
-		$localStorage.inProgress = false;		
-		$scope.stopWatch();		
-		delete $scope.session;						
-		$ionicHistory.nextViewOptions({
-			disableBack: true
-		});				
-		$state.go('app.intro');		
-	}
 	
 	$scope.switchStatus = function() {
 		$ionicHistory.nextViewOptions({
@@ -826,7 +786,80 @@ angular.module('starter.controllers', [])
 		} // end switch				
 	}
 	
+	$scope.changeStatus = function(id, status) { 
+		var data = {
+			id: id,
+			status: status
+		}
+		return $http.post(API.status.status, data);
+	}
+
+	$scope.tuteeCancel = function() {
+		$scope.changeStatus($scope.session.id, 98)
+			.success(function(data, status) {
+				$scope.session = data;				
+			})
+			.error(function(error) {
+				$scope.handleAJAXError(error);
+			});
+	}
 	
+	$scope.completeSession = function() {
+		// Send status change 4 to server
+		// Send ratings/comments to server
+		if ( !$scope.rating.rating ) {
+			$scope.dialog("Please rate this tutoring session.", 'Tutyr');
+			return;
+		}
+		
+		$scope.changeStatus($scope.session.id, 4)
+			.success(function(data, status){
+				$scope.session = data;
+			})
+			.error(function(err) {
+				$scope.handleAJAXError(err);
+			});
+		
+			var rating = {
+				rating: $scope.rating.rating,
+				comments: $scope.rating.comments,
+				fbID_from: null,
+				fbID_to: null,
+				session_id: $scope.session.id
+			};
+			
+			if ( $scope.currentUser.tutor_mode ) {
+				rating.fbID_from = $scope.session.tutor_to.facebook_id
+				rating.fbID_to = $scope.session.tutor_from.facebook_id
+			} else {
+				rating.fbID_from = $scope.session.tutor_from.facebook_id
+				rating.fbID_to = $scope.session.tutor_to.facebook_id				
+			}			
+
+		$http.post(API.rating, rating)
+			.success(function(data, status) {
+				if ( data.status == true ) {
+					$scope.sessionOver();
+				}
+			})
+			.error(function(error) {
+				$scope.dialog("There was an error rating this user. Please try again", "Rating error");
+			});
+	};
+	
+
+	$scope.sessionOver = function() {
+		// Shortcut to end timer and go back to homescreen
+		console.log("Called sessionOver, stopping.");
+		$localStorage.inProgress = false;		
+		$scope.stopWatch();		
+		delete $scope.session;						
+		$ionicHistory.nextViewOptions({
+			disableBack: true
+		});				
+		$state.go('app.intro');		
+	}
+		
 	$scope.statusWatch = function() {
 		// Watch for changes in session status and redirect to appropriate page
 		console.log("Called statusWatch");
@@ -843,17 +876,18 @@ angular.module('starter.controllers', [])
 				console.log("Current state is correct, no redirect.");
 				if ( $scope.session.status > 2 ) {
 					console.log("State greater than 2, switching and stopping.")
-					// $scope.switchStatus();
+					$scope.switchStatus();
 					$scope.stopWatch();
 				}
 				return;
 			} else {
 				console.log("Incorrect state, switching.");
-				// $scope.switchStatus();
+				$scope.switchStatus();
 				$rootScope.redirectStarted = true;							
 			} // endif correct state
 		} // endif status defined
 	}
+
 	
 	$scope.startSession = function() {	
 		// Mark session_start timestamp 
@@ -880,26 +914,24 @@ angular.module('starter.controllers', [])
 		// Mark session_end timestamp
 		$http.post(API.status.end, {id: $scope.session.id})
 			.success(function(data, status) {
-				console.log("Session successfully ended");
-			})
-			.error(function(err) {
-				$scope.handleAJAXError(err);
-			});
-
-		// Send status change 3 to server
-		$scope.changeStatus($scope.session.id, 3)
-			.success(function(data, status) {
-				delete $scope.session;
-				$ionicHistory.nextViewOptions({
-					disableBack: true
-				});				
-				$state.go('app.session_over', {id: $scope.session.id});
+				// Send status change 3 to server
+				$scope.changeStatus($scope.session.id, 3)
+					.success(function(data, status) {
+						$scope.session = data;
+						$ionicHistory.nextViewOptions({
+							disableBack: true
+						});				
+						$state.go('app.session_over', {id: $scope.session.id});
+					})
+					.error(function(err) {
+						$scope.handleAJAXError(err);
+					});
 			})
 			.error(function(err) {
 				$scope.handleAJAXError(err);
 			});
 	}
-		
+	
 	if ( $ionicHistory.currentStateName() != 'app.session_over' ) {		
 		console.log("Automatic startwatch");
 		$scope.startWatch(10000);
@@ -907,14 +939,8 @@ angular.module('starter.controllers', [])
 	
 	$scope.$watch('session.status', function(newStatus, oldStatus) {
 		if ( angular.isDefined($scope.session) && angular.isDefined($scope.session.status) && newStatus != oldStatus) {
-			$scope.switchStatus();
+			$scope.statusWatch();
 		};
 	});
-
-	// $scope.$on('$ionicView.enter', function() {
-	// 	$scope.switchStatus();
-	// });
-	// $scope.$on('$ionicView.leave', function() {
-	// 	$scope.stopWatch();
-	// })
+	
 });

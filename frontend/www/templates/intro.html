@@ -38,6 +38,7 @@
 				<div ng-repeat="profile in feed | filter:searchFilter" 
 					class="profile card" 
 					ng-if="feed"
+					ng-show="profile.facebook_id != currentUser.facebook_id"
 					ng-click="gotoProfile(profile.facebook_id)">
 					<div class="row profile-main">
 						<div class="col col-25">

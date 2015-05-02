@@ -4,8 +4,8 @@
 		<!-- ====== Tutor-side rating view ====== -->		
 		<div ng-if="currentUser.tutor_mode" class="tutor">
 			<div ng-if="session.status == 4" class="over-session">
-				<ion-item class="item-divider item-text-wrap item-assertive">
-					This session is over, but you can view its summary.
+				<ion-item class="item-divider item-text-wrap">
+					Archived session summary
 				</ion-item>	
 				<ion-item class="tutor-view-header item-text-wrap">
 					<div class="profile-image">
@@ -54,7 +54,7 @@
 		
 		<!-- ====== Student-side rating view ====== -->
 		<div ng-if="!currentUser.tutor_mode">
-			<div ng-if="session.status == 3||session.status==4" class="active-session">
+			<div ng-if="session.status == 3" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
 						<img src="{{session.tutor_to.profile_pic}}">
@@ -86,7 +86,13 @@
 					<button class="button button-block button-tutyr" ng-click="completeSession()">Complete Session</button>
 				</ion-item>
 			</div>	
-						
+			<div ng-if="session.status==4" class="inactive-session">			
+				<i class="icon ion-android-done"></i>
+				<p>This session has been concluded.</p>				
+				<ion-item style="border: none"> 
+					<button class="button button-block button-tutyr" ng-click="sessionOver()">Sounds good!</button>
+				</ion-item>	
+			</div>	
 			<div ng-if="session.status < 1" class="inactive-session">				
 				<i class="icon ion-help-circled"></i>
 				<p>You don't have an active tutoring session right now.</p>
