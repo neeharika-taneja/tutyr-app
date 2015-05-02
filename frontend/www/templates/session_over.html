@@ -81,6 +81,9 @@
 				<ion-item class="item-input">
 					<textarea placeholder="Any comments?"></textarea>
 				</ion-item>
+				<ion-item class="venmo-button" ng-show="session.tutor_to.bio3">
+					<button class="button button-block button-tutyr" ng-click="venmoSession()">Pay Using Venmo</button>
+				</ion-item>
 				<ion-item>
 					<button class="button button-block button-tutyr" ng-click="completeSession()">Complete Session</button>
 				</ion-item>

@@ -275,7 +275,6 @@ angular.module('starter.controllers', [])
 		});
 	};
 
-	window.$ih = $ionicHistory;
 	// Poll for new tutor requests
 	$scope.pollRequests = function(frequency) {
 		console.log("Set request checking timer.")
@@ -712,6 +711,17 @@ angular.module('starter.controllers', [])
 				$scope.handleAJAXError(error);
 			});
 	};
+	
+	$scope.venmoSession = function() {
+		var buildUrl = function(recipient, amount, note) {
+			return "https://venmo.com/?txn=pay&recipients=" + recipient +
+				"&amount=" + amount + 
+				"&note=" + note + 
+				"&audience=private";
+		}
+		var url = buildUrl($scope.session.tutor_to.bio3, $scope.session.session_cost, "Tutyr session");
+		$cordovaInAppBrowser.open(url, '_system');		
+	}
 	
 	$scope.reloadSession = function() {
 		$http.get(API.session + "/" + $scope.session.id)
