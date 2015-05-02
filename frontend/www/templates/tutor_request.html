@@ -4,7 +4,7 @@
 			<div class="profile-image">
 				<img src="{{request.tutor_from.profile_pic}}" />
 			</div>
-			<p class="profile-name">{{request.tutor_from.real_name}} is requesting a session</p>
+			<p class="profile-name"><strong>{{request.tutor_from.real_name}}</strong> <br /> is requesting a session</p>
 			<p class="comments" ng-if="request.comments">&#8220;{{request.comments}}&#8221;</p>
 			<p class="comments" ng-if="!request.comments">The user did not provide any comments.</p>
 			<br />

@@ -4,22 +4,22 @@
 			<div class="profile-image">
 				<img src="{{currentUser.profile_pic}}" s/>
 			</div>			
-			<h1>{{currentUser.real_name}}</h1>
-			<h3 class="user user-status">
-				<span ng-show="currentUser.tutor_mode">Tutor</span>
-				<span ng-show="!currentUser.tutor_mode">Student</span>
-			</h3>
+			<h1 style="font-size: 24px;">{{currentUser.real_name}}</h1>
 		</div>			
 
 		<div class="list">
 			<form ng-submit="updateProfile()">
 			<!-- list of strings -->
+		  <label class="item item-input item-stacked-label">
+		    <span class="input-label">About Me</span>
+		    <textarea placeholder="Why would you be a good tutor? Tell us a little about yourself!" ng-model="currentUser.bio2" required></textarea>
+		  </label>
 			<ion-item>
 				<span class="input-label">Subjects</span>			
 				 <ul class="list">
 				   <li class="item item-checkbox" ng-repeat="subject in subjects.list">
-				      <label class="checkbox">
-				        <input type="checkbox" checklist-model="currentUser.subjects" checklist-value="subject.name">
+				      <label class="checkbox checkbox-tutyr">
+				        <input type="checkbox" checklist-model="currentUser.subjects" checklist-value="subject.name" class="checkbox-tutyr">
 				      </label>
 							{{subject.name}}							
 				   </li>
@@ -28,10 +28,6 @@
 		  <label class="item item-input item-stacked-label">
 		    <span class="input-label">Subject specifics</span>
 		    <input type="text" placeholder="Calculus, matrix algebra, Python..." name="subjects" ng-model="currentUser.bio1">
-		  </label>
-		  <label class="item item-input item-stacked-label">
-		    <span class="input-label">About Me</span>
-		    <textarea placeholder="Why would you be a good tutor? Tell us a little about yourself!" ng-model="currentUser.bio2" required></textarea>
 		  </label>
 		  <label class="item item-input item-select">
 		    <span class="input-label">My Hourly Rate</span>

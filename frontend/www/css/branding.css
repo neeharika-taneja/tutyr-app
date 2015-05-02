@@ -6,10 +6,28 @@ Darker:
 body, div, button, input, h1, h2, h3, h4, p, em {
 	font-family: 'Open Sans', 'Helvetica', 'Roboto', sans-serif;
 }
+.bar.bar-dark {
+	background: #555;
+	transition: all 0.5s ease;
+}
+.is-tutyr ion-header-bar.bar-dark {
+  background: #00B197;
+	transition: all 0.5s ease;
+  background-image: linear-gradient(0deg, #00B197, #00B197 50%, transparent 50%);
+}
+.bar.bar-tutyr {
+  border-color: #111;
+  background-color: #00B197;
+  background-image: linear-gradient(0deg, #00B197, #00B197 50%, transparent 50%);
+  color: #fff; }
+  .bar.bar-tutyr .title {
+    color: #fff; }
+  .bar.bar-tutyr.bar-footer {
+    background-image: linear-gradient(180deg, #00B197, #00B197 50%, transparent 50%); }
+
 .logo {
 	margin-top: 6em;
-	max-width: 85vw;
-	margin-left: -5vw;
+	max-width: 75vw;
 }
 .logo-small {
   height: 4.5vh;
@@ -55,6 +73,13 @@ body, div, button, input, h1, h2, h3, h4, p, em {
     box-shadow: none;
     color: #fff; }
 		
+.checkbox-tutyr input:before, .checkbox-tutyr .checkbox-icon:before {
+  border-color: #00B197; }
+.checkbox-tutyr input:checked:before, .checkbox-tutyr input:checked + .checkbox-icon:before {
+  background: #00B197;
+  border-color: #00B197; }
+		
+		
 .item.item-tutyr {
 	background: #00B197;
 	color: #fff;
@@ -66,9 +91,6 @@ body, div, button, input, h1, h2, h3, h4, p, em {
 	border-color: #cacaca;
 }
 
-.is-tutyr {
-	border-bottom: 10px solid #00B197;
-}
 .tab-item {
 	max-width: 300px;
 }

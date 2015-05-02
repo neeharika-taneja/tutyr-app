@@ -1,12 +1,12 @@
 <ion-side-menus enable-menu-with-back-views="false">
-  <ion-side-menu-content ng-class="currentUser.tutor_mode ? 'is-tutyr' : ''">
-    <ion-nav-bar class="bar-dark">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-dark" ng-class="currentUser.tutor_mode ? 'is-tutyr' : ''" >
 		  <ion-nav-back-button class="button-clear">
 		    <i class="ion-arrow-left-c"></i> Back
 		  </ion-nav-back-button>
 
       <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left" ng-show="currentUser.loggedIn">
         </button>
       </ion-nav-buttons>
 			<ion-nav-buttons side="right">
@@ -65,6 +65,7 @@
 	        </ion-item>
 					
 					<ion-toggle 
+					id="tutor-toggle"
 					ng-model="currentUser.tutor_mode" 
 					toggle-class="toggle-tutyr"
 					ng-click="monitorTutorToggle()">Tutor Mode</ion-toggle>

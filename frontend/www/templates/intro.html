@@ -2,7 +2,7 @@
   <ion-content id="intro">
 		<div ng-if="!currentUser.loggedIn&&!$storage.currentUser.loggedIn" class="login">
 			<p><img src="img/logo-text.svg" alt="Tutyr logo" class="logo" /></p>
-			<h2>Log in for an easy to use, on-demand tutoring service.</h2>
+			<h2>Log in for an easy to use <br /> on-demand tutoring service.</h2>
 			<br />
 
 			<button class="button button-block button-tutyr" ng-click="fbLogin()">
@@ -38,7 +38,6 @@
 				<div ng-repeat="profile in feed | filter:searchFilter" 
 					class="profile card" 
 					ng-if="feed"
-					ng-hide="profile.facebook_id == currentUser.facebook_id"
 					ng-click="gotoProfile(profile.facebook_id)">
 					<div class="row profile-main">
 						<div class="col col-25">

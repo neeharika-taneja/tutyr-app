@@ -1,3 +1,19 @@
+.ng-enter {
+  transition:0.75s ease-in all;
+  opacity:0;
+}
+.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.ng-leave {
+  transition:0.55s ease-out all;
+  opacity:1;
+}
+.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -64,9 +80,12 @@
 .user.user-image img {
 	width: 10em;
 	border-radius: 5em;
-	border: 0.5em solid #fafafa;
+	border: 3px solid #fafafa;
 }
-
+#tutor-toggle {
+  border-bottom: none;
+  background: #333;	
+}
 /* Login */
 #intro {
 	background: #444;
@@ -86,6 +105,7 @@
 
 /* Edit profile */
 #edit-profile .profile-image, #edit-profile .profile-image img {
+	margin-top: 6px;
 	width: 9em;
 	height: 9em;
 	border-radius: 50%;
@@ -126,18 +146,17 @@
 	margin: 0 auto;
 	padding: 0.25em;
 	margin-bottom: 0.5em;
-	text-align: right;
+	text-align: left;
 }
 .profile-name {
 	font-size: 1.2em;
-	font-weight: bold;
 }
 .profile-image {
 }
 .profile-image img {
   width: 5em;
   border-radius: 2.5em;
-  margin-top: 15%;
+  margin-top: 10%;
 }}
 #tutor .profile-image img {
 	width: 3.85em;
@@ -207,7 +226,6 @@
 	width: 8em;
 	height: 8em;
 	border-radius: 4em;	
-	border: 5px solid #444;
 }
 #request-list .profile-name {
 	text-align: center;

@@ -1,8 +1,9 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs, $localStorage, $cordovaLocalNotification, $ionicSideMenuDelegate) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, API, $state, $ionicHistory, $interval, $cordovaGeolocation, $cordovaToast, $ionicPlatform, $cordovaDialogs, $localStorage, $cordovaLocalNotification, $ionicSideMenuDelegate, $rootScope) {
 
 	$scope.$storage = $localStorage;
+	$rootScope.headerClass= "bar-dark";
 
 	$scope.onDevice = function() {
     return (window.cordova || window.PhoneGap || window.phonegap) 
@@ -255,6 +256,21 @@ angular.module('starter.controllers', [])
 		      var long = position.coords.longitude
 					$scope.currentUser.latitude = lat;
 					$scope.currentUser.longitude = long;
+				
+					var locationData = {
+						latitude: lat,
+						longitude: long,
+						fbID: $scope.currentUser.facebook_id
+					}
+					$http.post(API.location, locationData)
+						.success(function(data, status){
+							console.log(data);
+						})
+						.error(function(error) {
+							$scope.handleAJAXError(error);
+						});														
+				}, function(err) {
+					return;
 				});
 		});
 	};
@@ -344,6 +360,7 @@ angular.module('starter.controllers', [])
 					facebook_id: $scope.currentUser.facebook_id,
 					tutor_mode: $scope.currentUser.tutor_mode
 				};
+				var element = angular.element(document.querySelector('ion-nav-bar'));
 				
 				if ( $scope.currentUser.tutor_mode == true ) {
 					console.log("Tutor mode on");
@@ -357,7 +374,7 @@ angular.module('starter.controllers', [])
 					}
 					$scope.tutorOn();
 
-				} else {
+				} else {					
 					console.log("Tutor mode off");
 					$scope.tutorOff();
 				}
@@ -431,7 +448,9 @@ angular.module('starter.controllers', [])
 	};
 		
 	$scope.refresh = function() {
-		$http.get(API.feed)
+		$scope.pingLocation();
+		
+		$http.get(API.feed + "/" + $scope.currentUser.facebook_id) 
 			.success(function(data, status){
 				$scope.feed = data;
 			})
