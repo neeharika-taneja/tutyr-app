@@ -11,6 +11,16 @@ angular.module('starter.controllers', [])
     && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
 	}
 	
+	$scope.fakeLogin = function(person) {
+		if ( person == 'stacy' ) {
+			var user = 	{"fbID": "12345678900987654321", "profile_pic": "http://i.imgur.com/WpV4xCq.jpg", "realname": "Stacy", "email": "tutyrapp+fake1@gmail.com"}
+		}
+		if ( person == 'josh' ) {
+			var user = {"fbID": "12345678900987654322", "profile_pic": "http://i.imgur.com/jIXtW6O.jpg", "realname": "Josh", "email": "tutyrapp+fake2@gmail.com"};
+		}
+		$scope.login(user);
+	}
+	
 	$scope.handleAJAXError = function(err) {
 		if ( err ) { 
 			if (err.hasOwnProperty('message') ) {
@@ -60,7 +70,7 @@ angular.module('starter.controllers', [])
 					window.plugin.notification.local.promptForPermission();
 					window.plugin.notification.local.add({
 				    id: 1,
-				    text: message,
+				    title: message,
 						badge: 1						
 					});
 				} catch (e) {

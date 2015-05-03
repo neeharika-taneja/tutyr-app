@@ -8,12 +8,14 @@
 			<button class="button button-block button-tutyr" ng-click="fbLogin()">
 				<i class="icon ion-social-facebook"></i> &nbsp; Login With Facebook
 			</button>						
+			<!--<button ng-click="fakeLogin('stacy')">Stacy</button>
+			<button ng-click="fakeLogin('josh')">Josh</button>-->
 		</div>
 		
 		<div ng-if="currentUser.loggedIn||$storage.currentUser.loggedIn" class="newsfeed">	
 			<ion-refresher pulling-text="Pull to refresh..." on-refresh="refresh()"></ion-refresher>			
 			<div class="header" ng-show="showSearch">
-			  <label class="item item-dark item-input item-select">
+			  <!--<label class="item item-dark item-input item-select">
 			    <div class="input-label">
 						Filter Subjects
 			    </div>
@@ -23,7 +25,7 @@
 			      <option value="99">Declined</option>
 						<option value="">All</option>
 			    </select>
-			  </label>
+			  </label>-->
 				<div class="item item-dark item-list">
 				  <label class="item item-input">
 				    <i class="icon ion-search placeholder-icon"></i>
@@ -35,7 +37,7 @@
 				<button class="button button-block button-tutyr" ng-click="toggleSearch()">Search and Filter</button>
 			</ion-item>
 			<div class="newsfeed-profiles">
-				<div ng-repeat="profile in feed | filter:searchFilter" 
+				<div ng-repeat="profile in feed | filter:searchFilter | orderBy:'distance'" 
 					class="profile card" 
 					ng-if="feed"
 					ng-show="profile.facebook_id != currentUser.facebook_id"
@@ -57,14 +59,18 @@
 					</div>	
 					<hr />
 					<div class="row profile-meta">
-						<i class="icon ion-location"></i> 
-						<span class="location" ng-show="profile.latitude && profile.longitude">
-							<reverse-geocode lat="{{profile.latitude}}" lng="{{profile.longitude}}"></reverse-geocode>
-						</span>
-						<span class="location distance" ng-show="profile.distance">
-							&nbsp;&bull;&nbsp;{{profile.distance|number:1}} mi
-						</span>	
-						<span class="location" ng-show="!(profile.latitude && profile.longitude)">No location shared</span>
+						<div class="col-80">
+							<!--<i class="icon ion-location"></i> -->
+							<span class="location" ng-show="profile.latitude && profile.longitude">
+								<reverse-geocode lat="{{profile.latitude}}" lng="{{profile.longitude}}"></reverse-geocode>
+							</span>
+							<span class="location" ng-show="!(profile.latitude && profile.longitude)">No location shared</span>
+						</div>
+						<div class="col-20" style="text-align: right">	
+							<span class="location distance" ng-show="profile.distance">
+								{{profile.distance|number:1}} mi
+							</span>	
+						</div>	
 					</div>
 			</div> <!-- /profile -->						
 			<div ng-if="feed.length == 0" class="inactive-session">

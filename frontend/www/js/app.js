@@ -16,7 +16,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
 			if (cordova.platformId == 'android') {
-		    StatusBar.backgroundColorByHexString("#00B197");
+		    StatusBar.backgroundColorByHexString("#00D3B6");
 			} else {
 				StatusBar.styleLightContent();
 			}

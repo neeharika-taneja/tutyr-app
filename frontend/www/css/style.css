@@ -161,13 +161,14 @@
 .profile-name {
 	font-size: 1.2em;
 }
-.profile-image {
-}
 .profile-image img {
   width: 5em;
   border-radius: 2.5em;
-
-}}
+}
+.profile-bio {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
 #tutor .profile-image img {
 	width: 3.85em;
 	margin:auto;
@@ -385,6 +386,7 @@
 }
 #profile span.subject {
   background: #00B197;
+	line-height: 32px;
   color: #fff;
   padding: 5px;
   border-radius: 3px;
