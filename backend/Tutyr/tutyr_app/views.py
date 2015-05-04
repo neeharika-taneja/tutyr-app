@@ -1,3 +1,5 @@
+# TODO: send distance with tutyr_list
+
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
@@ -25,8 +27,9 @@ def options_response():
     return response
 
 @csrf_exempt
-def tutyr_list(request):
+def tutyr_list(request, facebook_id):
     if request.method == 'GET':
+        tutyr = Tutyr.objects.get(facebook_id=facebook_id)
         subject_str = request.GET.get('subject', '')
         latitude = request.GET.get('latitude', '')
         longitude = request.GET.get('longitude', '')
@@ -34,20 +37,32 @@ def tutyr_list(request):
         # All tutors
         queryset = Tutyr.objects.filter(tutor_mode=True)
 
+        # Update relative distance for all tutors
+        for tutor in queryset.all():
+            position = (tutyr.latitude, tutyr.longitude)
+            tutor_position = (tutor.latitude, tutor.longitude)
+            distance = vincenty(position, tutor_position).miles
+            tutor.distance = distance
+            tutor.save()
+
         # Filter by subject
         if len(subject_str) > 0:
             subject_list = subject_str.split(',')
             for subject in subject_list:
                 queryset = queryset.filter(subjects__name=subject)
 
-        # Filter by location
+        # Filter by custom location
         if len(latitude) > 0 and len(longitude) > 0:
             for tutor in queryset.all():
                 position = (latitude, longitude)
                 tutor_position = (tutor.latitude, tutor.longitude)
                 distance = vincenty(position, tutor_position).miles
+                tutor.distance = distance
+                tutor.save()
                 if distance > 10:
                     queryset = queryset.exclude(pk=tutor.pk)
+
+            queryset = queryset.order_by('distance')
 
         serializer = TutyrSerializer(queryset, many=True)
         return JSONResponse(serializer.data)
@@ -55,23 +70,23 @@ def tutyr_list(request):
 
 @csrf_exempt
 def edit_tutyr_profile(request):
-    data = JSONParser().parse(request)
-    try:
-        tutyr = Tutyr.objects.get(facebook_id=data['facebook_id'])
-    except:
-        return HttpResponse(status=404)
     if request.method == 'OPTIONS':
         return options_response()
-    
     elif request.method == 'POST':
-        tutyr.bio1 = data['bio1']
-        tutyr.bio2 = data['bio2']
-        new_subjects = data['subjects'].split(',')
-        tutyr.subjects = Subject.objects.filter(name__in=new_subjects)
-        tutyr.hourly_rate = data['hourly_rate']
-        tutyr.save()
-        serializer = TutyrSerializer(tutyr)
-        return JSONResponse(serializer.data)
+        data = JSONParser().parse(request)
+        try:
+            tutyr = Tutyr.objects.get(facebook_id=data['facebook_id'])
+            tutyr.bio1 = data['bio1']
+            tutyr.bio2 = data['bio2']
+            tutyr.bio3 = data['bio3']
+            new_subjects = data['subjects']
+            tutyr.subjects = Subject.objects.filter(name__in=new_subjects)
+            tutyr.hourly_rate = data['hourly_rate']
+            tutyr.save()
+            serializer = TutyrSerializer(tutyr)
+            return JSONResponse(serializer.data)
+        except:
+            return HttpResponse(status=404)
     else:
         return HttpResponse(status=400)
 
@@ -99,7 +114,7 @@ def select_subjects(request, username):
         subject_list = Subject.objects.filter(subject_id__in=subjects)
         tutyr.subjects = subject_list
         tutyr.save()
-        serializer = TutyrSerializer(tutyr)
+        serializer = TutyrSerializer(data=tutyr)
         if serializer.is_valid():
             return JSONResponse(serializer.data)
     serializer = TutyrSerializer(tutyr)
@@ -107,6 +122,8 @@ def select_subjects(request, username):
 
 @csrf_exempt
 def subjects(request):
+    if request.method == 'OPTIONS':
+        return options_response()
     if request.method == 'GET':
         subject_list = Subject.objects.all()
         serializer = SubjectSerializer(subject_list, many=True)
@@ -191,20 +208,15 @@ def create_session(request):
         return options_response()
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        try:
-            tutor_from = Tutyr.objects.get(facebook_id=data['fbID_from'])
-            tutor_to = Tutyr.objects.get(facebook_id=data['fbID_to'])
-            comments = data['comments']
-            session = TutorRequest(status=0, tutor_from=tutor_from,
-                                   tutor_to=tutor_to, comments=comments,
-                                   timestamp=datetime.now())
-            session.save()
-            serializer = TutorRequestSerializer(session)
-            serializer.data['tutor_from'] = TutyrSerializer(tutor_from)
-            serializer.data['tutor_to'] = TutyrSerializer(tutor_to)
-            return JSONResponse(serializer.data)
-        except:
-            return HttpResponse(status=404)
+        tutor_from = Tutyr.objects.get(facebook_id=data['fbID_from'])
+        tutor_to = Tutyr.objects.get(facebook_id=data['fbID_to'])
+        comments = data['comments']
+        session = TutorRequest(status=0, tutor_from=tutor_from,
+                               tutor_to=tutor_to, comments=comments,
+                               timestamp=datetime.now())
+        session.save()
+        serializer = TutorRequestSerializer(session)
+        return JSONResponse(serializer.data)
     return HttpResponse(status=400)
 
 @csrf_exempt
@@ -219,15 +231,39 @@ def get_session(request, id):
     return HttpResponse(status=400)
 
 @csrf_exempt
+def get_sessions_for_tutor(request, id):
+    if request.method == 'GET':
+        # By default, get all sessions for the tutor
+        tutyr = Tutyr.objects.get(facebook_id=id)
+        session_list = TutorRequest.objects.filter(tutor_to=tutyr)
+
+        # Filter value present
+        if request.GET.get('filt'):
+            filt = request.GET.get('filt').split(',')
+            session_list = session_list.filter(status__in=filt)
+        serializer = TutorRequestSerializer(session_list, many=True)
+        return JSONResponse(serializer.data)
+    return HttpResponse(status=400)
+
+@csrf_exempt
 def rate(request):
     if request.method == 'OPTIONS':
         return options_response()
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        serializer = Rating(data=data)
+        
+        # Do not allow multiple ratings for session
+        curRating = Rating.objects.filter(session_id=data['session_id'])
+        if len(curRating) > 0:
+            if (curRating[0].fbID_to == data['fbID_to'] or
+                curRating[0].fbID_from == data['fbID_from']):
+                return JSONResponse({'status':'false'})
+
+        # Create a new rating
+        serializer = RatingSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-        tutor = Tutyr.objects.get(facebook_id=fbID_to)
+        tutor = Tutyr.objects.get(facebook_id=data['fbID_to'])
         if tutor.num_ratings == 0:
             tutor.rating = data['rating']
             tutor.num_ratings = 1
@@ -239,7 +275,77 @@ def rate(request):
         return JSONResponse({'status':'true'})
     return HttpResponse(status=400)
 
+@csrf_exempt
+def get_ratings_for_tutor(request, id):
+    if request.method == 'GET':
+        ratings = Rating.objects.filter(fbID_to=id)
+        serializer = RatingSerializer(ratings, many=True)
+        for item in serializer.data:
+            tutor = Tutyr.objects.get(facebook_id=item['fbID_from'])
+            item['name_from'] = tutor.real_name
+        return JSONResponse(serializer.data)
+    return HttpResponse(status=400)
+
+@csrf_exempt
+def session_status(request):
+    if request.method == 'OPTIONS':
+        return options_response()
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        session = TutorRequest.objects.get(id=data['id'])
+        session.status = data['status']
+        session.save()
+        serializer = TutorRequestSerializer(session)
+        return JSONResponse(serializer.data)
+    return HttpResponse(status=400)
+
+@csrf_exempt
+def session_start(request):
+    if request.method == 'OPTIONS':
+        return options_response()
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        session = TutorRequest.objects.get(id=data['id'])
+        session.session_start = datetime.now()
+        session.save()
+        tutor = Tutyr.objects.get(id=session.tutor_to.id)
+        tutor.busy = True
+        tutor.save()
+        return JSONResponse({'status':'true'})
+    return HttpResponse(status=400)
+
+@csrf_exempt
+def session_end(request):
+    if request.method == 'OPTIONS':
+        return options_response()
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        session = TutorRequest.objects.get(id=data['id'])
+        session.session_end = datetime.now()
+        session.save()
+        tutor = Tutyr.objects.get(id=session.tutor_to.id)
+        tutor.busy = False
+        tutor.save()
+        return JSONResponse({'status':'true'})
+    return HttpResponse(status=400)
+
+@csrf_exempt
+def session_location(request):
+    if request.method == 'OPTIONS':
+        return options_response()
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        session = TutorRequest.objects.get(id=data['id'])
+        if 'latitude' in data:
+            session.location_latitude = data['latitude']
+        if 'longitude' in data:
+            session.location_longitude = data['longitude']
+        if 'comments' in data:
+            session.location_comments = data['comments']
+        session.save()
+        serializer = TutorRequestSerializer(session)
+        return JSONResponse(serializer.data)
+    return HttpResponse(status=400)
 
 
 
-#https://github.com/geopy/geopy

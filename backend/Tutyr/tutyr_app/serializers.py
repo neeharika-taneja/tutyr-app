@@ -36,6 +36,8 @@ class TutyrSerializer(serializers.Serializer):
     subjects = SubjectSerializer(many=True, required=False)
     email = serializers.CharField(max_length=250)
     tutor_mode = serializers.BooleanField()
+    busy = serializers.BooleanField()
+    distance = serializers.DecimalField(max_digits=10, decimal_places=5)
 
     def create(self, validated_data):
         """
@@ -62,6 +64,8 @@ class TutyrSerializer(serializers.Serializer):
         instance.subjects = validated_data.get('subjects', instance.subjects)
         instance.email = validated_data.get('email', instance.email)
         instance.tutor_mode = validated_data.get('tutor_mode', instance.tutor_mode)
+        instance.busy = validated_data.get('busy', instance.busy)
+        instance.distance = validated_data.get('distance', instance.distance)
         instance.save()
         return instance
 
@@ -71,12 +75,13 @@ class TutorRequestSerializer(serializers.ModelSerializer):
         fields = ('id', 'status', 'tutor_from', 'tutor_to', 'comments',
             'location_latitude', 'location_longitude', 'location_comments',
             'timestamp', 'session_start', 'session_end')
+        depth = 1
 
 class TutorRequestSerializer2(serializers.Serializer):
     id = serializers.IntegerField()
     status = serializers.IntegerField()
-    tutor_from = serializers.CharField(max_length=250)
-    tutor_to = serializers.CharField(max_length=250)
+    tutor_from = TutyrSerializer()
+    tutor_to = TutyrSerializer()
     comments = serializers.CharField(max_length=250)
     location_latitude = serializers.DecimalField(max_digits=10, decimal_places=10, required=False)
     location_longitude = serializers.DecimalField(max_digits=10, decimal_places=10, required=False)
@@ -108,9 +113,10 @@ class TutorRequestSerializer2(serializers.Serializer):
         instance.session_end = validated_data.get('session_end', instance.session_end)
         return instance
 
-class RatingSerializer(models.Model):
+class RatingSerializer(serializers.Serializer):
+    session_id = serializers.IntegerField()
     rating = serializers.IntegerField()
-    comments = serializers.CharField(max_length=250)
+    comments = serializers.CharField(max_length=250, required=False)
     fbID_from = serializers.CharField(max_length=250)
     fbID_to = serializers.CharField(max_length=250)
 
@@ -124,6 +130,7 @@ class RatingSerializer(models.Model):
         """
         Update and return an existing `Rating` instance, given the validated data.
         """
+        instance.session_id = validated_data.get('session_id', instance.session_id)
         instance.rating = validated_data.get('rating', instance.rating)
         instance.comments = validated_data.get('comments', instance.comments)
         instance.fbID_from = validated_data.get('fbID_from', instance.fbID_from)
