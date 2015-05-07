@@ -54,3 +54,5 @@ target/
 frontend/platforms
 venv/
 *.apk
+
+*.apk
