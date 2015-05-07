@@ -39,28 +39,29 @@ angular.module('starter.controllers', [])
 	});
 	
 	// Toggle tutor mode when necessary on server side when app suspends / resumes
+	// TODO fix screen off
 	
-	$scope.$on('Device.pause', function() {
-		if ( $scope.currentUser.tutor_mode == true ) {
-			$localStorage.suspendWithTutorMode = true;
-			var tutorToggleMessage = {
-				facebook_id: $scope.currentUser.facebook_id,
-				tutor_mode: false
-			};
-			$http.post(API.tutor_mode, tutorToggleMessage);			
-		}
-	});
-	
-	$scope.$on('Device.resume', function() {
-		if ( $localStorage.suspendWithTutorMode == true ) {
-			delete $localStorage.suspendWithTutorMode;
-			var tutorToggleMessage = {
-				facebook_id: $scope.currentUser.facebook_id,
-				tutor_mode: true
-			};
-			$http.post(API.tutor_mode, tutorToggleMessage);
-		}
-	});
+	// $scope.$on('Device.pause', function() {
+	// 	if ( $scope.currentUser.tutor_mode == true ) {
+	// 		$localStorage.suspendWithTutorMode = true;
+	// 		var tutorToggleMessage = {
+	// 			facebook_id: $scope.currentUser.facebook_id,
+	// 			tutor_mode: false
+	// 		};
+	// 		$http.post(API.tutor_mode, tutorToggleMessage);
+	// 	}
+	// });
+	//
+	// $scope.$on('Device.resume', function() {
+	// 	if ( $localStorage.suspendWithTutorMode == true ) {
+	// 		delete $localStorage.suspendWithTutorMode;
+	// 		var tutorToggleMessage = {
+	// 			facebook_id: $scope.currentUser.facebook_id,
+	// 			tutor_mode: true
+	// 		};
+	// 		$http.post(API.tutor_mode, tutorToggleMessage);
+	// 	}
+	// });
 	
 	$scope.dialog = function(message, title, tryNotify) {
 		var title = typeof(title) === "undefined" ? "" : title;
@@ -432,7 +433,10 @@ angular.module('starter.controllers', [])
 		window.location = link;
 	}	
 	$scope.visitWebsite = function() {
-		$cordovaInAppBrowser.open('http://tutyr.me', '_blank', {toolbar: 'yes'});
+		$cordovaInAppBrowser.open('http://tutyr.me', '_system');
+	}
+	$scope.rateStore = function() {
+		$cordovaInAppBrowser.open("https://play.google.com/store/apps/details?id=com.ionicframework.tutyr782568", "_system");
 	}
 })
 
@@ -713,7 +717,11 @@ angular.module('starter.controllers', [])
 					latitude: $scope.session.location_latitude,
 					longitude: $scope.session.location_longitude			
 				}
-			}
+			};
+			$scope.pinLocation = {
+				latitude: $scope.session.location_latitude,
+				longitude: $scope.session.location_longitude							
+			};
 		}
 	});
 	
@@ -838,7 +846,7 @@ angular.module('starter.controllers', [])
 				session_id: $scope.session.id
 			};
 			
-			if ( $scope.currentUser.tutor_mode ) {
+			if ( $scope.thisSessionRoles.userIsTutor ) {
 				rating.fbID_from = $scope.session.tutor_to.facebook_id
 				rating.fbID_to = $scope.session.tutor_from.facebook_id
 			} else {
@@ -902,20 +910,21 @@ angular.module('starter.controllers', [])
 		$http.post(API.status.start, {id: $scope.session.id})
 			.success(function(data, status) {
 				console.log("Successfully marked session start.");
+				// Change session status
+				$scope.changeStatus($scope.session.id, 2)
+					.success(function(data, status) {
+						console.log("Changed status to 2.");
+						$scope.session = data;
+					})
+					.error(function(err) {
+						$scope.handleAJAXError(err);
+					});
+				
 			})
 			.error(function(err) {
-				$scope.handleAJAXError(err);
+				$scope.dialog("There was a problem starting the session. Please try again.");
 			});
 			
-		// Change session status
-		$scope.changeStatus($scope.session.id, 2)
-			.success(function(data, status) {
-				console.log("Changed status to 2.");
-				$scope.session = data;
-			})
-			.error(function(err) {
-				$scope.handleAJAXError(err);
-			});
 	};
 	
 	$scope.endSession = function() {

@@ -2,7 +2,7 @@
   <ion-content>
 		
 		<!-- ====== Tutor-side rating view ====== -->		
-		<div ng-if="currentUser.tutor_mode" class="tutor">
+		<div ng-if="thisSessionRoles.userIsTutor" class="tutor">
 			<div ng-if="session.status == 4" class="over-session">
 				<ion-item class="item-divider item-text-wrap">
 					Archived session 
@@ -53,7 +53,7 @@
 		<!-- =========================================== -->
 		
 		<!-- ====== Student-side rating view ====== -->
-		<div ng-if="!currentUser.tutor_mode">
+		<div ng-if="thisSessionRoles.userIsTutee">
 			<div ng-if="session.status == 3" class="active-session">
 				<ion-item class="tutee-view-header item-text-wrap">
 					<p class="profile-image">
